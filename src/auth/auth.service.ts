@@ -7,6 +7,7 @@ import { User } from 'src/users/entities/user.entity';
 
 // dto
 import { SignUpDto } from './dto/signup.dto';
+import { SignInDto } from './dto/signin.dto';
 
 @Injectable()
 export class AuthService {
@@ -17,6 +18,21 @@ export class AuthService {
   async signUp(signUpDto: SignUpDto): Promise<User> {
     const user = await this.userRepository.create(signUpDto);
 
+    delete user.hashedPassword;
+
     return await this.userRepository.save(user);
+  }
+
+  async signIn(signInDto: SignInDto): Promise<User> {
+    const user = await this.userRepository.findOneOrFail({
+      where: {
+        email: signInDto.email,
+        hashedPassword: signInDto.hashedPassword,
+      },
+    });
+
+    delete user.hashedPassword;
+
+    return user;
   }
 }

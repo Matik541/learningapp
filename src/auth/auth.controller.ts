@@ -3,6 +3,7 @@ import { ApiTags } from '@nestjs/swagger';
 
 // service
 import { AuthService } from './auth.service';
+import { SignInDto } from './dto/signin.dto';
 
 // dto
 import { SignUpDto } from './dto/signup.dto';
@@ -16,5 +17,11 @@ export class AuthController {
   @Post('register')
   signUp(@Body() signUpDto: SignUpDto) {
     return this.authService.signUp(signUpDto);
+  }
+
+  //   login
+  @Post('login')
+  signIn(@Body() signInDto: SignInDto) {
+    return this.authService.signIn(signInDto);
   }
 }
