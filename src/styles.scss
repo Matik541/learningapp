@@ -25,6 +25,13 @@ nav{
     align-items: center;
     padding: 0 1rem;
     width: 25%;
+
+    .logo {
+      width: 2rem;
+      height: 2rem;
+      margin-right: 1rem;
+      filter: invert(25%) sepia(67%) saturate(2928%) hue-rotate(251deg) brightness(75%) contrast(87%);
+    }
   }
   .mid {
     display: flex;

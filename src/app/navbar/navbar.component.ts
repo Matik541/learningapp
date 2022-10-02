@@ -16,10 +16,13 @@ export class NavbarComponent {
   loged: null | { name: string; picture: string; } = null;
   // loged: null | { name: string; picture: string; } = { name: "User name" };
 
-  constructor() { }
+  constructor() { 
+    // on start*
+    // *do not recommend to use it if no need
+  }
 
   ngOnInit() { 
-    this.Lout();
+    // on app initialize
   }
 
   Sin() { 
