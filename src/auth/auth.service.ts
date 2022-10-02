@@ -18,8 +18,6 @@ export class AuthService {
   async signUp(signUpDto: SignUpDto): Promise<User> {
     const user = await this.userRepository.create(signUpDto);
 
-    delete user.hashedPassword;
-
     return await this.userRepository.save(user);
   }
 
