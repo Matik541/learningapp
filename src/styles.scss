@@ -1,9 +1,87 @@
 body {
   font-family: Roboto, "Helvetica Neue", sans-serif;
   margin: 0;
-  padding: 30px;
+
+  nav, main, footer {
+    padding: 0 3rem;
+  }
 }
 
 html, body {
   height: 100%;
+}
+
+nav{
+  background-color: #444;
+  width: 100%;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  height: 3rem;
+
+  .brand {
+    display: flex;
+    justify-content: flex-start;
+    align-items: center;
+    padding: 0 1rem;
+    width: 25%;
+  }
+  .mid {
+    display: flex;
+    justify-content: space-around;
+    align-items: center;
+    width: 50%;
+
+    .create {
+      cursor: pointer;
+    }
+
+    .search {
+      $button-width: 36px;
+      $button-round: 0.5em;
+      $flex: center;
+
+      display: flex;
+      justify-content: $flex;
+      align-items: center;
+      padding: 0 1rem;
+
+      button {
+        padding: 0;
+        min-width: $button-width;
+        line-height: $button-width;
+        border-radius: $button-round $button-round 1px $button-round ;
+        z-index: 999;
+      }
+
+      input {
+        padding-left: 0.5ch;
+        border: none;
+        outline: none;
+      }
+
+      label {
+        padding-left: 0.5ch;
+      }
+      .mat-form-field-wrapper{
+        top: calc( ( $button-width + $button-round*2 ) / 8 );
+      }
+      .mat-form-field-underline {
+        display: flex;
+        align-items: baseline;
+        width: 105%;
+        margin-left: -2.5%;
+        
+        span {
+          top: -1px;
+        }
+      }
+    }
+  }
+  .nav-user{
+    display: flex;
+    justify-content: flex-end;
+    align-items: center;
+    width: 25%;
+  }
 }

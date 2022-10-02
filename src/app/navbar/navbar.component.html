@@ -1,5 +1,50 @@
-<button mat-button [matMenuTriggerFor]="menu">Menu</button>
-<mat-menu #menu="matMenu">
-  <button mat-menu-item>Item 1</button>
-  <button mat-menu-item>Item 2</button>
-</mat-menu>
+<nav>
+  <div class="brand">
+    <div>
+      {{ app.title }}
+    </div>
+    <img src="./assets/logo.png" alt="logo">
+  </div>
+  <div class="mid">
+    <div>
+      <button mat-button [matMenuTriggerFor]="create" class="create btn-primary">Create</button>
+      <mat-menu #create="matMenu">
+        <button mat-menu-item>Lesson</button>
+        <button mat-menu-item disabled>Folder</button>
+      </mat-menu>
+    </div>
+    <div>
+      <form class="search">
+        <div>
+          <button mat-button type="submit">
+            <mat-icon>
+              search
+            </mat-icon>
+          </button>
+        </div>
+        <mat-form-field>
+          <input matInput type="text" placeholder="Search" autocomplete="off">
+        </mat-form-field>
+      </form>
+    </div>
+  </div>
+  <div class="nav-user" *ngIf="loged">
+    <button color="accent" mat-button [matMenuTriggerFor]="userMenu">
+      {{ loged.name }}
+      <mat-icon *ngIf="loged.picture == ''">
+        account_circles
+      </mat-icon>
+      <img *ngIf="loged.picture" src="{{loged.picture}}" alt="">
+    </button>
+    <mat-menu #userMenu="matMenu" xPosition="before">
+        <button mat-menu-item>Profile</button>
+      <button mat-menu-item>...</button>
+      <hr>
+      <button mat-menu-item (click)="Lout()">Logout</button>
+    </mat-menu>
+  </div>
+  <div class="nav-user" *ngIf="!loged">
+    <button mat-button (click)="Sin()">Sign in</button>
+    <button mat-button (click)="Sup()" class="btn-primary">Sign up</button>
+  </div>
+</nav>
