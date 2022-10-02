@@ -11,8 +11,11 @@ export class User {
   @Column()
   email: string;
 
-  @Column()
+  @Column({ name: 'hashed_password' })
   hashedPassword: string;
+
+  @Column({ name: 'hashed_refresh_token', nullable: true })
+  hashedRefreshToken?: string;
 
   //   TODO: add lessonsCompleted, lessonsCreated, createdComments
 }

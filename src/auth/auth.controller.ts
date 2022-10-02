@@ -7,6 +7,7 @@ import { SignInDto } from './dto/signin.dto';
 
 // dto
 import { SignUpDto } from './dto/signup.dto';
+import { Tokens } from './type/tokens.type';
 
 @ApiTags('auth')
 @Controller('auth')
@@ -15,13 +16,13 @@ export class AuthController {
 
   //   register
   @Post('register')
-  signUp(@Body() signUpDto: SignUpDto) {
+  signUp(@Body() signUpDto: SignUpDto): Promise<Tokens> {
     return this.authService.signUp(signUpDto);
   }
 
   //   login
   @Post('login')
-  signIn(@Body() signInDto: SignInDto) {
+  signIn(@Body() signInDto: SignInDto): Promise<Tokens> {
     return this.authService.signIn(signInDto);
   }
 }
