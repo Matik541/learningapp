@@ -7,7 +7,6 @@ import {
   HttpStatus,
 } from '@nestjs/common';
 import { ApiTags } from '@nestjs/swagger';
-import console from 'console';
 
 // service
 import { AuthService } from './auth.service';
@@ -43,8 +42,8 @@ export class AuthController {
   @UseGuards(AuthorizationGuard)
   @Post('logout')
   @HttpCode(HttpStatus.OK)
-  logout(@LoginedUserDecorator() userData) {
-    return this.authService.logout(userData['sub']);
+  logout(@LoginedUserDecorator('sub') id: number) {
+    return this.authService.logout(id);
   }
 
   // refresh token
