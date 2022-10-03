@@ -1,6 +1,7 @@
 import { PassportStrategy } from '@nestjs/passport';
 import { Request } from 'express';
 import { ExtractJwt, Strategy } from 'passport-jwt';
+import { TokenPayloadType } from '../type/tokenPayload.type';
 
 export class RefreshTokenStrategy extends PassportStrategy(
   Strategy,
@@ -14,7 +15,7 @@ export class RefreshTokenStrategy extends PassportStrategy(
     });
   }
 
-  validate(req: Request, data: any) {
+  validate(req: Request, data: TokenPayloadType) {
     const token = req.get('auth').replace('Bearer', '').trim();
 
     return { ...data, token };

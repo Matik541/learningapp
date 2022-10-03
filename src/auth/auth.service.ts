@@ -1,8 +1,8 @@
-import { Injectable } from '@nestjs/common';
+import { Injectable, ForbiddenException } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 import { JwtService } from '@nestjs/jwt';
-import { bcrypt } from 'bcrypt';
+import * as bcrypt from 'bcrypt';
 
 // dto
 import { SignUpDto } from './dto/signup.dto';
@@ -34,7 +34,9 @@ export class AuthService {
     await this.userRepository.save(user);
 
     // generate tokens
-    const tokens = await this.getTokens(user.id, user.email);
+    const tokens = await this.getTokens(user.id, user.userName);
+
+    await this.updateRefreshTokenAsHash(user.id, tokens.refreshToken);
 
     // return token
     return tokens;
@@ -56,7 +58,44 @@ export class AuthService {
     });
 
     // generate tokens
-    const tokens = await this.getTokens(user.id, user.email);
+    const tokens = await this.getTokens(user.id, user.userName);
+
+    await this.updateRefreshTokenAsHash(user.id, tokens.refreshToken);
+
+    // return the tokens
+    return tokens;
+  }
+
+  async logout(id: number) {
+    const user = await this.userRepository.findOneOrFail({ where: { id } });
+
+    if (user.hashedRefreshToken !== null) {
+      user.hashedRefreshToken = null;
+
+      await this.userRepository.save(user);
+    }
+  }
+
+  async refreshToken(id: number, refreshToken: string) {
+    const user = await this.userRepository.findOneOrFail({ where: { id } });
+
+    if (!user) {
+      throw new ForbiddenException('Access denied');
+    }
+
+    const tokensMatches = await bcrypt.compare(
+      refreshToken,
+      user.hashedRefreshToken,
+    );
+
+    if (!tokensMatches) {
+      throw new ForbiddenException('Access denied');
+    }
+
+    // generate tokens
+    const tokens = await this.getTokens(user.id, user.userName);
+
+    await this.updateRefreshTokenAsHash(user.id, tokens.refreshToken);
 
     // return the tokens
     return tokens;
@@ -69,12 +108,12 @@ export class AuthService {
    * @param {string} email - string - the email of the user
    * @returns A promise of Tokens type
    */
-  async getTokens(id: number, email: string): Promise<Tokens> {
+  async getTokens(id: number, userName: string): Promise<Tokens> {
     // generate auth token
     const authToken = await this.jwtService.signAsync(
       {
         sub: id,
-        email,
+        username: userName,
       },
       {
         secret: 'auth-secret',
@@ -86,7 +125,7 @@ export class AuthService {
     const refreshToken = await this.jwtService.signAsync(
       {
         sub: id,
-        email,
+        username: userName,
       },
       {
         secret: 'refresh-secret',
@@ -109,13 +148,13 @@ export class AuthService {
    */
   async updateRefreshTokenAsHash(id: number, refreshToken: string) {
     // hash token
-    const hashedToken = bcrypt.hash(refreshToken, 5);
+    const hashedToken = await bcrypt.hash(refreshToken, 5);
 
     // find user
-    let user = await this.userRepository.findOneOrFail({ where: { id } });
+    const user = await this.userRepository.findOneOrFail({ where: { id } });
 
     // change data in hashed refresh token
-    user = user.hashedRefreshToken = hashedToken;
+    user.hashedRefreshToken = hashedToken;
 
     // save user with new refresh token
     return await this.userRepository.save(user);
