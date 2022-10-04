@@ -66,7 +66,7 @@ export class AuthService {
     return tokens;
   }
 
-  async logout(id: number) {
+  async logout(id: number): Promise<void> {
     const user = await this.userRepository.findOneOrFail({ where: { id } });
 
     if (user.hashedRefreshToken !== null) {
@@ -76,7 +76,7 @@ export class AuthService {
     }
   }
 
-  async refreshToken(id: number, refreshToken: string) {
+  async refreshToken(id: number, refreshToken: string): Promise<Tokens> {
     const user = await this.userRepository.findOneOrFail({ where: { id } });
 
     if (!user) {
@@ -105,7 +105,7 @@ export class AuthService {
    * It takes an id and email, generate a JWT with them as the payload and returns a promise
    * of a Tokens type.
    * @param {number} id - the user's id
-   * @param {string} email - string - the email of the user
+   * @param {string} userName - user's name
    * @returns A promise of Tokens type
    */
   async getTokens(id: number, userName: string): Promise<Tokens> {

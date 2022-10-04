@@ -10,13 +10,19 @@ import { ApiTags } from '@nestjs/swagger';
 
 // service
 import { AuthService } from './auth.service';
-import { LoginedUserDecorator } from './decorators/loginedUser.decorator';
-import { SignInDto } from './dto/signin.dto';
 
 // dto
 import { SignUpDto } from './dto/signup.dto';
+import { SignInDto } from './dto/signin.dto';
+
+// decorator
+import { LoginedUserDecorator } from './decorators/loginedUser.decorator';
+
+// guard
 import { AuthorizationGuard } from './guards/auth.guard';
 import { RefreshGuard } from './guards/refresh.guard';
+
+// type
 import { Tokens } from './type/tokens.type';
 
 @ApiTags('auth')
@@ -42,7 +48,7 @@ export class AuthController {
   @UseGuards(AuthorizationGuard)
   @Post('logout')
   @HttpCode(HttpStatus.OK)
-  logout(@LoginedUserDecorator('sub') id: number) {
+  logout(@LoginedUserDecorator('sub') id: number): Promise<void> {
     return this.authService.logout(id);
   }
 
@@ -50,5 +56,10 @@ export class AuthController {
   @UseGuards(RefreshGuard)
   @Post('refreshtoken')
   @HttpCode(HttpStatus.OK)
-  refreshToken(@LoginedUserDecorator() userData) {}
+  refreshToken(
+    @LoginedUserDecorator('sub') id: number,
+    @LoginedUserDecorator('refreshT') refreshToken: string,
+  ): Promise<Tokens> {
+    return this.authService.refreshToken(id, refreshToken);
+  }
 }

@@ -16,8 +16,12 @@ export class RefreshTokenStrategy extends PassportStrategy(
   }
 
   validate(req: Request, data: TokenPayloadType) {
-    const token = req.get('auth').replace('Bearer', '').trim();
+    let refreshT: string;
 
-    return { ...data, token };
+    if (req) {
+      refreshT = req.get('authorization').replace('Bearer', '').trim();
+    }
+
+    return { ...data, refreshT };
   }
 }
