@@ -1,0 +1,18 @@
+<div *ngIf="loged">
+  <button color="accent" mat-button [matMenuTriggerFor]="userMenu">
+    {{ loged.name }}
+    <mat-icon>
+      account_circles
+    </mat-icon>
+  </button>
+  <mat-menu #userMenu="matMenu" xPosition="before">
+    <button mat-menu-item>Profile</button>
+    <button mat-menu-item>...</button>
+    <hr>
+    <button mat-menu-item (click)="lout()">Logout</button>
+  </mat-menu>
+</div>
+<div *ngIf="!loged">
+  <button mat-button (click)="openDialog('login', '10ms', '50ms')">Sign in</button>
+  <button mat-button (click)="openDialog('register', '10ms', '50ms')" class="btn-primary">Sign up</button>
+</div>

@@ -1,0 +1,20 @@
+<div class="dialog">
+  <h3>Register</h3>
+  <form class="example-form" [formGroup]="formGroup" (ngSubmit)="register()">
+    <mat-form-field appearance="outline">
+      <mat-label>Username</mat-label>
+      <input required matInput placeholder="Username" type="text" formControlName="username">
+    </mat-form-field>
+    <mat-form-field appearance="outline">
+      <mat-label>Email</mat-label>
+      <input required matInput placeholder="Email" type="email" formControlName="email">
+    </mat-form-field>
+    <mat-form-field hintLabel="Min 10 characters" appearance="outline">
+      <mat-label>Password</mat-label>
+      <input required minlength="10" #input matInput placeholder="Password" type="password" formControlName="password">
+      <mat-hint align="end">{{input.value.length || 0}}/10</mat-hint>
+    </mat-form-field>
+    <hr>
+    <button mat-raised-button color="primary" type="submit">Register</button>
+  </form>
+</div>

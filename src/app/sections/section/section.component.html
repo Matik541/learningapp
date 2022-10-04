@@ -1,0 +1,15 @@
+<h2 class="title">{{ title }}</h2>
+<div class="section">
+  <div class="blocks">
+    <div *ngFor="let block of blocks" class="block">
+      <h4>{{ block.title }}</h4>
+      {{ block.text }}
+    </div>
+  </div>
+  <div class="add block">
+    <mat-icon>
+      add
+    </mat-icon>
+    add new
+  </div>
+</div>
