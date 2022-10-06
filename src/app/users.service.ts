@@ -12,6 +12,10 @@ export class UsersService {
 
   constructor(private http: HttpClient) { }
 
+  isLogged(): boolean {
+    return this.isLoggedIn;
+  }
+
   login(email: string, password: string):Observable<boolean> {
     return this.http.post(`${API_URL}/auth/login`, {email, password})
     .pipe(
@@ -23,45 +27,10 @@ export class UsersService {
       })
     );
   }
-
-// var request = new HttpRequestMessage();
-// request.RequestUri = new Uri("localhost:3000/auth/logout");
-// request.Method = HttpMethod.Post;
-
-// request.Headers.Add("Accept", "*/*");
-// request.Headers.Add("User-Agent", "Thunder Client (https://www.thunderclient.com)");
-// request.Headers.Add("Authorization", "bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOjMsInVzZXJuYW1lIjoic3RyaW5nc3RyaW5nIiwiaWF0IjoxNjY1MDU0OTkwLCJleHAiOjE2NjU2NTk3OTB9.76OmUcdKOCq7KQCRbe1ZKrgdqHB64g-vXPMVujm3kVc");
-
-// var response = await client.SendAsync(request);
-// var result = await response.Content.ReadAsStringAsync();
-// Console.WriteLine(result);
-
   logout() {
-    var request = new HttpRequestMessage();
-    request.RequestUri = new Uri("localhost:3000/auth/logout");
-    request.Method = HttpMethod.Post;
-    
-    request.Headers.Add("Accept", "*/*");
-    request.Headers.Add("User-Agent", "Thunder Client (https://www.thunderclient.com)");
-    request.Headers.Add("Authorization", "bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOjMsInVzZXJuYW1lIjoic3RyaW5nc3RyaW5nIiwiaWF0IjoxNjY1MDU0OTkwLCJleHAiOjE2NjU2NTk3OTB9.76OmUcdKOCq7KQCRbe1ZKrgdqHB64g-vXPMVujm3kVc");
-    
-    var response = await client.SendAsync(request);
-    var result = await response.Content.ReadAsStringAsync();
-    Console.WriteLine(result);
+    const headers = { 'Authorization': `Bearer ${this.accessToken()}` }
 
-    
-    let token = this.accesToken();
-
-    console.log(token);
-
-    const headers = new HttpHeaders({
-      Authorization: `Bearer ${token}`
-    });
-
-    console.log(headers.get('Authorization'));
-
-    this.http.post(`${API_URL}/auth/logout`, 
-      { headers: headers }
+    this.http.post(`${API_URL}/auth/logout`, null, { headers: headers }
     ).subscribe((data)=>{
       console.log(data);
     })
@@ -79,7 +48,6 @@ export class UsersService {
       })
     );
   }
-
   register(userName: string, email: string, password: string):Observable<boolean> {
     return this.http.post(`${API_URL}/auth/register`, 
       {userName, email, hashPassword: this.hashPassword(password)})
@@ -119,19 +87,7 @@ export class UsersService {
   private refreshTokens(): string | null {
     return localStorage.getItem('refresh_token');
   }
-  private accesToken(): string | null {
+  public accessToken(): string | null {
     return localStorage.getItem('access_token');
   }
-
-  // !TODO: better sorage system for **JWT** tokens
-  private strokeJWTToken(token: string): void {
-    localStorage.setItem('jwt_token', token);
-  }
-  private clearJWTToken(): void {
-    localStorage.removeItem('jwt_token');
-  }
-  private getJWTToken(): string | null {
-    return localStorage.getItem('jwt_token');
-  }
-
 }

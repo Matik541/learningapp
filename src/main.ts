@@ -4,11 +4,13 @@ import {enableProdMode} from '@angular/core';
 import {platformBrowserDynamic} from '@angular/platform-browser-dynamic';
 
 import {AppModule} from './app/app.module';
-import {environment} from './environments/environment';
+import {environment, appName } from './environments/environment';
 
 if (environment.production) {
   enableProdMode();
 }
+
+document.title = appName;
 
 /* eslint-disable no-console */
 console.info('Angular CDK version', CDK_VERSION.full);
