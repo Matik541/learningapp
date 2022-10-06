@@ -39,3 +39,6 @@ todo
 
 # databases
 *.db
+
+# private data
+.env

@@ -3,6 +3,7 @@ import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 import { JwtService } from '@nestjs/jwt';
 import * as bcrypt from 'bcrypt';
+import { ConfigService } from '@nestjs/config';
 
 // dto
 import { SignUpDto } from './dto/signup.dto';
@@ -19,6 +20,7 @@ export class AuthService {
   constructor(
     @InjectRepository(User) private userRepository: Repository<User>,
     private jwtService: JwtService,
+    private configService: ConfigService,
   ) {}
 
   /**
@@ -134,17 +136,26 @@ export class AuthService {
       username: userName,
     };
 
-    const timeExpiresIn = 60 * 60 * 24 * 7;
+    // get data from .env file
+    const authTokenSecret =
+      this.configService.get<string>('SECRET_AUTH') || 'auth-secret';
+
+    const refreshTokenSecret =
+      this.configService.get<string>('SECRET_REFRESH') || 'refresh-secret';
+
+    const timeExpiresIn =
+      this.configService.get<number>('TOKEN_TIME_EXPIRES_IN') ||
+      60 * 60 * 24 * 7;
 
     // generate auth token
     const authToken = await this.jwtService.signAsync(userData, {
-      secret: 'auth-secret',
+      secret: authTokenSecret,
       expiresIn: timeExpiresIn,
     });
 
     // generate refresh token
     const refreshToken = await this.jwtService.signAsync(userData, {
-      secret: 'refresh-secret',
+      secret: refreshTokenSecret,
       expiresIn: timeExpiresIn,
     });
 

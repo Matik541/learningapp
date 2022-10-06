@@ -7,7 +7,6 @@ export class SignInDto {
     nullable: false,
     required: true,
   })
-  @ApiProperty()
   email: string;
 
   @ApiProperty({
