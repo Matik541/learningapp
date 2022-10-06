@@ -15,7 +15,7 @@ export class NavbarUserComponent implements OnInit {
 
   ngOnInit(): void { }
 
-  logged: boolean = false;
+  logged: boolean = this.usersService.isLogged();
 
   openDialog(type: string, enterAnimationDuration: string, exitAnimationDuration: string): void {
     let dialog: any = (type == 'login' ? LoginComponent : RegisterComponent);
@@ -27,6 +27,6 @@ export class NavbarUserComponent implements OnInit {
   }
 
   logout() {
-    console.log(this.usersService.logout());
+    this.usersService.logout();
   }
 }

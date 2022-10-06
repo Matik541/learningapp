@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, Optional } from '@angular/core';
 import { UsersService } from '../../users.service';
 import { MatDialog, MatDialogRef } from '@angular/material/dialog';
 import { FormControl, FormGroup, Validators } from '@angular/forms';
@@ -24,19 +24,17 @@ export class LoginComponent implements OnInit {
     });
   }
 
-  login(){
-    if(this.formGroup.valid){
+  login() {
+    if (this.formGroup.valid) {
       this.usersService.login(this.formGroup.value.email, this.formGroup.value.password)
-      .subscribe((logged) => {
-        if(logged){
-          this.dialogRef.close();
-        }
-        else{
-          console.log("Invalid login");
-        }
-      });
+        .subscribe((logged) => {
+          if (logged)
+            this.dialogRef.close();
+          else
+            console.log("Invalid login");
+        });
     }
-    else{
+    else {
       console.log("Invalid form");
     }
   }
