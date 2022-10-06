@@ -22,13 +22,13 @@ export class AuthService {
   ) {}
 
   /**
-   * It creates a user and save them in the database. Then generates auth and refresh tokens and returns the them
+   * It creates a user and save them in the database. Then generates auth and refresh tokens then returns them.
    * @param {SignUpDto} signUpDto
    * @returns promise of Tokens type
    */
   async signUp(signUpDto: SignUpDto): Promise<Tokens> {
     // create user
-    const user = await this.userRepository.create(signUpDto);
+    const user = this.userRepository.create(signUpDto);
 
     // save them in db
     await this.userRepository.save(user);
@@ -36,9 +36,9 @@ export class AuthService {
     // generate tokens
     const tokens = await this.getTokens(user.id, user.userName);
 
+    // update user refresh token in db
     await this.updateRefreshTokenAsHash(user.id, tokens.refreshToken);
 
-    // return token
     return tokens;
   }
 
@@ -60,34 +60,54 @@ export class AuthService {
     // generate tokens
     const tokens = await this.getTokens(user.id, user.userName);
 
+    // update user refresh token in db
     await this.updateRefreshTokenAsHash(user.id, tokens.refreshToken);
 
-    // return the tokens
     return tokens;
   }
 
+  /**
+   * Find user by id, check if user is logged in, if yes, change user refresh token in db to null, save
+   * new refresh token value in db.
+   * @param {number} id - number - the id of the user to log out
+   */
   async logout(id: number): Promise<void> {
+    // find user by id
     const user = await this.userRepository.findOneOrFail({ where: { id } });
 
+    // check if user is logged in
     if (user.hashedRefreshToken !== null) {
+      // if yes, change user refresh token in db to null
       user.hashedRefreshToken = null;
 
+      // save new refresh token value in db
       await this.userRepository.save(user);
     }
   }
 
+  /**
+   * It takes a user id and a refresh token, finds the user in the database, compares the refresh token
+   * with the one in the database, generates new tokens, and updates the refresh token in the database
+   * @param {number} id - number - the user id
+   * @param {string} refreshToken - string - the refresh token that was sent from the client
+   * @returns Tokens
+   */
   async refreshToken(id: number, refreshToken: string): Promise<Tokens> {
+    // find user by id
     const user = await this.userRepository.findOneOrFail({ where: { id } });
 
+    // check is user exists
     if (!user) {
       throw new ForbiddenException('Access denied');
     }
 
+    // compare user refresh token with refresh token in db
     const tokensMatches = await bcrypt.compare(
       refreshToken,
       user.hashedRefreshToken,
     );
 
+    // is the refresh token not matches show exception
     if (!tokensMatches) {
       throw new ForbiddenException('Access denied');
     }
@@ -95,43 +115,38 @@ export class AuthService {
     // generate tokens
     const tokens = await this.getTokens(user.id, user.userName);
 
+    // update user refresh token in db
     await this.updateRefreshTokenAsHash(user.id, tokens.refreshToken);
 
-    // return the tokens
     return tokens;
   }
 
   /**
-   * It takes an id and email, generate a JWT with them as the payload and returns a promise
+   * It takes an id and user name, generate a JWT with them as the payload and returns a promise
    * of a Tokens type.
    * @param {number} id - the user's id
    * @param {string} userName - user's name
    * @returns A promise of Tokens type
    */
   async getTokens(id: number, userName: string): Promise<Tokens> {
+    const userData = {
+      sub: id,
+      username: userName,
+    };
+
+    const timeExpiresIn = 60 * 60 * 24 * 7;
+
     // generate auth token
-    const authToken = await this.jwtService.signAsync(
-      {
-        sub: id,
-        username: userName,
-      },
-      {
-        secret: 'auth-secret',
-        expiresIn: 60 * 60 * 24 * 7,
-      },
-    );
+    const authToken = await this.jwtService.signAsync(userData, {
+      secret: 'auth-secret',
+      expiresIn: timeExpiresIn,
+    });
 
     // generate refresh token
-    const refreshToken = await this.jwtService.signAsync(
-      {
-        sub: id,
-        username: userName,
-      },
-      {
-        secret: 'refresh-secret',
-        expiresIn: 60 * 60 * 24 * 7,
-      },
-    );
+    const refreshToken = await this.jwtService.signAsync(userData, {
+      secret: 'refresh-secret',
+      expiresIn: timeExpiresIn,
+    });
 
     // return promise of Tokens type
     return {
@@ -150,7 +165,7 @@ export class AuthService {
     // hash token
     const hashedToken = await bcrypt.hash(refreshToken, 5);
 
-    // find user
+    // find user by id
     const user = await this.userRepository.findOneOrFail({ where: { id } });
 
     // change data in hashed refresh token
