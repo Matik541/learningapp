@@ -11,11 +11,11 @@ import { RegisterComponent } from '../../auth/register/register.component';
 })
 export class NavbarUserComponent implements OnInit {
 
-  constructor(public dialog: MatDialog) { }
+  constructor(public dialog: MatDialog, private usersService: UsersService) { }
 
   ngOnInit(): void { }
 
-  loged: null | { name: string; } = null;
+  logged: boolean = false;
 
   openDialog(type: string, enterAnimationDuration: string, exitAnimationDuration: string): void {
     let dialog: any = (type == 'login' ? LoginComponent : RegisterComponent);
@@ -26,17 +26,7 @@ export class NavbarUserComponent implements OnInit {
     });
   }
 
-  sin() {
-    console.log("Sin")
-    this.loged = { name: "User name" };
-  }
-
-  sup() {
-    console.log("Sup")
-    this.loged = { name: "New user" };
-  }
-  lout() {
-    console.log("Lout")
-    this.loged = null;
+  logout() {
+    console.log(this.usersService.logout());
   }
 }

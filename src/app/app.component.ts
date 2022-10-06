@@ -15,9 +15,7 @@ export class AppComponent {
     })
   }
   logout() {
-    this.usersService.logout().subscribe((data) => {
-      console.log(data);
-    })
+    console.log(this.usersService.logout());
   }
   register(username: string, email: string, password: string) {
     this.usersService.register(username, email, password).subscribe((data) => {

@@ -26,7 +26,8 @@ export class RegisterComponent implements OnInit {
   }
   register(){
     if(this.formGroup.valid){
-      this.usersService.register(this.formGroup.value.username, this.formGroup.value.email, this.formGroup.value.password).subscribe((data) => {
+      this.usersService.register(this.formGroup.value.username, this.formGroup.value.email, this.formGroup.value.password)
+      .subscribe((data) => {
         console.log(data);
         this.dialogRef.close();
       });
