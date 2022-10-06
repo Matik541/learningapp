@@ -6,7 +6,7 @@ import {
   HttpCode,
   HttpStatus,
 } from '@nestjs/common';
-import { ApiTags } from '@nestjs/swagger';
+import { ApiBearerAuth, ApiTags } from '@nestjs/swagger';
 
 // service
 import { AuthService } from './auth.service';
@@ -45,6 +45,7 @@ export class AuthController {
   }
 
   // logout
+  @ApiBearerAuth()
   @UseGuards(AuthorizationGuard)
   @Post('logout')
   @HttpCode(HttpStatus.OK)
@@ -53,6 +54,7 @@ export class AuthController {
   }
 
   // refresh token
+  @ApiBearerAuth()
   @UseGuards(RefreshGuard)
   @Post('refreshtoken')
   @HttpCode(HttpStatus.OK)
