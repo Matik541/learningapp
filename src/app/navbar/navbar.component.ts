@@ -1,5 +1,7 @@
 import { Component } from '@angular/core';
 
+import { appName } from 'src/environments/environment';
+
 /**
  * @title Basic menu
  */
@@ -9,9 +11,8 @@ import { Component } from '@angular/core';
 })
 
 export class NavbarComponent {
-  app = {
-    title: "LearningApp",
-  }
+  
+  appName: string = appName;
 
   constructor() { 
     // on start*

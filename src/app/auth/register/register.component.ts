@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, Optional } from '@angular/core';
 import { UsersService } from '../../users.service';
 import { MatDialog, MatDialogRef } from '@angular/material/dialog';
 import { FormControl, FormGroup, Validators } from '@angular/forms';
@@ -26,9 +26,14 @@ export class RegisterComponent implements OnInit {
   }
   register(){
     if(this.formGroup.valid){
-      this.usersService.register(this.formGroup.value.username, this.formGroup.value.email, this.formGroup.value.password).subscribe((data) => {
-        console.log(data);
-        this.dialogRef.close();
+      this.usersService.register(this.formGroup.value.username, this.formGroup.value.email, this.formGroup.value.password)
+      .subscribe((logged) => {
+        if(logged){
+          this.dialogRef.close();
+        }
+        else{
+          console.log("Invalid login");
+        }
       });
     }
     else{
