@@ -7,13 +7,12 @@ import { API_URL } from '../environments/environment';
   providedIn: 'root'
 })
 export class UsersService {
-  private isLoggedIn: boolean;
-  private loggedUser: string | null = null;
+  private loggedUser:  null | { email: string, nickname: string, id: number } = null;
 
   constructor(private http: HttpClient) { }
 
-  isLogged(): boolean {
-    return this.isLoggedIn;
+  isLogged(): null | { email: string, nickname: string, id: number } {
+    return this.loggedUser;
   }
 
   login(email: string, password: string):Observable<boolean> {
@@ -29,12 +28,15 @@ export class UsersService {
   }
   logout() {
     const headers = { 'Authorization': `Bearer ${this.accessToken()}` }
-
-    this.http.post(`${API_URL}/auth/logout`, null, { headers: headers }
-    ).subscribe((data)=>{
-      console.log(data);
-    })
-    return false;
+    this.loggedOut()
+    return this.http.post(`${API_URL}/auth/logout`, null, { headers: headers }
+    ).pipe(
+      map(() => { return true } ),
+      catchError((err) => {
+        console.log(err);
+        return of(false);
+      })
+    )
   }
   refreshToken():Observable<any> {
     return this.http.post(`${API_URL}/auth/refresh`, {
@@ -61,7 +63,7 @@ export class UsersService {
   }
 
   private loggedIn(email: string, tokens: any): void{
-    this.loggedUser = email;
+    this.loggedUser = {email: email, nickname: '', id: NaN};
     this.strokeTokens(tokens);
   }
   private loggedOut(): void {

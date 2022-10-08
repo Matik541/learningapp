@@ -4,14 +4,14 @@ import { MatDialog, MatDialogRef } from '@angular/material/dialog';
 import { FormControl, FormGroup, Validators } from '@angular/forms';
 
 @Component({
-  selector: 'app-login',
+  selector: 'login',
   templateUrl: './login.component.html',
 })
 export class LoginComponent implements OnInit {
-
+  
   formGroup: FormGroup;
 
-  constructor(public dialogRef: MatDialogRef<LoginComponent>, private usersService: UsersService) { }
+  constructor(public dialogRef: MatDialogRef<LoginComponent>, private usersService: UsersService) {}
 
   ngOnInit(): void {
     this.initForm();

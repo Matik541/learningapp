@@ -11,11 +11,11 @@ import { RegisterComponent } from '../../auth/register/register.component';
 })
 export class NavbarUserComponent implements OnInit {
 
+  logged: null | { email: string, nickname: string, id: number } = this.usersService.isLogged();
+
   constructor(public dialog: MatDialog, private usersService: UsersService) { }
 
   ngOnInit(): void { }
-
-  logged: boolean = this.usersService.isLogged();
 
   openDialog(type: string, enterAnimationDuration: string, exitAnimationDuration: string): void {
     let dialog: any = (type == 'login' ? LoginComponent : RegisterComponent);
@@ -24,9 +24,18 @@ export class NavbarUserComponent implements OnInit {
       enterAnimationDuration,
       exitAnimationDuration,
     });
+
+    this.dialog.afterAllClosed.subscribe(() => {
+      this.checkLogin();
+    });
   }
 
   logout() {
     this.usersService.logout();
+    this.checkLogin();
+  }
+
+  checkLogin() {
+    this.logged = this.usersService.isLogged();
   }
 }
