@@ -58,21 +58,25 @@ export class AuthService {
    * @returns Tokens
    */
   async signIn(signInDto: SignInDto): Promise<Tokens> {
-    // find the user by email
-    const user = await this.userRepository.findOneOrFail({
-      where: {
-        email: signInDto.email,
-        hashedPassword: signInDto.hashedPassword,
-      },
-    });
+    try {
+      // find the user by email
+      const user = await this.userRepository.findOneOrFail({
+        where: {
+          email: signInDto.email,
+          hashedPassword: signInDto.hashedPassword,
+        },
+      });
 
-    // generate tokens
-    const tokens = await this.getTokens(user.id, user.userName);
+      // generate tokens
+      const tokens = await this.getTokens(user.id, user.userName);
 
-    // update user refresh token in db
-    await this.updateRefreshTokenAsHash(user.id, tokens.refreshToken);
+      // update user refresh token in db
+      await this.updateRefreshTokenAsHash(user.id, tokens.refreshToken);
 
-    return tokens;
+      return tokens;
+    } catch (err) {
+      throw new Error(err);
+    }
   }
 
   /**
@@ -81,16 +85,20 @@ export class AuthService {
    * @param {number} id - number - the id of the user to log out
    */
   async logout(id: number): Promise<void> {
-    // find user by id
-    const user = await this.userRepository.findOneOrFail({ where: { id } });
+    try {
+      // find user by id
+      const user = await this.userRepository.findOneOrFail({ where: { id } });
 
-    // check if user is logged in
-    if (user.hashedRefreshToken !== null) {
-      // if yes, change user refresh token in db to null
-      user.hashedRefreshToken = null;
+      // check if user is logged in
+      if (user.hashedRefreshToken !== null) {
+        // if yes, change user refresh token in db to null
+        user.hashedRefreshToken = null;
 
-      // save new refresh token value in db
-      await this.userRepository.save(user);
+        // save new refresh token value in db
+        await this.userRepository.save(user);
+      }
+    } catch (err) {
+      throw new Error(err);
     }
   }
 
@@ -102,32 +110,36 @@ export class AuthService {
    * @returns Tokens
    */
   async refreshToken(id: number, refreshToken: string): Promise<Tokens> {
-    // find user by id
-    const user = await this.userRepository.findOneOrFail({ where: { id } });
+    try {
+      // find user by id
+      const user = await this.userRepository.findOneOrFail({ where: { id } });
 
-    // check is user exists
-    if (!user) {
-      throw new ForbiddenException('Access denied');
+      // check is user exists
+      if (!user) {
+        throw new ForbiddenException('Access denied');
+      }
+
+      // compare user refresh token with refresh token in db
+      const tokensMatches = await bcrypt.compare(
+        refreshToken,
+        user.hashedRefreshToken,
+      );
+
+      // is the refresh token not matches show exception
+      if (!tokensMatches) {
+        throw new ForbiddenException('Access denied');
+      }
+
+      // generate tokens
+      const tokens = await this.getTokens(user.id, user.userName);
+
+      // update user refresh token in db
+      await this.updateRefreshTokenAsHash(user.id, tokens.refreshToken);
+
+      return tokens;
+    } catch (err) {
+      throw new Error(err);
     }
-
-    // compare user refresh token with refresh token in db
-    const tokensMatches = await bcrypt.compare(
-      refreshToken,
-      user.hashedRefreshToken,
-    );
-
-    // is the refresh token not matches show exception
-    if (!tokensMatches) {
-      throw new ForbiddenException('Access denied');
-    }
-
-    // generate tokens
-    const tokens = await this.getTokens(user.id, user.userName);
-
-    // update user refresh token in db
-    await this.updateRefreshTokenAsHash(user.id, tokens.refreshToken);
-
-    return tokens;
   }
 
   /**
@@ -183,13 +195,17 @@ export class AuthService {
     // hash token
     const hashedToken = await bcrypt.hash(refreshToken, 5);
 
-    // find user by id
-    const user = await this.userRepository.findOneOrFail({ where: { id } });
+    try {
+      // find user by id
+      const user = await this.userRepository.findOneOrFail({ where: { id } });
 
-    // change data in hashed refresh token
-    user.hashedRefreshToken = hashedToken;
+      // change data in hashed refresh token
+      user.hashedRefreshToken = hashedToken;
 
-    // save user with new refresh token
-    return await this.userRepository.save(user);
+      // save user with new refresh token
+      return await this.userRepository.save(user);
+    } catch (err) {
+      throw new Error(err);
+    }
   }
 }
