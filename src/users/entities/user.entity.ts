@@ -8,7 +8,7 @@ export class User {
   @Column()
   userName: string;
 
-  @Column()
+  @Column({ unique: true })
   email: string;
 
   @Column({ name: 'hashed_password' })

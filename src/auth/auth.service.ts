@@ -1,6 +1,11 @@
-import { Injectable, ForbiddenException } from '@nestjs/common';
+import {
+  Injectable,
+  ForbiddenException,
+  ConflictException,
+  BadRequestException,
+} from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
-import { Repository } from 'typeorm';
+import { QueryFailedError, Repository } from 'typeorm';
 import { JwtService } from '@nestjs/jwt';
 import * as bcrypt from 'bcrypt';
 import { ConfigService } from '@nestjs/config';
@@ -32,16 +37,19 @@ export class AuthService {
     // create user
     const user = this.userRepository.create(signUpDto);
 
-    // save them in db
-    await this.userRepository.save(user);
+    try {
+      // save them in db
+      await this.userRepository.save(user);
+      // generate tokens
+      const tokens = await this.getTokens(user.id, user.userName);
 
-    // generate tokens
-    const tokens = await this.getTokens(user.id, user.userName);
+      // update user refresh token in db
+      await this.updateRefreshTokenAsHash(user.id, tokens.refreshToken);
 
-    // update user refresh token in db
-    await this.updateRefreshTokenAsHash(user.id, tokens.refreshToken);
-
-    return tokens;
+      return tokens;
+    } catch (err) {
+      throw new BadRequestException('Email is already in use.');
+    }
   }
 
   /**
