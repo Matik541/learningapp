@@ -1,15 +1,16 @@
 <h2 class="title">{{ title }}</h2>
 <div class="section">
-  <div class="blocks">
+  <!-- <drag-scroll class="blocks"> -->
     <div *ngFor="let block of blocks" class="block">
-      <h4>{{ block.title }}</h4>
-      {{ block.text }}
+      <mat-icon> {{ block.icon }} </mat-icon>
+      <span>{{ block.title }}</span>
     </div>
-  </div>
+  <!-- </drag-scroll> -->
   <div class="add block">
     <mat-icon>
       add
     </mat-icon>
     add new
   </div>
+
 </div>

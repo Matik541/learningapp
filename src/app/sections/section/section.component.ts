@@ -14,13 +14,13 @@ export class SectionComponent implements OnInit {
   ngOnInit(): void {
   }
 
-  // REVERSE!
   blocks = [
-    { title: "Block 5", text: "Lorem ipsum dolor sit amet consectetur adipisicing elit. Quisquam, quod." },
-    { title: "Block 4", text: "Lorem ipsum dolor sit amet consectetur adipisicing elit. Quisquam, quod." },
-    { title: "Block 3", text: "Lorem ipsum dolor sit amet consectetur adipisicing elit. Quisquam, quod." },
-    { title: "Block 2", text: "Lorem ipsum dolor sit amet consectetur adipisicing elit. Quisquam, quod." },
-    { title: "Block 1", text: "Lorem ipsum dolor sit amet consectetur adipisicing elit. Quisquam, quod." },
+    { title: "Block 1", icon: "tab unselected" },
+    { title: "Block 2", icon: "folder" },
+    { title: "Block 3", icon: "folder_open" },
+    { title: "Block 4", icon: "view_agenda" },
+    { title: "Block 5", icon: "space_dashboard" },
+    { title: "Block 6", icon: "view_carousel" },
+    { title: "Block 7", icon: "space_dashboard" },
   ]
-
 }

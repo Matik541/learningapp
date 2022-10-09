@@ -26,10 +26,10 @@ export class TokenInterceptor implements HttpInterceptor {
     }));
   }
 
-  addToken(request: HttpRequest<any>, arg1: string | null): HttpRequest<any> {
+  addToken(request: HttpRequest<any>, token: string | null): HttpRequest<any> {
     return request.clone({
       setHeaders: {
-        Authorization: `Bearer ${arg1}`
+        Authorization: `Bearer ${token}`
       }
     });
   }
