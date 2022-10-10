@@ -1,4 +1,7 @@
-import { Column, Entity, PrimaryGeneratedColumn } from 'typeorm';
+import { Column, Entity, OneToMany, PrimaryGeneratedColumn } from 'typeorm';
+
+// entities
+import { Lesson } from 'src/lessons/entities/lesson.entity';
 
 @Entity()
 export class User {
@@ -17,5 +20,8 @@ export class User {
   @Column({ name: 'hashed_refresh_token', nullable: true })
   hashedRefreshToken?: string;
 
-  //   TODO: add lessonsCompleted, lessonsCreated, createdComments
+  @OneToMany(() => Lesson, (lesson) => lesson.creator)
+  createdLessons: Lesson[];
+
+  //   TODO: add lessonsCompleted, createdComments
 }
