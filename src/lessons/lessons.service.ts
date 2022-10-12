@@ -14,6 +14,11 @@ export class LessonsService {
     @InjectRepository(Lesson) private lessonsRepository: Repository<Lesson>,
   ) {}
 
+  /**
+   * Find all lessons, select only the id, title, description and include the creator's id
+   * and username fields. Then return selected lessons data.
+   * @returns An array of lessons
+   */
   async getAllLessons(): Promise<Lesson[]> {
     // find and return all lessons
     try {
@@ -37,6 +42,12 @@ export class LessonsService {
     }
   }
 
+  /**
+   * Find a lesson by id, select only the id, title, description and include the creator's id
+   * and username fields. Then return lesson data
+   * @param {number} id - number - the id of the lesson we want to get
+   * @returns Lesson
+   */
   async getLessonById(id: number): Promise<Lesson> {
     // find lesson by id and return lesson data
     try {
@@ -59,6 +70,12 @@ export class LessonsService {
     }
   }
 
+  /**
+   * It creates a lesson, saves it in the database, and returns it
+   * @param {number} lessonCreatorId - number - the id of the user who created the lesson
+   * @param {AddLessonDto} dto - AddLessonDto
+   * @returns The lesson that was created.
+   */
   async addLesson(lessonCreatorId: number, dto: AddLessonDto): Promise<Lesson> {
     // create lesson
     const lesson = this.lessonsRepository.create({
