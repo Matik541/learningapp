@@ -4,6 +4,7 @@ import {
   Get,
   HttpCode,
   HttpStatus,
+  Param,
   Post,
   UseGuards,
 } from '@nestjs/common';
@@ -31,9 +32,22 @@ export class LessonsController {
 
   @Get()
   @HttpCode(HttpStatus.OK)
-  @ApiResponse({ status: HttpStatus.OK, description: 'Return all lessons.' })
+  @ApiResponse({
+    status: HttpStatus.OK,
+    description: 'Return all lessons data.',
+  })
   getAllLessons(): Promise<Lesson[]> {
     return this.lessonsService.getAllLessons();
+  }
+
+  @Get(':id')
+  @HttpCode(HttpStatus.OK)
+  @ApiResponse({
+    status: HttpStatus.OK,
+    description: 'Return lesson data by id.',
+  })
+  getLessonById(@Param('id') id: string): Promise<Lesson> {
+    return this.lessonsService.getLessonById(+id);
   }
 
   @ApiBearerAuth()

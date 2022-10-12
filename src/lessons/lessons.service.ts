@@ -37,6 +37,28 @@ export class LessonsService {
     }
   }
 
+  async getLessonById(id: number): Promise<Lesson> {
+    // find lesson by id and return lesson data
+    try {
+      return await this.lessonsRepository.findOneOrFail({
+        select: {
+          id: true,
+          title: true,
+          description: true,
+          // get only id and username from creator
+          creator: {
+            id: true,
+            userName: true,
+          },
+        },
+        where: { id },
+        relations: { creator: true },
+      });
+    } catch (err) {
+      throw new Error(err);
+    }
+  }
+
   async addLesson(lessonCreatorId: number, dto: AddLessonDto): Promise<Lesson> {
     // create lesson
     const lesson = this.lessonsRepository.create({
