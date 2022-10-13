@@ -8,6 +8,7 @@ import {
   Post,
   Put,
   UseGuards,
+  Delete,
 } from '@nestjs/common';
 import { ApiBearerAuth, ApiResponse, ApiTags } from '@nestjs/swagger';
 
@@ -76,14 +77,21 @@ export class LessonsController {
     description: 'Update and return lesson data by id.',
   })
   updateLesson(
-    @LoginedUserDecorator('sub') lessonCreatorId: number,
     @Param('id') lessonId: string,
     @Body() updateLessonDto: UpdateLessonDto,
   ): Promise<Lesson> {
-    return this.lessonsService.updateLesson(
-      lessonCreatorId,
-      +lessonId,
-      updateLessonDto,
-    );
+    return this.lessonsService.updateLesson(+lessonId, updateLessonDto);
+  }
+
+  @ApiBearerAuth()
+  @UseGuards(AuthorizationGuard)
+  @Delete(':id')
+  @HttpCode(HttpStatus.OK)
+  @ApiResponse({
+    status: HttpStatus.OK,
+    description: 'Delete and return lesson data by id.',
+  })
+  deleteLesson(@Param('id') lessonId: string): Promise<Lesson> {
+    return this.lessonsService.deleteLesson(+lessonId);
   }
 }

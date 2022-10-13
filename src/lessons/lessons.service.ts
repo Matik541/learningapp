@@ -92,11 +92,7 @@ export class LessonsService {
     }
   }
 
-  async updateLesson(
-    creatorId: number,
-    lessonId: number,
-    dto: UpdateLessonDto,
-  ): Promise<Lesson> {
+  async updateLesson(lessonId: number, dto: UpdateLessonDto): Promise<Lesson> {
     // get lesson by id
     let lesson = await this.getLessonById(lessonId);
 
@@ -106,6 +102,18 @@ export class LessonsService {
     // save updated lesson
     try {
       return await this.lessonsRepository.save(lesson);
+    } catch (err) {
+      throw new BadRequestException(err);
+    }
+  }
+
+  async deleteLesson(lessonId: number): Promise<Lesson> {
+    // get lesson by id
+    const lesson = await this.getLessonById(lessonId);
+
+    try {
+      // remove lesson from db
+      return await this.lessonsRepository.remove(lesson);
     } catch (err) {
       throw new BadRequestException(err);
     }
