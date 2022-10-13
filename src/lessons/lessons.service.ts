@@ -4,6 +4,7 @@ import { Repository } from 'typeorm';
 
 // dto
 import { AddLessonDto } from './dto/addLesson.dto';
+import { UpdateLessonDto } from './dto/updateLesson.dto';
 
 // entity
 import { Lesson } from './entities/lesson.entity';
@@ -85,6 +86,25 @@ export class LessonsService {
 
     try {
       // save lesson in the database
+      return await this.lessonsRepository.save(lesson);
+    } catch (err) {
+      throw new BadRequestException(err);
+    }
+  }
+
+  async updateLesson(
+    creatorId: number,
+    lessonId: number,
+    dto: UpdateLessonDto,
+  ): Promise<Lesson> {
+    // get lesson by id
+    let lesson = await this.getLessonById(lessonId);
+
+    // change data in lesson object
+    lesson = Object.assign(lesson, dto);
+
+    // save updated lesson
+    try {
       return await this.lessonsRepository.save(lesson);
     } catch (err) {
       throw new BadRequestException(err);

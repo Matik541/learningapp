@@ -6,6 +6,7 @@ import {
   HttpStatus,
   Param,
   Post,
+  Put,
   UseGuards,
 } from '@nestjs/common';
 import { ApiBearerAuth, ApiResponse, ApiTags } from '@nestjs/swagger';
@@ -18,6 +19,7 @@ import { AuthorizationGuard } from 'src/auth/guards/auth.guard';
 
 // dto
 import { AddLessonDto } from './dto/addLesson.dto';
+import { UpdateLessonDto } from './dto/updateLesson.dto';
 
 // entity
 import { Lesson } from './entities/lesson.entity';
@@ -63,5 +65,25 @@ export class LessonsController {
     @Body() addLessonDto: AddLessonDto,
   ): Promise<Lesson> {
     return this.lessonsService.addLesson(lessonCreatorId, addLessonDto);
+  }
+
+  @ApiBearerAuth()
+  @UseGuards(AuthorizationGuard)
+  @Put(':id')
+  @HttpCode(HttpStatus.OK)
+  @ApiResponse({
+    status: HttpStatus.OK,
+    description: 'Update and return lesson data by id.',
+  })
+  updateLesson(
+    @LoginedUserDecorator('sub') lessonCreatorId: number,
+    @Param('id') lessonId: string,
+    @Body() updateLessonDto: UpdateLessonDto,
+  ): Promise<Lesson> {
+    return this.lessonsService.updateLesson(
+      lessonCreatorId,
+      +lessonId,
+      updateLessonDto,
+    );
   }
 }
