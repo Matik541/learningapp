@@ -20,7 +20,6 @@ export class SignUpDto {
   })
   @IsNotEmpty()
   @IsEmail()
-  @ApiProperty()
   email: string;
 
   @ApiProperty({
