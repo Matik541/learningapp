@@ -1,9 +1,24 @@
 import { ApiProperty } from '@nestjs/swagger';
+import { IsOptional, IsString } from 'class-validator';
 
 export class UpdateLessonDto {
-  @ApiProperty({ required: false })
+  @ApiProperty({
+    description: 'Title of the lesson',
+    type: String,
+    nullable: false,
+    required: false,
+  })
+  @IsString()
+  @IsOptional()
   title?: string;
 
-  @ApiProperty({ required: false })
+  @ApiProperty({
+    description: 'Description of the lesson',
+    type: String,
+    nullable: false,
+    required: false,
+  })
+  @IsString()
+  @IsOptional()
   description?: string;
 }
