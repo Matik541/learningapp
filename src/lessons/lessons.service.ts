@@ -92,9 +92,27 @@ export class LessonsService {
     }
   }
 
-  async updateLesson(lessonId: number, dto: UpdateLessonDto): Promise<Lesson> {
+  /**
+   * We get the lesson by id, check if logger user is the author, change the data in the lesson object,
+   * and save the updated lesson
+   * @param {number} creatorId - number - the id of the logged user
+   * @param {number} lessonId - number - the id of the lesson to be updated
+   * @param {UpdateLessonDto} dto - UpdateLessonDto - this is the data transfer object that we will
+   * create in the next step.
+   * @returns A promise of a lesson
+   */
+  async updateLesson(
+    creatorId: number,
+    lessonId: number,
+    dto: UpdateLessonDto,
+  ): Promise<Lesson> {
     // get lesson by id
     let lesson = await this.getLessonById(lessonId);
+
+    // check is lesson author
+    if (lesson.creator.id !== creatorId) {
+      throw new BadRequestException('You are not allowed to update.');
+    }
 
     // change data in lesson object
     lesson = Object.assign(lesson, dto);
@@ -107,9 +125,20 @@ export class LessonsService {
     }
   }
 
-  async deleteLesson(lessonId: number): Promise<Lesson> {
+  /**
+   * It deletes a lesson from the database
+   * @param {number} creatorId - number - the id of the logged user
+   * @param {number} lessonId - number - the id of the lesson to be deleted
+   * @returns The lesson that was deleted.
+   */
+  async deleteLesson(creatorId: number, lessonId: number): Promise<Lesson> {
     // get lesson by id
     const lesson = await this.getLessonById(lessonId);
+
+    // check is lesson author
+    if (lesson.creator.id !== creatorId) {
+      throw new BadRequestException('You are not allowed to update.');
+    }
 
     try {
       // remove lesson from db

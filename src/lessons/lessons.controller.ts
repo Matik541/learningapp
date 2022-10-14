@@ -77,10 +77,15 @@ export class LessonsController {
     description: 'Update and return lesson data by id.',
   })
   updateLesson(
+    @LoginedUserDecorator('sub') creatorId: number,
     @Param('id') lessonId: string,
     @Body() updateLessonDto: UpdateLessonDto,
   ): Promise<Lesson> {
-    return this.lessonsService.updateLesson(+lessonId, updateLessonDto);
+    return this.lessonsService.updateLesson(
+      creatorId,
+      +lessonId,
+      updateLessonDto,
+    );
   }
 
   @ApiBearerAuth()
@@ -91,7 +96,10 @@ export class LessonsController {
     status: HttpStatus.OK,
     description: 'Delete and return lesson data by id.',
   })
-  deleteLesson(@Param('id') lessonId: string): Promise<Lesson> {
-    return this.lessonsService.deleteLesson(+lessonId);
+  deleteLesson(
+    @LoginedUserDecorator('sub') creatorId: number,
+    @Param('id') lessonId: string,
+  ): Promise<Lesson> {
+    return this.lessonsService.deleteLesson(creatorId, +lessonId);
   }
 }
