@@ -1,6 +1,10 @@
 import { ApiProperty } from '@nestjs/swagger';
 import { IsNotEmpty, IsString } from 'class-validator';
 
+// entities
+import { Tag } from '../entities/tag.entity';
+import { AddTagDto } from './addTag.dto';
+
 export class AddLessonDto {
   @ApiProperty({
     description: 'Title of the lesson',
@@ -21,4 +25,12 @@ export class AddLessonDto {
   @IsNotEmpty()
   @IsString()
   description: string;
+
+  @ApiProperty({
+    description: 'Lesson tags',
+    type: [AddTagDto],
+    nullable: false,
+    required: true,
+  })
+  tags: Tag[];
 }

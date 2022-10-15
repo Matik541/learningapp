@@ -33,10 +33,9 @@ export class LessonsService {
             id: true,
             userName: true,
           },
+          tags: true,
         },
-        relations: {
-          creator: true,
-        },
+        relations: { creator: true, tags: true },
       });
     } catch (err) {
       throw new Error(err);
@@ -62,9 +61,10 @@ export class LessonsService {
             id: true,
             userName: true,
           },
+          tags: true,
         },
         where: { id },
-        relations: { creator: true },
+        relations: { creator: true, tags: true },
       });
     } catch (err) {
       throw new Error(err);
