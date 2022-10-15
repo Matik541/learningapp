@@ -20,7 +20,7 @@ export class NavbarUserComponent implements OnInit {
   openDialog(type: string, enterAnimationDuration: string, exitAnimationDuration: string): void {
     let dialog: any = (type == 'login' ? LoginComponent : RegisterComponent);
     this.dialog.open(dialog, {
-      width: '250px',
+      width: '30vw',
       enterAnimationDuration,
       exitAnimationDuration,
     });

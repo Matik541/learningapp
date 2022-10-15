@@ -1,8 +1,9 @@
 import { COMMA, ENTER } from '@angular/cdk/keycodes';
-import { Component, ElementRef, ViewChild } from '@angular/core';
+import { Component, ElementRef, Input, ViewChild } from '@angular/core';
 import { FormControl } from '@angular/forms';
 import { MatAutocompleteSelectedEvent, MatAutocomplete } from '@angular/material/autocomplete';
 import { MatChipInputEvent } from '@angular/material/chips';
+import { MatFormFieldAppearance } from '@angular/material/form-field';
 import { Observable } from 'rxjs';
 import { map, startWith } from 'rxjs/operators';
 
@@ -13,6 +14,9 @@ import { map, startWith } from 'rxjs/operators';
 })
 
 export class AutocompleteTagsComponent {
+  @Input() appearance: MatFormFieldAppearance;
+  @Input() match: boolean = false;
+
   visible = true;
   selectable = true;
   removable = true;
@@ -21,8 +25,8 @@ export class AutocompleteTagsComponent {
   tagCtrl = new FormControl();
   filteredTags: Observable<string[]>;
   tags: string[] = [];
-  //TODO: get tags from database
-  allTags: string[] = [/* API CALLs for all tags */];
+  //TODO: get tags from database - API CALLs for all tags
+  allTags: string[] = ["polish", "english", "español"];
 
   @ViewChild('tagInput', { static: false }) tagInput: ElementRef<HTMLInputElement>;
   @ViewChild('auto', { static: false }) matAutocomplete: MatAutocomplete;
@@ -39,12 +43,15 @@ export class AutocompleteTagsComponent {
       const value = event.value;
 
       if ((value || '').trim()) {
-        this.tags.push(value.trim());
+        if (this.match){
+          if (this.allTags.includes(value) && !this.tags.includes(value))
+            this.tags.push(value.trim());
+        }
+        else
+          this.tags.push(value.trim());
       }
-
-      if (input) {
+      if (input) 
         input.value = '';
-      }
 
       this.tagCtrl.setValue(null);
     }
@@ -53,14 +60,20 @@ export class AutocompleteTagsComponent {
   remove(tag: string): void {
     const index = this.tags.indexOf(tag);
 
-    if (index >= 0) {
+    if (index >= 0) 
       this.tags.splice(index, 1);
-    }
   }
 
   selected(event: MatAutocompleteSelectedEvent): void {
-    this.tags.push(event.option.viewValue);
-    this.tagInput.nativeElement.value = '';
+    const value = event.option.viewValue;
+
+    if (this.match){
+      if (this.allTags.includes(value) && !this.tags.includes(value))
+        this.tags.push(event.option.viewValue);
+    }
+    else
+      this.tags.push();
+
     this.tagCtrl.setValue(null);
   }
 

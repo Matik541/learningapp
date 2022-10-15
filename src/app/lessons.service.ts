@@ -13,9 +13,9 @@ export class LessonsService {
 
   getFlashcards(id: number): { title: string, icon: string, id: number } {
     this.http.get(API_URL + '/lessons/' + id)
-    // .subscribe(() => { })
+    // .subscribe((data) => { console.log(data) })
 
-    return { title: "", icon: "flash_on", id: id }
+    return { title: "asd", icon: "flash_on", id: id }
   }
 
 }

@@ -40,3 +40,7 @@ nav {
 errors {
   color: mat.get-color-from-palette($warn, 500);
 }
+
+#cdk-step-content-0-0 > form > div.create-grid > div.row1 > div > div > button {
+  background-color: mat.get-color-from-palette($accent, A200);
+}

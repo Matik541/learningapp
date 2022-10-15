@@ -1,4 +1,4 @@
-<mat-form-field class="full-width">
+<mat-form-field class="full-width" [appearance]="appearance">
   <mat-chip-list #chipList aria-label="Tag selection">
     <mat-chip *ngFor="let tag of tags" [selectable]="selectable" [removable]="removable" (removed)="remove(tag)">
       {{tag}}

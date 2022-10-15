@@ -8,7 +8,7 @@ import { FormControl, FormGroup, Validators } from '@angular/forms';
   templateUrl: './login.component.html',
 })
 export class LoginComponent implements OnInit {
-  
+  hide = true;
   formGroup: FormGroup;
 
   constructor(public dialogRef: MatDialogRef<LoginComponent>, private usersService: UsersService) {}

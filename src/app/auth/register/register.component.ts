@@ -8,7 +8,7 @@ import { FormControl, FormGroup, Validators } from '@angular/forms';
   templateUrl: './register.component.html',
 })
 export class RegisterComponent implements OnInit {
-
+  hide = true;
   formGroup: FormGroup;
 
   constructor(public dialogRef: MatDialogRef<RegisterComponent>, private usersService: UsersService) { }
