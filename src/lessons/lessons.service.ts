@@ -8,11 +8,13 @@ import { UpdateLessonDto } from './dto/updateLesson.dto';
 
 // entity
 import { Lesson } from './entities/lesson.entity';
+import { Tag } from './entities/tag.entity';
 
 @Injectable()
 export class LessonsService {
   constructor(
     @InjectRepository(Lesson) private lessonsRepository: Repository<Lesson>,
+    @InjectRepository(Tag) private tagRepository: Repository<Tag>,
   ) {}
 
   /**
@@ -40,6 +42,10 @@ export class LessonsService {
     } catch (err) {
       throw new Error(err);
     }
+  }
+
+  async getTags(): Promise<Tag[]> {
+    return await this.tagRepository.find();
   }
 
   /**

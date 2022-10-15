@@ -24,6 +24,7 @@ import { UpdateLessonDto } from './dto/updateLesson.dto';
 
 // entity
 import { Lesson } from './entities/lesson.entity';
+import { Tag } from './entities/tag.entity';
 
 // service
 import { LessonsService } from './lessons.service';
@@ -41,6 +42,13 @@ export class LessonsController {
   })
   getAllLessons(): Promise<Lesson[]> {
     return this.lessonsService.getAllLessons();
+  }
+
+  @Get('tags')
+  @HttpCode(HttpStatus.OK)
+  @ApiResponse({})
+  getLessonTags(): Promise<Tag[]> {
+    return this.lessonsService.getTags();
   }
 
   @Get(':id')
