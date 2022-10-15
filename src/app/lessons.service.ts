@@ -7,13 +7,15 @@ import { API_URL } from '../environments/environment';
   providedIn: 'root'
 })
 
-export class FlashcardsService {
+export class LessonsService {
 
   constructor(private http: HttpClient) { }
 
-  getFLashcards(id: number): {title: string, icon: string, id: number}[] {
-    this.http.get(API_URL + '/flashcards/' + id);
-    return [{title: "Flashcards", icon: "flash_on", id: 0}]
+  getFlashcards(id: number): { title: string, icon: string, id: number } {
+    this.http.get(API_URL + '/lessons/' + id)
+    // .subscribe(() => { })
+
+    return { title: "", icon: "flash_on", id: id }
   }
 
 }

@@ -1,5 +1,5 @@
 <div>
-  <app-section *ngFor="let section of sections">
-    {{ section }}
+  <app-section *ngFor="let section of sections" [label]="section.title" [blocks]="section.block"
+    [mustloggin]="section.mustloggin">
   </app-section>
 </div>

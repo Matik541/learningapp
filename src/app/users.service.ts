@@ -1,60 +1,61 @@
 import { Injectable } from '@angular/core';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { catchError, map, Observable, of, tap } from 'rxjs';
-import { API_URL } from '../environments/environment';
+import { API_URL, User } from '../environments/environment';
 
 @Injectable({
   providedIn: 'root'
 })
 export class UsersService {
-  private loggedUser:  null | { email: string, nickname: string, id: number } = null;
+  private loggedUser: User = null;
 
   constructor(private http: HttpClient) { }
 
-  isLogged(): null | { email: string, nickname: string, id: number } {
+  isLogged(): User {
     return this.loggedUser;
   }
 
-  login(email: string, password: string):Observable<boolean> {
-    return this.http.post(`${API_URL}/auth/login`, {email, password})
-    .pipe(
-      tap((tokens) => this.loggedIn(email, tokens)),
-      map(() => { return true } ),
-      catchError((err) => {
-        console.log(err);
-        return of(false);
-      })
-    );
+  login(email: string, password: string): Observable<boolean> {
+    return this.http.post(`${API_URL}/auth/login`, { email, password })
+      .pipe(
+        tap((tokens) => this.loggedIn(email, tokens)),
+        map(() => { return true }),
+        catchError((err) => {
+          console.log(err);
+          return of(false);
+        })
+      );
   }
-  logout() {
+  logout(): Observable<boolean> {
     const headers = { 'Authorization': `Bearer ${this.accessToken()}` }
     this.loggedOut()
     return this.http.post(`${API_URL}/auth/logout`, null, { headers: headers }
     ).pipe(
-      map(() => { return true } ),
+      map(() => { return true }),
       catchError((err) => {
         console.log(err);
         return of(false);
       })
     )
   }
-  refreshToken():Observable<any> {
+  refreshToken(): Observable<boolean> {
     return this.http.post(`${API_URL}/auth/refresh`, {
       refreshToken: this.refreshTokens()
     })
-    .pipe(
-      tap((tokens) => console.log(tokens)),
-      catchError((err) => {
-        console.log(err);
-        return of(false);
-      })
-    );
-  }
-  register(userName: string, email: string, password: string):Observable<boolean> {
-    return this.http.post(`${API_URL}/auth/register`, 
-      {userName, email, hashPassword: this.hashPassword(password)})
       .pipe(
-        map(() => { return true } ),
+        tap((tokens) => console.log(tokens)),
+        map(() => { return true }),
+        catchError((err) => {
+          console.log(err);
+          return of(false);
+        })
+      );
+  }
+  register(userName: string, email: string, password: string): Observable<boolean> {
+    return this.http.post(`${API_URL}/auth/register`,
+      { userName, email, hashedPassword: this.hashedPassword(password) })
+      .pipe(
+        map(() => { return true }),
         catchError((err) => {
           console.log(err);
           return of(false);
@@ -62,18 +63,18 @@ export class UsersService {
       )
   }
 
-  private loggedIn(email: string, tokens: any): void{
-    this.loggedUser = {email: email, nickname: '', id: NaN};
+  private loggedIn(email: string, tokens: any): void {
+    this.loggedUser = { email: email, nickname: '', id: NaN };
     this.strokeTokens(tokens);
   }
   private loggedOut(): void {
     this.loggedUser = null;
     this.clearTokens();
   }
-  
-  private hashPassword(password: string): string {
+
+  private hashedPassword(password: string): string {
     // TODO: use jwt token to hash Password
-    
+
     return password;
   }
 

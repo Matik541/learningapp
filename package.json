@@ -23,6 +23,7 @@
     "@angular/router": "~14.0.0",
     "bootstrap": "^5.2.2",
     "moment": "^2.18.1",
+    "ngx-drag-scroll": "^14.0.1",
     "rxjs": "~7.4.0",
     "tslib": "^2.3.0",
     "zone.js": "~0.11.5"

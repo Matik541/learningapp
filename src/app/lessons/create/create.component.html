@@ -1,0 +1,21 @@
+<div class="create-dialog">
+  <h3>Add new lesson</h3>
+  <form class="example-form" [formGroup]="formGroup" (ngSubmit)="create()">
+    <div>
+      <div>
+        <mat-form-field appearance="fill">
+          <input matInput placeholder="Title" formControlName="title">
+        </mat-form-field>
+        <autocomplete-tags></autocomplete-tags>
+      </div>
+      <mat-form-field appearance="fill">
+        <textarea matInput placeholder="Description" formControlName="description"></textarea>
+      </mat-form-field>
+    </div>
+    <div>
+
+    </div>
+    <hr>
+    <button mat-raised-button color="primary" type="submit">Create</button>
+  </form>
+</div>

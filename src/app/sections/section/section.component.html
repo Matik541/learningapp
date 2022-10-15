@@ -1,16 +1,18 @@
-<h2 class="title">{{ title }}</h2>
-<div class="section">
-  <!-- <drag-scroll class="blocks"> -->
-    <div *ngFor="let block of blocks" class="block">
+<h2 class="title">{{ label }}</h2>
+<div class="section" *ngIf="!mustloggin">
+  <drag-scroll class="blocks" [scrollbar-hidden]="false">
+    <div drag-scroll-item *ngFor="let block of blocks" class="block">
       <mat-icon> {{ block.icon }} </mat-icon>
       <span>{{ block.title }}</span>
     </div>
-  <!-- </drag-scroll> -->
-  <div class="add block">
+  </drag-scroll>
+  <div class="add block" (click)="addNew('10ms', '50ms')">
     <mat-icon>
       add
     </mat-icon>
     add new
   </div>
-
+</div>
+<div *ngIf="!!mustloggin">
+  <errors innerHTML="You need to be logged to see this"></errors>
 </div>

@@ -24,20 +24,18 @@ export class RegisterComponent implements OnInit {
       password: new FormControl('', [Validators.required, Validators.pattern(/(?=^.{10,}$)((?=.*\d)|(?=.*\W+))(?![.\n])(?=.*[A-Z])(?=.*[a-z]).*$/)]),
     });
   }
-  register(){
-    if(this.formGroup.valid){
+  register() {
+    if (this.formGroup.valid) {
+      console.log(this.formGroup.value);
       this.usersService.register(this.formGroup.value.username, this.formGroup.value.email, this.formGroup.value.password)
-      .subscribe((logged) => {
-        if(logged){
-          this.dialogRef.close();
-        }
-        else{
-          console.log("Invalid login");
-        }
-      });
+        .subscribe((logged) => {
+          if (logged) 
+            this.dialogRef.close();
+          else 
+            console.log(logged);
+        });
     }
-    else{
+    else 
       console.log("Invalid form");
-    }
   }
 }

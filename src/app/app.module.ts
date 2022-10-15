@@ -1,12 +1,10 @@
 import { NgModule } from '@angular/core';
 import { BrowserModule } from '@angular/platform-browser';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
-
+import { HttpClientModule } from '@angular/common/http';
 import { MaterialExampleModule } from '../material.module';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
-import { HttpClientModule } from '@angular/common/http';
 import { MatNativeDateModule } from '@angular/material/core';
-
 import { MatDialogModule, MatDialogRef } from '@angular/material/dialog';
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
@@ -18,7 +16,10 @@ import { SectionComponent } from './sections/section/section.component';
 import { SectionsComponent } from './sections/sections.component';
 import { LoginComponent } from './auth/login/login.component';
 import { RegisterComponent } from './auth/register/register.component';
-
+import { DragScrollModule } from 'ngx-drag-scroll';
+import { CreateComponent } from './lessons/create/create.component';
+import { AutocompleteTagsComponent } from './components/autocomplete-tags/autocomplete-tags.component';
+import { ErrorsComponent } from './components/errors/errors.component';
 @NgModule({
   declarations: [
     AppComponent,
@@ -29,8 +30,13 @@ import { RegisterComponent } from './auth/register/register.component';
     SectionComponent,
     SectionsComponent,
     LoginComponent,
-    RegisterComponent],
+    RegisterComponent,
+    CreateComponent,
+    AutocompleteTagsComponent,
+    ErrorsComponent
+  ],
   imports: [
+    DragScrollModule,
     BrowserAnimationsModule,
     BrowserModule,
     FormsModule,

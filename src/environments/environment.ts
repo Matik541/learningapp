@@ -11,6 +11,8 @@ export const API_URL = 'http://localhost:3000';
 
 export const refreshToken = 'refreshToken';
 export const accessToken = 'accessToken';
+
+export type User = null | { email: string, nickname: string, id: number };
 /*
  * For easier debugging in development mode, you can import the following file
  * to ignore zone related error stack frames such as `zone.run`, `zoneDelegate.invokeTask`.

@@ -6,7 +6,7 @@
     </mat-icon>
   </button>
   <mat-menu #create="matMenu">
-    <button mat-menu-item>Lesson</button>
+    <button mat-menu-item (click)="addNew('lesson', '10ms', '50ms')">Lesson</button>
     <button mat-menu-item disabled>Folder</button>
   </mat-menu>
 </div>

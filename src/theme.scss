@@ -1,4 +1,4 @@
-@use '@angular/material' as mat;
+@use "@angular/material" as mat;
 
 @include mat.core();
 
@@ -6,21 +6,24 @@ $primary: mat.define-palette(mat.$deep-purple-palette);
 $accent: mat.define-palette(mat.$green-palette, A200, A100, A400);
 $warn: mat.define-palette(mat.$pink-palette);
 
-$theme: mat.define-light-theme((
- color: (
-   primary: $primary,
-   accent: $accent,
-   warn: $warn,
- )
-));
-$theme: mat.define-dark-theme((
- color: (
-   primary: $primary,
-   accent: $accent,
-   warn: $warn,
- )
-));
-
+$theme: mat.define-light-theme(
+  (
+    color: (
+      primary: $primary,
+      accent: $accent,
+      warn: $warn,
+    ),
+  )
+);
+$theme: mat.define-dark-theme(
+  (
+    color: (
+      primary: $primary,
+      accent: $accent,
+      warn: $warn,
+    ),
+  )
+);
 
 @include mat.core-theme($theme);
 @include mat.all-component-themes($theme);
@@ -29,7 +32,11 @@ $theme: mat.define-dark-theme((
 @include mat.input-theme($theme);
 
 nav {
-  .btn-primary, .search button {
+  .btn-primary,
+  .search button {
     background-color: mat.get-color-from-palette($primary, 500);
   }
+}
+errors {
+  color: mat.get-color-from-palette($warn, 500);
 }
