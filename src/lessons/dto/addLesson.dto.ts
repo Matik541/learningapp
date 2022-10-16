@@ -1,5 +1,7 @@
 import { ApiProperty } from '@nestjs/swagger';
 import { IsArray, IsNotEmpty, IsString } from 'class-validator';
+
+// dto
 import { AddTagToLesson } from './addTagToLesson.dto';
 
 export class AddLessonDto {
