@@ -1,0 +1,61 @@
+<mat-accordion class="flashcard">
+  <mat-expansion-panel (opened)="panelOpenState = true" (closed)="panelOpenState = false">
+    <mat-expansion-panel-header>
+
+      <mat-panel-title *ngIf="!word.value">
+        <mat-icon color="warn">error_outline</mat-icon>
+        <errors innerHTML="Word"></errors>
+      </mat-panel-title>
+      <mat-panel-title *ngIf="!!word.value">
+        {{word.value}}
+      </mat-panel-title>
+
+      <mat-panel-description *ngIf="!tran.value">
+        <mat-icon color="warn">error_outline</mat-icon>
+        <errors innerHTML="Translation"></errors>
+      </mat-panel-description>
+      <mat-panel-description *ngIf="!!tran.value">
+        {{tran.value}}
+      </mat-panel-description>
+    </mat-expansion-panel-header>
+    <form [formGroup]="flashcardFromGroup" class="flashcard">
+
+      <div>
+        <mat-form-field>
+          <mat-label>Word</mat-label>
+          <input required matInput placeholder="Oryginal word" #word formControlName="word">
+        </mat-form-field>
+
+        <mat-form-field>
+          <mat-label>Choose language</mat-label>
+          <input type="text" placeholder="Choose language" matInput [formControl]="langCtrl"
+            [matAutocomplete]="wordLang">
+          <mat-autocomplete autoActiveFirstOption #wordLang="matAutocomplete">
+            <mat-option *ngFor="let lang of filterLangs | async" [value]="lang">
+              {{lang}}
+            </mat-option>
+          </mat-autocomplete>
+        </mat-form-field>
+      </div>
+
+      <div>
+        <mat-form-field>
+          <mat-label>Translation</mat-label>
+          <input required matInput placeholder="Translated word" #tran formControlName="tran">
+        </mat-form-field>
+
+        <mat-form-field>
+          <mat-label>Choose language</mat-label>
+          <input type="text" placeholder="Choose language" matInput [formControl]="langCtrl"
+            [matAutocomplete]="tranLang">
+          <mat-autocomplete autoActiveFirstOption #tranLang="matAutocomplete">
+            <mat-option *ngFor="let lang of filterLangs | async" [value]="lang">
+              {{lang}}
+            </mat-option>
+          </mat-autocomplete>
+        </mat-form-field>
+      </div>
+
+    </form>
+  </mat-expansion-panel>
+</mat-accordion>

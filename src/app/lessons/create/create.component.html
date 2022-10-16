@@ -30,32 +30,30 @@
           </div>
         </div>
         <div>
-          <p>Go to a different step to see the error state</p>
           <button mat-button matStepperNext>Next</button>
         </div>
       </form>
     </mat-step>
     <mat-step [stepControl]="formGroup2">
-      <form [formGroup]="formGroup2">
-        <ng-template matStepLabel>Fleshcards</ng-template>
-
-        <div>
-          <p>Go to a different step to see the error state</p>
-          <button mat-button matStepperPrevious>Back</button>
-          <button mat-button matStepperNext>Next</button>
-        </div>
-      </form>
+      <ng-template matStepLabel>Fleshcards</ng-template>
+      <add-flashcard></add-flashcard>
+      <div>
+        <button mat-button matStepperPrevious>Back</button>
+        <button mat-button matStepperNext>Next</button>
+      </div>
     </mat-step>
     <mat-step [editable]="false">
       <ng-template matStepLabel>Done</ng-template>
-      <p>
-        Lesson is done, press Create to confirm and go to your lesson.<br>
-        You can always edit your lesson later.
-      </p>
       <div>
-        <button mat-button matStepperPrevious>Back</button>
-        <button mat-button (click)="stepper.reset()">Reset</button>
-        <button mat-button [disabled]="(canCreate)? '' : 'disabled'" (click)="create()">Create</button>
+        <p>
+          Lesson is done, press Create to confirm and go to your lesson.<br>
+          You can always edit your lesson later.
+        </p>
+        <div>
+          <button mat-button matStepperPrevious>Back</button>
+          <button mat-button (click)="stepper.reset()">Reset</button>
+          <button mat-button [disabled]="(canCreate)? '' : 'disabled'" (click)="create()">Create</button>
+        </div>
       </div>
     </mat-step>
   </mat-stepper>

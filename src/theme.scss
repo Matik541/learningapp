@@ -5,6 +5,10 @@
 $primary: mat.define-palette(mat.$deep-purple-palette);
 $accent: mat.define-palette(mat.$green-palette, A200, A100, A400);
 $warn: mat.define-palette(mat.$pink-palette);
+$alt: mat.define-palette(mat.$grey-palette, A100, A200, A400, A700);
+$my_dark: mat.define-palette(mat.$grey-palette, 700, 800, 900);
+$my_grey: mat.define-palette(mat.$grey-palette, 400, 500, 600);
+$my_light: mat.define-palette(mat.$grey-palette, 100, 200, 300);
 
 $theme: mat.define-light-theme(
   (
@@ -12,6 +16,10 @@ $theme: mat.define-light-theme(
       primary: $primary,
       accent: $accent,
       warn: $warn,
+      alt: $alt,
+      my_light: $my_light,
+      my_grey: $my_grey,
+      my_dark: $my_dark,
     ),
   )
 );
@@ -21,6 +29,10 @@ $theme: mat.define-dark-theme(
       primary: $primary,
       accent: $accent,
       warn: $warn,
+      alt: $alt,
+      my_light: $my_light,
+      my_grey: $my_grey,
+      my_dark: $my_dark,
     ),
   )
 );
@@ -43,4 +55,17 @@ errors {
 
 #cdk-step-content-0-0 > form > div.create-grid > div.row1 > div > div > button {
   background-color: mat.get-color-from-palette($accent, A200);
+}
+
+mat-accordion.flashcard {
+  mat-expansion-panel-header,
+  mat-expansion-panel-header:hover,
+  mat-expansion-panel-header:focus {
+    background-color: rgba(mat.get-color-from-palette($my_dark, 700), 0.3) !important;
+  }
+  .mat-expansion-panel-body,
+  .mat-expansion-panel-body:hover,
+  .mat-expansion-panel-body:focus {
+    background-color: rgba(mat.get-color-from-palette($my_dark, 700), 0.5) !important;
+  }
 }

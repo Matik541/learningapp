@@ -20,6 +20,7 @@ import { DragScrollModule } from 'ngx-drag-scroll';
 import { CreateComponent } from './lessons/create/create.component';
 import { AutocompleteTagsComponent } from './components/autocomplete-tags/autocomplete-tags.component';
 import { ErrorsComponent } from './components/errors/errors.component';
+import { FlashcardComponent } from './lessons/create/flashcard/flashcard.component';
 @NgModule({
   declarations: [
     AppComponent,
@@ -34,6 +35,7 @@ import { ErrorsComponent } from './components/errors/errors.component';
     CreateComponent,
     AutocompleteTagsComponent,
     ErrorsComponent,
+    FlashcardComponent,
   ],
   imports: [
     DragScrollModule,

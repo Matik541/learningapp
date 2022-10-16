@@ -3,6 +3,7 @@ import { UsersService } from '../../users.service';
 import { MatDialog, MatDialogRef } from '@angular/material/dialog';
 import { LoginComponent } from '../../auth/login/login.component';
 import { RegisterComponent } from '../../auth/register/register.component';
+import { User } from 'src/environments/environment';
 
 @Component({
   selector: 'nav-user',
@@ -11,7 +12,7 @@ import { RegisterComponent } from '../../auth/register/register.component';
 })
 export class NavbarUserComponent implements OnInit {
 
-  logged: null | { email: string, nickname: string, id: number } = this.usersService.isLogged();
+  logged: User = this.usersService.isLogged();
 
   constructor(public dialog: MatDialog, private usersService: UsersService) { }
 

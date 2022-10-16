@@ -154,6 +154,19 @@ nav {
       }
     }
   }
+
+  mat-accordion.flashcard {
+    .mat-expansion-panel-body {
+      padding-top: 0.5em;
+    }
+    form.flashcard {
+      div {
+        display: grid;
+        grid-template-columns: calc(70% - 1rem) 30%;
+        gap: 1rem;
+      }
+    }
+  }
 }
 
 .choose-icon div {
@@ -249,7 +262,7 @@ errors {
   ::after {
     font-family: "Material Icons";
     -webkit-font-feature-settings: "liga";
-    content: "&#e160;";
+    content: "&#e160;asd";
   }
 }
 

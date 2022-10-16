@@ -5,6 +5,7 @@ import { API_URL, User } from '../environments/environment';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { ErrorsComponent } from './components/errors/errors.component';
 import { AppComponent } from './app.component';
+import jwt_decode from 'jwt-decode';
 
 @Injectable({
   providedIn: 'root'
@@ -12,10 +13,14 @@ import { AppComponent } from './app.component';
 export class UsersService {
   public loggedUser: User = null;
 
-  constructor(private http: HttpClient, private _snackBar: MatSnackBar) { }
+  constructor(private http: HttpClient, private _snackBar: MatSnackBar) {
+    if (this.accessToken()) {
+      this.loggedUser = jwt_decode(this.accessToken());
+    }
+  }
 
   snackBar(message: string, action: string) {
-    this._snackBar.open(message, action);
+    this._snackBar.open(message, action, { duration: 2000 });
   }
 
   isLogged(): User {
@@ -23,21 +28,23 @@ export class UsersService {
   }
 
   login(email: string, password: string): Observable<boolean> {
-    return this.http.post(`${API_URL}/auth/login`, 
+    let call: Observable<boolean> = this.http.post(`${API_URL}/auth/login`, 
       { email, hashedPassword: this.hashedPassword(password) })
       .pipe(
-        tap((tokens) => this.loggedIn(email, tokens)),
+        tap((tokens) => this.loggedIn(tokens)),
         map(() => { return true }),
         catchError((err) => {
           console.log(err);
           return of(false);
         })
       );
+    this.snackBar(((call)?"Logged in":"Error: Invalid form"), "OK");
+    return call;
   }
   logout(): Observable<boolean> {
     const headers = { 'Authorization': `Bearer ${this.accessToken()}` }
     this.loggedOut()
-    return this.http.post(`${API_URL}/auth/logout`, null, { headers: headers }
+    let call: Observable<boolean> = this.http.post(`${API_URL}/auth/logout`, null, { headers: headers }
     ).pipe(
       map(() => { return true }),
       catchError((err) => {
@@ -45,6 +52,8 @@ export class UsersService {
         return of(false);
       })
     )
+    this.snackBar(((call)?"Logged out":"Error: Something went wrong"), "OK");
+    return call;
   }
   refreshToken(): Observable<boolean> {
     return this.http.post(`${API_URL}/auth/refresh`, {
@@ -73,8 +82,8 @@ export class UsersService {
     return call;
   }
 
-  private loggedIn(email: string, tokens: any): void {
-    this.loggedUser = { email: email, nickname: '', id: NaN };
+  private loggedIn(tokens: any): void {
+    this.loggedUser = jwt_decode(tokens.authToken);
     this.strokeTokens(tokens);
   }
   private loggedOut(): void {
@@ -95,10 +104,12 @@ export class UsersService {
     localStorage.removeItem('access_token');
     localStorage.removeItem('refresh_token');
   }
-  private refreshTokens(): string | null {
-    return localStorage.getItem('refresh_token');
+  private refreshTokens(): string {
+    let token = localStorage.getItem('refresh_token')
+    return token ? token : '';
   }
-  public accessToken(): string | null {
-    return localStorage.getItem('access_token');
+  public accessToken(): string {
+    let token = localStorage.getItem('access_token')
+    return token ? token : '';
   }
 }
