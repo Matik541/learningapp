@@ -62,6 +62,16 @@ export class LessonsController {
     return this.lessonsService.getLessonById(+id);
   }
 
+  @Get(':tag')
+  @HttpCode(HttpStatus.OK)
+  @ApiResponse({
+    status: HttpStatus.OK,
+    description: 'Return lesson data by tag id.',
+  })
+  getLessonsByTag(@Param('tag') tagId: string): Promise<Lesson[]> {
+    return this.lessonsService.getLessonsByTag(+tagId);
+  }
+
   @ApiBearerAuth()
   @UseGuards(AuthorizationGuard)
   @Post('add')

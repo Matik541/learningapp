@@ -87,6 +87,33 @@ export class LessonsService {
     }
   }
 
+  async getLessonsByTag(tagId: number): Promise<Lesson[]> {
+    // find lessons by tag and return lessons data
+    try {
+      return await this.lessonsRepository.find({
+        select: {
+          id: true,
+          title: true,
+          description: true,
+          // get only id and username from creator
+          creator: {
+            id: true,
+            userName: true,
+          },
+          tags: true,
+        },
+        where: {
+          tags: {
+            id: tagId,
+          },
+        },
+        relations: { creator: true, tags: true },
+      });
+    } catch (err) {
+      throw new Error(err);
+    }
+  }
+
   /**
    * It creates a lesson, saves it in the database, and returns it
    * @param {number} lessonCreatorId - number - the id of the user who created the lesson
