@@ -20,6 +20,7 @@ import { AuthorizationGuard } from 'src/auth/guards/auth.guard';
 
 // dto
 import { AddLessonDto } from './dto/addLesson.dto';
+import { AddTagDto } from './dto/addTag.dto';
 import { UpdateLessonDto } from './dto/updateLesson.dto';
 
 // entity
@@ -67,13 +68,25 @@ export class LessonsController {
   @HttpCode(HttpStatus.CREATED)
   @ApiResponse({
     status: HttpStatus.CREATED,
-    description: 'Return added lesson data. Get jwt token and payload. ',
+    description: 'Return added lesson data. Get jwt token and payload.',
   })
   addLesson(
     @LoginedUserDecorator('sub') lessonCreatorId: number,
     @Body() addLessonDto: AddLessonDto,
   ): Promise<Lesson> {
     return this.lessonsService.addLesson(lessonCreatorId, addLessonDto);
+  }
+
+  @ApiBearerAuth()
+  @UseGuards(AuthorizationGuard)
+  @Post('tag')
+  @HttpCode(HttpStatus.OK)
+  @ApiResponse({
+    status: HttpStatus.OK,
+    description: 'Return added tag. Get tag name.',
+  })
+  addTag(@Body() addTagDto: AddTagDto): Promise<Tag> {
+    return this.lessonsService.addTag(addTagDto);
   }
 
   @ApiBearerAuth()

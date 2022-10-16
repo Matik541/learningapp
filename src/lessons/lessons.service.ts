@@ -4,6 +4,7 @@ import { Repository } from 'typeorm';
 
 // dto
 import { AddLessonDto } from './dto/addLesson.dto';
+import { AddTagDto } from './dto/addTag.dto';
 import { UpdateLessonDto } from './dto/updateLesson.dto';
 
 // entity
@@ -96,6 +97,12 @@ export class LessonsService {
     } catch (err) {
       throw new BadRequestException(err);
     }
+  }
+
+  async addTag(addTagDto: AddTagDto): Promise<Tag> {
+    const tag = await this.tagRepository.create(addTagDto);
+
+    return this.tagRepository.save(tag);
   }
 
   /**
