@@ -154,12 +154,15 @@ nav {
       }
     }
   }
-
+  .mat-horizontal-stepper-content {
+    max-height: 50vh;
+    overflow-y: auto;
+  }
   mat-accordion.flashcard {
     .mat-expansion-panel-body {
       padding-top: 0.5em;
     }
-    form.flashcard {
+    div.flashcard {
       div {
         display: grid;
         grid-template-columns: calc(70% - 1rem) 30%;

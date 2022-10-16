@@ -34,10 +34,16 @@
         </div>
       </form>
     </mat-step>
-    <mat-step [stepControl]="formGroup2">
+    <mat-step>
       <ng-template matStepLabel>flashcards</ng-template>
-      <add-flashcard></add-flashcard>
+      <mat-accordion class="flashcard">
+        <add-flashcard *ngFor="let item of [].constructor(flashcards.length); let i = index"
+          (exportForm)="refreshFlashcard($event)" [id]="i">
+        </add-flashcard>
+      </mat-accordion>
       <div>
+        <button (click)="addNewFlashcard()">Add new flashcard</button>
+        <hr>
         <button mat-button matStepperPrevious>Back</button>
         <button mat-button matStepperNext>Next</button>
       </div>
@@ -52,7 +58,8 @@
         <div>
           <button mat-button matStepperPrevious>Back</button>
           <button mat-button (click)="stepper.reset()">Reset</button>
-          <button mat-button [disabled]="(canCreate)? '' : 'disabled'" (click)="create()">Create</button>
+          <button mat-button type="submit" (click)="create()">Create</button>
+          <!-- <button mat-button type="submit" [disabled]="(canCreate)? '' : 'disabled'" (click)="create()">Create</button> -->
         </div>
       </div>
     </mat-step>

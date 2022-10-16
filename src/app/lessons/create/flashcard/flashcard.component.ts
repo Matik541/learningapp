@@ -1,4 +1,11 @@
-import { Component, OnInit } from '@angular/core'
+import {
+  Component,
+  ElementRef,
+  EventEmitter,
+  Input,
+  OnInit,
+  Output,
+} from '@angular/core'
 import { FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms'
 import { map, Observable, startWith } from 'rxjs'
 
@@ -8,6 +15,11 @@ import { map, Observable, startWith } from 'rxjs'
   styleUrls: ['./flashcard.component.scss'],
 })
 export class FlashcardComponent implements OnInit {
+  @Input() id: number = 0
+  @Input() update: ElementRef<HTMLButtonElement>
+
+  @Output() exportForm = new EventEmitter()
+
   public panelOpenState: boolean = true
 
   public langs: string[] = [
@@ -228,14 +240,17 @@ export class FlashcardComponent implements OnInit {
 
   filterLangs: Observable<string[]>
 
-  public flashcardFromGroup: FormGroup = this._formBuilder.group({
-    word: new FormControl('', [Validators.required]),
-    tran: new FormControl('', [Validators.required]),
-  })
   langCtrl: FormControl = new FormControl('', [
     Validators.required,
     Validators.pattern(/[A-Z]{1}[a-z]{2,}\s\([a-z]{2}-[A-Z]{2}\)/),
   ])
+
+  public flashcardFromGroup: FormGroup = this._formBuilder.group({
+    word: new FormControl('', [Validators.required]),
+    wordLang: this.langCtrl,
+    tran: new FormControl('', [Validators.required]),
+    tranLang: this.langCtrl,
+  })
 
   constructor(private _formBuilder: FormBuilder) {}
 
@@ -249,5 +264,15 @@ export class FlashcardComponent implements OnInit {
   private _filter(value: string): string[] {
     const filterValue = value.toLowerCase()
     return this.langs.filter((lang) => lang.toLowerCase().includes(filterValue))
+  }
+
+  public check(): void {
+    console.log(this.flashcardFromGroup.valid)
+    if (this.flashcardFromGroup.valid) {
+      this.exportForm.emit({
+        id: this.id,
+        flashcard: this.flashcardFromGroup.value,
+      })
+    }
   }
 }

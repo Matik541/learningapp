@@ -6,6 +6,12 @@ import { FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms'
 import { map, Observable, startWith } from 'rxjs'
 
 type Tags = { name: string }
+type Flashcard = {
+  word: string
+  wordLang: string
+  tran: string
+  tranLang: string
+}
 
 @Component({
   selector: 'app-create',
@@ -26,11 +32,9 @@ export class CreateComponent implements OnInit {
     description: new FormControl('', [
       Validators.pattern(/^(.|\s)*[a-zA-Z]+(.|\s)*$/),
     ]),
-    icon: new FormControl('', [Validators.required]),
   })
-  formGroup2: FormGroup = this._formBuilder.group({
-    formCtrl2: ['', Validators.required],
-  })
+
+  flashcards: Flashcard[] = []
 
   canCreate: boolean = false
 
@@ -166,11 +170,23 @@ export class CreateComponent implements OnInit {
   initForm() {}
 
   create() {
+    this.formGroup1.valueChanges.subscribe((value) => {
+      console.log(value)
+    })
     this.lesson = {
       author: this.usersService.loggedUser?.id,
-      flashcards: [],
+      flashcards: this.flashcards,
       tags: [],
       ...this.formGroup1.value,
     }
+    console.log(this.lesson)
+  }
+  refreshFlashcard(event: any) {
+    console.log(event)
+    this.flashcards[event.id] = event.flashcard
+  }
+
+  addNewFlashcard() {
+    this.flashcards.push({} as Flashcard)
   }
 }
