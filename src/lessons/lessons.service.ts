@@ -45,8 +45,17 @@ export class LessonsService {
     }
   }
 
+  /**
+   * It returns a promise of an array of Tag objects
+   * @returns An array of Tag objects
+   */
   async getTags(): Promise<Tag[]> {
-    return await this.tagRepository.find();
+    // find and return all tags
+    try {
+      return await this.tagRepository.find();
+    } catch (err) {
+      throw new Error(err);
+    }
   }
 
   /**
@@ -85,14 +94,14 @@ export class LessonsService {
    * @returns The lesson that was created.
    */
   async addLesson(lessonCreatorId: number, dto: AddLessonDto): Promise<Lesson> {
-    // create lesson
+    // create lesson object
     const lesson = this.lessonsRepository.create({
       creator: { id: lessonCreatorId },
       ...dto,
     });
 
     try {
-      // save lesson in the database
+      // save lesson to the database
       return await this.lessonsRepository.save(lesson);
     } catch (err) {
       throw new BadRequestException(err);
@@ -100,9 +109,15 @@ export class LessonsService {
   }
 
   async addTag(addTagDto: AddTagDto): Promise<Tag> {
+    // create tag object
     const tag = await this.tagRepository.create(addTagDto);
 
-    return this.tagRepository.save(tag);
+    try {
+      // save tag to the db
+      return this.tagRepository.save(tag);
+    } catch (err) {
+      throw new BadRequestException(err);
+    }
   }
 
   /**
