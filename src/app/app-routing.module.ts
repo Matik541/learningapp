@@ -8,7 +8,6 @@ const routes: Routes = [
   {path: '', component: LoginComponent},
   {path: '', component: RegisterComponent},
 ]
-
 @NgModule({
   declarations: [],
   imports: [

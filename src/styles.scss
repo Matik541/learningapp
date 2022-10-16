@@ -148,6 +148,10 @@ nav {
       .mat-form-field-wrapper textarea {
         height: 100%;
       }
+
+      .mat-chip-list-wrapper {
+        min-height: 4rem;
+      }
     }
   }
 }
@@ -201,6 +205,10 @@ sections {
         max-width: calc(100vw - (2 * $padding + $gap + $size));
         width: (($size + $gap) * 5 + $gap);
         min-width: $size;
+      }
+
+      .disabled {
+        opacity: 0.5;
       }
 
       drag-scroll div {

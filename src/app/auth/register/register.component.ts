@@ -32,10 +32,10 @@ export class RegisterComponent implements OnInit {
           if (logged) 
             this.dialogRef.close();
           else 
-            console.log(logged);
+            this.usersService.snackBar('Error: Invalid form', 'Close');
         });
     }
     else 
-      console.log("Invalid form");
+      this.usersService.snackBar('Error: Invalid form', 'Close');
   }
 }

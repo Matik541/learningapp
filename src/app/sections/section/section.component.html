@@ -6,7 +6,13 @@
       <span>{{ block.title }}</span>
     </div>
   </drag-scroll>
-  <div class="add block" (click)="addNew('10ms', '50ms')">
+  <div *ngIf="!!this.usersService.loggedUser" class="add block" (click)="addNew('10ms', '50ms')">
+    <mat-icon>
+      add
+    </mat-icon>
+    add new
+  </div>
+  <div *ngIf="!this.usersService.loggedUser" class="add block disabled">
     <mat-icon>
       add
     </mat-icon>

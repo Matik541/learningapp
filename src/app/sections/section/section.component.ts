@@ -1,9 +1,10 @@
 import { User } from './../../../environments/environment';
 import { UsersService } from './../../users.service';
-import { Component, Input, OnInit, Inject, Injectable } from '@angular/core';
+import { Component, Input, OnInit, Inject, Injectable, SimpleChanges } from '@angular/core';
 import { MatDialog } from '@angular/material/dialog';
 import { LessonsService } from '../../lessons.service';
-import { CreateComponent } from '../../lessons/create/create.component';
+import { CreateComponent } from '../../lessons/create/create.component'; 
+import { Router } from '@angular/router';
 
 type Block = {
   title: string,
@@ -22,13 +23,11 @@ export class SectionComponent implements OnInit {
   @Input() blocks: Block[] = [];
   @Input() mustloggin: boolean;
 
-  logged: User = this.usersService.isLogged();
-
-  constructor(public dialog: MatDialog, private usersService: UsersService, private LessonsService: LessonsService) { }
+  constructor(public dialog: MatDialog, public usersService: UsersService, private LessonsService: LessonsService) { }
 
   ngOnInit(): void { }
 
-  addNew(enterAnimationDuration: string, exitAnimationDuration: string): void {
+  public addNew(enterAnimationDuration: string, exitAnimationDuration: string): void {
     this.dialog.open(CreateComponent, {
       enterAnimationDuration,
       exitAnimationDuration,

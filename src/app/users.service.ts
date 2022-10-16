@@ -2,21 +2,29 @@ import { Injectable } from '@angular/core';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { catchError, map, Observable, of, tap } from 'rxjs';
 import { API_URL, User } from '../environments/environment';
+import { MatSnackBar } from '@angular/material/snack-bar';
+import { ErrorsComponent } from './components/errors/errors.component';
+import { AppComponent } from './app.component';
 
 @Injectable({
   providedIn: 'root'
 })
 export class UsersService {
-  private loggedUser: User = null;
+  public loggedUser: User = null;
 
-  constructor(private http: HttpClient) { }
+  constructor(private http: HttpClient, private _snackBar: MatSnackBar) { }
+
+  snackBar(message: string, action: string) {
+    this._snackBar.open(message, action);
+  }
 
   isLogged(): User {
     return this.loggedUser;
   }
 
   login(email: string, password: string): Observable<boolean> {
-    return this.http.post(`${API_URL}/auth/login`, { email, password })
+    return this.http.post(`${API_URL}/auth/login`, 
+      { email, hashedPassword: this.hashedPassword(password) })
       .pipe(
         tap((tokens) => this.loggedIn(email, tokens)),
         map(() => { return true }),
@@ -52,7 +60,7 @@ export class UsersService {
       );
   }
   register(userName: string, email: string, password: string): Observable<boolean> {
-    return this.http.post(`${API_URL}/auth/register`,
+    let call: Observable<boolean> = this.http.post(`${API_URL}/auth/register`,
       { userName, email, hashedPassword: this.hashedPassword(password) })
       .pipe(
         map(() => { return true }),
@@ -61,6 +69,8 @@ export class UsersService {
           return of(false);
         })
       )
+    this.snackBar(((call)?"User registered":"Error: Invalid form"), "OK");
+    return call;
   }
 
   private loggedIn(email: string, tokens: any): void {
@@ -73,8 +83,6 @@ export class UsersService {
   }
 
   private hashedPassword(password: string): string {
-    // TODO: use jwt token to hash Password
-
     return password;
   }
 

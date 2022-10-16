@@ -4,7 +4,6 @@ import { UsersService } from 'src/app/users.service';
 import { MatDialog, MatDialogRef } from '@angular/material/dialog';
 import { FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
 import { map, Observable, startWith } from 'rxjs';
-import { IconsComponent } from './icons/icons.component';
 
 type Tags = { name: string };
 
@@ -26,8 +25,8 @@ export class CreateComponent implements OnInit {
   isEditable: boolean = true;
 
   formGroup1: FormGroup = this._formBuilder.group({
-    title: new FormControl('', [Validators.required, Validators.pattern(/^[a-zA-Z0-9]+$/)]),
-    description: new FormControl('', [Validators.pattern(/^[a-zA-Z0-9][\\s\\S]+$/)]),
+    title: new FormControl('', [Validators.required, Validators.pattern(/^(.|\s)*[a-zA-Z]+(.|\s)*$/)]),
+    description: new FormControl('', [Validators.pattern(/^(.|\s)*[a-zA-Z]+(.|\s)*$/)]),
     icon: new FormControl('', [Validators.required])
   });
   formGroup2: FormGroup = this._formBuilder.group({
@@ -44,7 +43,6 @@ export class CreateComponent implements OnInit {
   constructor(
     private _formBuilder: FormBuilder, 
     public dialogRef: MatDialogRef<CreateComponent>, 
-    private dialog: MatDialog,
     private lessonsService: LessonsService, 
     private usersService: UsersService
   ) { }
@@ -60,6 +58,7 @@ export class CreateComponent implements OnInit {
       author: this.usersService.isLogged()?.id,
       flashcards: [],
       tags: [],
+
       ...this.formGroup1.value
     }
   }
