@@ -1,10 +1,11 @@
 import { BadRequestException, Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
-import { Repository } from 'typeorm';
+import { In, Repository } from 'typeorm';
 
 // dto
 import { AddLessonDto } from './dto/addLesson.dto';
 import { AddTagDto } from './dto/addTag.dto';
+import { GetAllLessonsQueryParametersDto } from './dto/getAllLessonsQueryParameters.dto';
 import { UpdateLessonDto } from './dto/updateLesson.dto';
 
 // entity
@@ -46,6 +47,35 @@ export class LessonsService {
   }
 
   /**
+   * It return all lessons filtered by given tags
+   * @param {GetAllLessonsQueryParametersDto} query - GetAllLessonsQueryParametersDto
+   * @returns Lessons
+   */
+  async getAllLessonsWithFilters(query: GetAllLessonsQueryParametersDto) {
+    // get tags by ids
+    const tags = await this.tagRepository.find({
+      where: {
+        id: In(query.tagIds),
+      },
+    });
+
+    // get lessons
+    let lessons = await this.getAllLessons();
+
+    // filter lessons by tags
+    tags.forEach((tag) => {
+      lessons = lessons.filter((lesson) => {
+        if (JSON.stringify(lesson.tags).includes(JSON.stringify(tag))) {
+          return lesson;
+        }
+      });
+    });
+
+    // return filtered lessons
+    return lessons;
+  }
+
+  /**
    * It returns a promise of an array of Tag objects
    * @returns An array of Tag objects
    */
@@ -80,33 +110,6 @@ export class LessonsService {
           tags: true,
         },
         where: { id },
-        relations: { creator: true, tags: true },
-      });
-    } catch (err) {
-      throw new Error(err);
-    }
-  }
-
-  async getLessonsByTag(tagId: number): Promise<Lesson[]> {
-    // find lessons by tag and return lessons data
-    try {
-      return await this.lessonsRepository.find({
-        select: {
-          id: true,
-          title: true,
-          description: true,
-          // get only id and username from creator
-          creator: {
-            id: true,
-            userName: true,
-          },
-          tags: true,
-        },
-        where: {
-          tags: {
-            id: tagId,
-          },
-        },
         relations: { creator: true, tags: true },
       });
     } catch (err) {

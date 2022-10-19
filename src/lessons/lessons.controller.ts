@@ -9,6 +9,7 @@ import {
   Put,
   UseGuards,
   Delete,
+  Query,
 } from '@nestjs/common';
 import { ApiBearerAuth, ApiResponse, ApiTags } from '@nestjs/swagger';
 
@@ -21,6 +22,7 @@ import { AuthorizationGuard } from 'src/auth/guards/auth.guard';
 // dto
 import { AddLessonDto } from './dto/addLesson.dto';
 import { AddTagDto } from './dto/addTag.dto';
+import { GetAllLessonsQueryParametersDto } from './dto/getAllLessonsQueryParameters.dto';
 import { UpdateLessonDto } from './dto/updateLesson.dto';
 
 // entity
@@ -39,15 +41,25 @@ export class LessonsController {
   @HttpCode(HttpStatus.OK)
   @ApiResponse({
     status: HttpStatus.OK,
-    description: 'Return all lessons data.',
+    description:
+      'Return all lessons data. Filter them by tags. Query parameters is tags ids',
   })
-  getAllLessons(): Promise<Lesson[]> {
+  getAllLessons(@Query() query: GetAllLessonsQueryParametersDto) {
+    // if have query filters
+    if (Object.keys(query).length !== 0) {
+      return this.lessonsService.getAllLessonsWithFilters(query);
+    }
+
+    // simple get all lesson without filters
     return this.lessonsService.getAllLessons();
   }
 
   @Get('tags')
   @HttpCode(HttpStatus.OK)
-  @ApiResponse({})
+  @ApiResponse({
+    status: HttpStatus.OK,
+    description: 'Return all tags',
+  })
   getLessonTags(): Promise<Tag[]> {
     return this.lessonsService.getTags();
   }
@@ -60,16 +72,6 @@ export class LessonsController {
   })
   getLessonById(@Param('id') id: string): Promise<Lesson> {
     return this.lessonsService.getLessonById(+id);
-  }
-
-  @Get(':tag')
-  @HttpCode(HttpStatus.OK)
-  @ApiResponse({
-    status: HttpStatus.OK,
-    description: 'Return lesson data by tag id.',
-  })
-  getLessonsByTag(@Param('tag') tagId: string): Promise<Lesson[]> {
-    return this.lessonsService.getLessonsByTag(+tagId);
   }
 
   @ApiBearerAuth()
