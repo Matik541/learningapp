@@ -1,11 +1,10 @@
 import { BadRequestException, Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
-import { In, Repository } from 'typeorm';
+import { In, Like, Repository } from 'typeorm';
 
 // dto
 import { AddLessonDto } from './dto/addLesson.dto';
 import { AddTagDto } from './dto/addTag.dto';
-import { GetAllLessonsQueryParametersDto } from './dto/getAllLessonsQueryParameters.dto';
 import { UpdateLessonDto } from './dto/updateLesson.dto';
 
 // entity
@@ -51,16 +50,25 @@ export class LessonsService {
    * @param {GetAllLessonsQueryParametersDto} query - GetAllLessonsQueryParametersDto
    * @returns Lessons
    */
-  async getAllLessonsWithFilters(query: GetAllLessonsQueryParametersDto) {
+  async getAllLessonsWithFilters(
+    tagIds: number[],
+    lessonsSearched: Promise<Lesson[]> | undefined,
+  ): Promise<Lesson[]> {
+    let lessons;
+
+    // get lessons
+    if (typeof lessonsSearched === 'undefined') {
+      lessons = await this.getAllLessons();
+    } else {
+      lessons = await lessonsSearched;
+    }
+
     // get tags by ids
     const tags = await this.tagRepository.find({
       where: {
-        id: In(query.tagIds),
+        id: In(tagIds),
       },
     });
-
-    // get lessons
-    let lessons = await this.getAllLessons();
 
     // filter lessons by tags
     tags.forEach((tag) => {
@@ -72,6 +80,29 @@ export class LessonsService {
     });
 
     // return filtered lessons
+    return lessons;
+  }
+
+  async getSearchedLessons(searchBy: string): Promise<Lesson[]> {
+    const lessons = await this.lessonsRepository.find({
+      select: {
+        id: true,
+        title: true,
+        description: true,
+        // get only id and username from creator
+        creator: {
+          id: true,
+          userName: true,
+        },
+        tags: true,
+      },
+      where: [
+        { title: Like('%' + searchBy + '%') },
+        { description: Like('%' + searchBy + '%') },
+      ],
+      relations: { creator: true, tags: true },
+    });
+
     return lessons;
   }
 

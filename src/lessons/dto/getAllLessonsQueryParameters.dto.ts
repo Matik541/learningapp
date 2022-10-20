@@ -10,4 +10,11 @@ export class GetAllLessonsQueryParametersDto {
   @IsNotEmpty()
   @IsOptional()
   tagIds: number[];
+
+  @ApiProperty({
+    description: 'Search parameter',
+    type: String,
+    required: false,
+  })
+  searchQuery: string;
 }

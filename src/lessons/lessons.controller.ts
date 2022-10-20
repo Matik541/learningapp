@@ -44,14 +44,43 @@ export class LessonsController {
     description:
       'Return all lessons data. Filter them by tags. Query parameters is tags ids',
   })
-  getAllLessons(@Query() query: GetAllLessonsQueryParametersDto) {
-    // if have query filters
-    if (Object.keys(query).length !== 0) {
-      return this.lessonsService.getAllLessonsWithFilters(query);
+  getAllLessons(
+    @Query() query: GetAllLessonsQueryParametersDto,
+  ): Promise<Lesson[]> {
+    let lessons: Promise<Lesson[]>;
+
+    // search
+    if (
+      typeof query.searchQuery !== 'undefined' &&
+      query.searchQuery.length > 0
+    ) {
+      lessons = this.lessonsService.getSearchedLessons(query.searchQuery);
+    }
+
+    // filter
+    if (typeof query.tagIds !== 'undefined' && query.tagIds.length > 0) {
+      if (typeof lessons === 'undefined') {
+        lessons = this.lessonsService.getAllLessonsWithFilters(
+          query.tagIds,
+          undefined,
+        );
+      } else {
+        lessons = this.lessonsService.getAllLessonsWithFilters(
+          query.tagIds,
+          lessons,
+        );
+      }
     }
 
     // simple get all lesson without filters
-    return this.lessonsService.getAllLessons();
+    if (
+      typeof query.tagIds === 'undefined' &&
+      typeof query.searchQuery === 'undefined'
+    ) {
+      lessons = this.lessonsService.getAllLessons();
+    }
+
+    return lessons;
   }
 
   @Get('tags')
