@@ -3,6 +3,8 @@ import { IsArray, IsNotEmpty, IsString } from 'class-validator';
 
 // dto
 import { AddTagToLesson } from './addTagToLesson.dto';
+import { AddFlashcardToLesson } from './addFlashcardToLesson.dto';
+import { AddFlashcard } from './addFlashcard.dto';
 
 export class AddLessonDto {
   @ApiProperty({
@@ -33,4 +35,13 @@ export class AddLessonDto {
   })
   @IsArray()
   tags: AddTagToLesson[];
+
+  @ApiProperty({
+    description: 'Lesson flashcards',
+    type: [AddFlashcard],
+    nullable: false,
+    required: true,
+  })
+  @IsArray()
+  flashcards: AddFlashcardToLesson[];
 }
