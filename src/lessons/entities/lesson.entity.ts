@@ -10,6 +10,7 @@ import {
 // entities
 import { User } from 'src/users/entities/user.entity';
 import { Tag } from './tag.entity';
+import { Flashcard } from './flashcard.entity';
 
 @Entity()
 export class Lesson {
@@ -30,5 +31,9 @@ export class Lesson {
   @JoinTable()
   tags: Tag[];
 
-  // TODO: flashcards[], comments[]
+  @ManyToMany(() => Flashcard)
+  @JoinTable()
+  flashcards: Flashcard[];
+
+  // TODO: comments[]
 }

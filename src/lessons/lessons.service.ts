@@ -37,8 +37,9 @@ export class LessonsService {
             userName: true,
           },
           tags: true,
+          flashcards: true,
         },
-        relations: { creator: true, tags: true },
+        relations: { creator: true, tags: true, flashcards: true },
       });
     } catch (err) {
       throw new Error(err);
@@ -95,12 +96,13 @@ export class LessonsService {
           userName: true,
         },
         tags: true,
+        flashcards: true,
       },
       where: [
         { title: Like('%' + searchBy + '%') },
         { description: Like('%' + searchBy + '%') },
       ],
-      relations: { creator: true, tags: true },
+      relations: { creator: true, tags: true, flashcards: true },
     });
 
     return lessons;
@@ -139,9 +141,10 @@ export class LessonsService {
             userName: true,
           },
           tags: true,
+          flashcards: true,
         },
         where: { id },
-        relations: { creator: true, tags: true },
+        relations: { creator: true, tags: true, flashcards: true },
       });
     } catch (err) {
       throw new Error(err);
