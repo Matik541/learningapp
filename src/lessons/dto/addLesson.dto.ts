@@ -3,7 +3,6 @@ import { IsArray, IsNotEmpty, IsString } from 'class-validator';
 
 // dto
 import { AddTagToLesson } from './addTagToLesson.dto';
-import { AddFlashcardToLesson } from './addFlashcardToLesson.dto';
 import { AddFlashcard } from './addFlashcard.dto';
 
 export class AddLessonDto {
@@ -43,5 +42,5 @@ export class AddLessonDto {
     required: true,
   })
   @IsArray()
-  flashcards: AddFlashcardToLesson[];
+  flashcards: AddFlashcard[];
 }

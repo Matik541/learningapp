@@ -161,12 +161,24 @@ export class LessonsService {
    * @returns The lesson that was created.
    */
   async addLesson(lessonCreatorId: number, dto: AddLessonDto): Promise<Lesson> {
-    // create flashcards objects
-    // and save them in the db
+    const flashcards = [];
+
+    for (let i = 0; i < dto.flashcards.length; i++) {
+      // create flashcards object
+      const flashcard = this.flashcardRepository.create(dto.flashcards[i]);
+
+      // save them in the database
+      await this.flashcardRepository.save(flashcard);
+
+      flashcards.push(flashcard);
+    }
+
+    delete dto.flashcards;
 
     // create lesson object
     const lesson = this.lessonsRepository.create({
       creator: { id: lessonCreatorId },
+      flashcards: flashcards,
       ...dto,
     });
 
