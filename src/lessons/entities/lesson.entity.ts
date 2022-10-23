@@ -4,6 +4,7 @@ import {
   JoinTable,
   ManyToMany,
   ManyToOne,
+  OneToMany,
   PrimaryGeneratedColumn,
 } from 'typeorm';
 
@@ -31,8 +32,7 @@ export class Lesson {
   @JoinTable()
   tags: Tag[];
 
-  @ManyToMany(() => Flashcard)
-  @JoinTable()
+  @OneToMany(() => Flashcard, (flashcard) => flashcard.lesson)
   flashcards: Flashcard[];
 
   // TODO: comments[]

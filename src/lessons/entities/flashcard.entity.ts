@@ -1,4 +1,7 @@
-import { Column, Entity, PrimaryGeneratedColumn } from 'typeorm';
+import { Column, Entity, ManyToOne, PrimaryGeneratedColumn } from 'typeorm';
+
+// entities
+import { Lesson } from './lesson.entity';
 
 @Entity()
 export class Flashcard {
@@ -10,4 +13,7 @@ export class Flashcard {
 
   @Column()
   translation: string;
+
+  @ManyToOne(() => Lesson, (lesson) => lesson.flashcards)
+  lesson: Lesson;
 }

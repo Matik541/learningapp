@@ -6,6 +6,7 @@ import { In, Like, Repository } from 'typeorm';
 import { AddLessonDto } from './dto/addLesson.dto';
 import { AddTagDto } from './dto/addTag.dto';
 import { UpdateLessonDto } from './dto/updateLesson.dto';
+import { Flashcard } from './entities/flashcard.entity';
 
 // entity
 import { Lesson } from './entities/lesson.entity';
@@ -16,6 +17,8 @@ export class LessonsService {
   constructor(
     @InjectRepository(Lesson) private lessonsRepository: Repository<Lesson>,
     @InjectRepository(Tag) private tagRepository: Repository<Tag>,
+    @InjectRepository(Flashcard)
+    private flashcardRepository: Repository<Flashcard>,
   ) {}
 
   /**
@@ -158,6 +161,9 @@ export class LessonsService {
    * @returns The lesson that was created.
    */
   async addLesson(lessonCreatorId: number, dto: AddLessonDto): Promise<Lesson> {
+    // create flashcards objects
+    // and save them in the db
+
     // create lesson object
     const lesson = this.lessonsRepository.create({
       creator: { id: lessonCreatorId },
