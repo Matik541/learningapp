@@ -1,5 +1,6 @@
 import { ApiProperty } from '@nestjs/swagger';
 import { IsArray, IsOptional, IsString } from 'class-validator';
+import { AddFlashcard } from './addFlashcard.dto';
 
 // dto
 import { AddTagToLesson } from './addTagToLesson.dto';
@@ -34,4 +35,14 @@ export class UpdateLessonDto {
   @IsArray()
   @IsOptional()
   tags?: AddTagToLesson[];
+
+  @ApiProperty({
+    description: 'Lesson flashcards',
+    type: [AddFlashcard],
+    nullable: false,
+    required: false,
+  })
+  @IsArray()
+  @IsOptional()
+  flashcards?: AddFlashcard[];
 }

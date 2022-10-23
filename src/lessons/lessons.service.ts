@@ -173,12 +173,11 @@ export class LessonsService {
       flashcards.push(flashcard);
     }
 
-    delete dto.flashcards;
+    dto.flashcards = flashcards;
 
     // create lesson object
     const lesson = this.lessonsRepository.create({
       creator: { id: lessonCreatorId },
-      flashcards: flashcards,
       ...dto,
     });
 
@@ -218,6 +217,21 @@ export class LessonsService {
   ): Promise<Lesson> {
     // get lesson by id
     let lesson = await this.getLessonById(lessonId);
+
+    // get flashcards
+    const flashcards = [];
+
+    for (let i = 0; i < dto.flashcards.length; i++) {
+      // create flashcards object
+      const flashcard = this.flashcardRepository.create(dto.flashcards[i]);
+
+      // save them in the database
+      await this.flashcardRepository.save(flashcard);
+
+      flashcards.push(flashcard);
+    }
+
+    dto.flashcards = flashcards;
 
     // check is lesson author
     if (lesson.creator.id !== creatorId) {
