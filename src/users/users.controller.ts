@@ -3,6 +3,7 @@ import {
   Get,
   HttpCode,
   HttpStatus,
+  Param,
   UseGuards,
 } from '@nestjs/common';
 import { ApiBearerAuth, ApiResponse, ApiTags } from '@nestjs/swagger';
@@ -30,9 +31,19 @@ export class UsersController {
   @HttpCode(HttpStatus.OK)
   @ApiResponse({
     status: HttpStatus.OK,
-    description: 'Return data of logged user',
+    description: 'Return data of logged user.',
   })
-  async getMe(@LoginedUserDecorator('sub') userId: number): Promise<User> {
-    return await this.usersService.getUserById(userId);
+  getMe(@LoginedUserDecorator('sub') userId: number): Promise<User> {
+    return this.usersService.getUserById(userId);
+  }
+
+  @Get(':id')
+  @HttpCode(HttpStatus.OK)
+  @ApiResponse({
+    status: HttpStatus.OK,
+    description: 'Return user data by id.',
+  })
+  getUserById(@Param('id') id: string): Promise<User> {
+    return this.usersService.getUserById(+id);
   }
 }

@@ -17,6 +17,7 @@ export class UsersService {
         id: true,
         userName: true,
         email: true,
+        createdLessons: true,
       },
       where: { id: userId },
     });
