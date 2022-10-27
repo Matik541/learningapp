@@ -183,16 +183,6 @@ export class LessonsService {
       ...dto,
     });
 
-    const creator = await this.userService.getUserById(lessonCreatorId);
-
-    if (!Array.isArray(creator.createdLessons)) {
-      creator.createdLessons = [];
-    }
-
-    creator.createdLessons.push(lesson);
-
-    await this.userService.updateUser(lessonCreatorId, creator.createdLessons);
-
     try {
       // save lesson to the database
       return await this.lessonsRepository.save(lesson);
