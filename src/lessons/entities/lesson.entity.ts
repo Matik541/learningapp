@@ -19,7 +19,6 @@ export class Lesson {
   id: number;
 
   @ManyToOne(() => User, (user) => user.createdLessons)
-  @JoinTable()
   creator: User;
 
   @Column()

@@ -1,5 +1,6 @@
 import { BadRequestException, Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
+import { UsersService } from 'src/users/users.service';
 import { In, Like, Repository } from 'typeorm';
 
 // dto
@@ -19,6 +20,7 @@ export class LessonsService {
     @InjectRepository(Tag) private tagRepository: Repository<Tag>,
     @InjectRepository(Flashcard)
     private flashcardRepository: Repository<Flashcard>,
+    private readonly userService: UsersService,
   ) {}
 
   /**
@@ -180,6 +182,16 @@ export class LessonsService {
       creator: { id: lessonCreatorId },
       ...dto,
     });
+
+    const creator = await this.userService.getUserById(lessonCreatorId);
+
+    if (!Array.isArray(creator.createdLessons)) {
+      creator.createdLessons = [];
+    }
+
+    creator.createdLessons.push(lesson);
+
+    await this.userService.updateUser(lessonCreatorId, creator.createdLessons);
 
     try {
       // save lesson to the database
