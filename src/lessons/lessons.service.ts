@@ -246,6 +246,15 @@ export class LessonsService {
     }
 
     try {
+      // delete flashcards
+      for (let i = 0; i < lesson.flashcards.length; i++) {
+        await this.flashcardRepository.remove(lesson.flashcards[i]);
+      }
+    } catch (err) {
+      throw new BadRequestException(err);
+    }
+
+    try {
       // remove lesson from db
       return await this.lessonsRepository.remove(lesson);
     } catch (err) {

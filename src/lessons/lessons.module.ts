@@ -11,9 +11,10 @@ import { LessonsService } from './lessons.service';
 import { Lesson } from './entities/lesson.entity';
 import { Tag } from './entities/tag.entity';
 import { Flashcard } from './entities/flashcard.entity';
+import { User } from 'src/users/entities/user.entity';
 
 @Module({
-  imports: [TypeOrmModule.forFeature([Lesson, Tag, Flashcard])],
+  imports: [TypeOrmModule.forFeature([Lesson, Tag, Flashcard, User])],
   controllers: [LessonsController],
   providers: [LessonsService],
 })
