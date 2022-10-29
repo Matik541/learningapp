@@ -1,17 +1,17 @@
 import { BadRequestException, Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
-import { UsersService } from 'src/users/users.service';
 import { In, Like, Repository } from 'typeorm';
 
 // dto
 import { AddLessonDto } from './dto/addLesson.dto';
 import { AddTagDto } from './dto/addTag.dto';
 import { UpdateLessonDto } from './dto/updateLesson.dto';
-import { Flashcard } from './entities/flashcard.entity';
+import { AddFlashcard } from './dto/addFlashcard.dto';
 
 // entity
 import { Lesson } from './entities/lesson.entity';
 import { Tag } from './entities/tag.entity';
+import { Flashcard } from './entities/flashcard.entity';
 
 @Injectable()
 export class LessonsService {
@@ -20,13 +20,12 @@ export class LessonsService {
     @InjectRepository(Tag) private tagRepository: Repository<Tag>,
     @InjectRepository(Flashcard)
     private flashcardRepository: Repository<Flashcard>,
-    private readonly userService: UsersService,
   ) {}
 
   /**
    * Find all lessons, select only the id, title, description and include the creator's id
    * and username fields. Then return selected lessons data.
-   * @returns An array of lessons
+   * @returns An array of lessons.
    */
   async getAllLessons(): Promise<Lesson[]> {
     // find and return all lessons
@@ -51,18 +50,12 @@ export class LessonsService {
     }
   }
 
-  /**
-   * It return all lessons filtered by given tags
-   * @param {GetAllLessonsQueryParametersDto} query - GetAllLessonsQueryParametersDto
-   * @returns Lessons
-   */
   async getAllLessonsWithFilters(
     tagIds: number[],
     lessonsSearched: Promise<Lesson[]> | undefined,
   ): Promise<Lesson[]> {
-    let lessons;
-
     // get lessons
+    let lessons: Lesson[];
     if (typeof lessonsSearched === 'undefined') {
       lessons = await this.getAllLessons();
     } else {
@@ -70,11 +63,7 @@ export class LessonsService {
     }
 
     // get tags by ids
-    const tags = await this.tagRepository.find({
-      where: {
-        id: In(tagIds),
-      },
-    });
+    const tags: Tag[] = await this.getLessonTags(tagIds);
 
     // filter lessons by tags
     tags.forEach((tag) => {
@@ -89,33 +78,41 @@ export class LessonsService {
     return lessons;
   }
 
+  /**
+   * It returns all lessons where the searchBy string is found in the title or description.
+   * @param {string} searchBy - string - the string we're searching for.
+   * @returns Lessons where the searchBy string is found in the title or description.
+   */
   async getSearchedLessons(searchBy: string): Promise<Lesson[]> {
-    const lessons = await this.lessonsRepository.find({
-      select: {
-        id: true,
-        title: true,
-        description: true,
-        // get only id and username from creator
-        creator: {
+    // return lessons where find key worlds in title or description
+    try {
+      return await this.lessonsRepository.find({
+        select: {
           id: true,
-          userName: true,
+          title: true,
+          description: true,
+          // get only id and username from creator
+          creator: {
+            id: true,
+            userName: true,
+          },
+          tags: true,
+          flashcards: true,
         },
-        tags: true,
-        flashcards: true,
-      },
-      where: [
-        { title: Like('%' + searchBy + '%') },
-        { description: Like('%' + searchBy + '%') },
-      ],
-      relations: { creator: true, tags: true, flashcards: true },
-    });
-
-    return lessons;
+        where: [
+          { title: Like('%' + searchBy + '%') },
+          { description: Like('%' + searchBy + '%') },
+        ],
+        relations: { creator: true, tags: true, flashcards: true },
+      });
+    } catch (err) {
+      throw new Error(err);
+    }
   }
 
   /**
-   * It returns a promise of an array of Tag objects
-   * @returns An array of Tag objects
+   * It returns a promise of an array of Tag objects.
+   * @returns An array of Tag objects.
    */
   async getTags(): Promise<Tag[]> {
     // find and return all tags
@@ -128,9 +125,9 @@ export class LessonsService {
 
   /**
    * Find a lesson by id, select only the id, title, description and include the creator's id
-   * and username fields. Then return lesson data
-   * @param {number} id - number - the id of the lesson we want to get
-   * @returns Lesson
+   * and username fields. Then return lesson data.
+   * @param {number} id - number - the id of the lesson we want to get.
+   * @returns Lesson object.
    */
   async getLessonById(id: number): Promise<Lesson> {
     // find lesson by id and return lesson data
@@ -157,25 +154,14 @@ export class LessonsService {
   }
 
   /**
-   * It creates a lesson, saves it in the database, and returns it
-   * @param {number} lessonCreatorId - number - the id of the user who created the lesson
-   * @param {AddLessonDto} dto - AddLessonDto
+   * It creates a lesson, saves it in the database, and returns it.
+   * @param {number} lessonCreatorId - number - the id of the user who created the lesson.
+   * @param {AddLessonDto} dto - AddLessonDto.
    * @returns The lesson that was created.
    */
   async addLesson(lessonCreatorId: number, dto: AddLessonDto): Promise<Lesson> {
-    const flashcards = [];
-
-    for (let i = 0; i < dto.flashcards.length; i++) {
-      // create flashcards object
-      const flashcard = this.flashcardRepository.create(dto.flashcards[i]);
-
-      // save them in the database
-      await this.flashcardRepository.save(flashcard);
-
-      flashcards.push(flashcard);
-    }
-
-    dto.flashcards = flashcards;
+    // get flashcards
+    dto.flashcards = await this.addFlashcards(dto.flashcards);
 
     // create lesson object
     const lesson = this.lessonsRepository.create({
@@ -191,9 +177,14 @@ export class LessonsService {
     }
   }
 
+  /**
+   * It creates a new tag object and them in the database.
+   * @param {AddTagDto} addTagDto - AddTagDto - this is the DTO that we created earlier.
+   * @returns The tag object that was created and saved to the db.
+   */
   async addTag(addTagDto: AddTagDto): Promise<Tag> {
     // create tag object
-    const tag = await this.tagRepository.create(addTagDto);
+    const tag = this.tagRepository.create(addTagDto);
 
     try {
       // save tag to the db
@@ -205,12 +196,12 @@ export class LessonsService {
 
   /**
    * We get the lesson by id, check if logger user is the author, change the data in the lesson object,
-   * and save the updated lesson
-   * @param {number} creatorId - number - the id of the logged user
-   * @param {number} lessonId - number - the id of the lesson to be updated
+   * and save the updated lesson.
+   * @param {number} creatorId - number - the id of the logged user.
+   * @param {number} lessonId - number - the id of the lesson to be updated.
    * @param {UpdateLessonDto} dto - UpdateLessonDto - this is the data transfer object that we will
    * create in the next step.
-   * @returns A promise of a lesson
+   * @returns A promise of a lesson.
    */
   async updateLesson(
     creatorId: number,
@@ -221,19 +212,7 @@ export class LessonsService {
     let lesson = await this.getLessonById(lessonId);
 
     // get flashcards
-    const flashcards = [];
-
-    for (let i = 0; i < dto.flashcards.length; i++) {
-      // create flashcards object
-      const flashcard = this.flashcardRepository.create(dto.flashcards[i]);
-
-      // save them in the database
-      await this.flashcardRepository.save(flashcard);
-
-      flashcards.push(flashcard);
-    }
-
-    dto.flashcards = flashcards;
+    dto.flashcards = await this.addFlashcards(dto.flashcards);
 
     // check is lesson author
     if (lesson.creator.id !== creatorId) {
@@ -252,7 +231,7 @@ export class LessonsService {
   }
 
   /**
-   * It deletes a lesson from the database
+   * It deletes a lesson from the database.
    * @param {number} creatorId - number - the id of the logged user
    * @param {number} lessonId - number - the id of the lesson to be deleted
    * @returns The lesson that was deleted.
@@ -272,5 +251,55 @@ export class LessonsService {
     } catch (err) {
       throw new BadRequestException(err);
     }
+  }
+
+  /**
+   * It takes an array of flashcards data from dto, creates a flashcard objects, saves them in the
+   * database and returns their objects.
+   * @param {AddFlashcard[]} flashcardsData - AddFlashcard[]
+   * @returns An array of flashcards objects
+   */
+  private async addFlashcards(
+    flashcardsData: AddFlashcard[],
+  ): Promise<Flashcard[]> {
+    const flashcards = [];
+
+    for (let i = 0; i < flashcardsData.length; i++) {
+      // create flashcards object
+      const flashcard = this.flashcardRepository.create(flashcardsData[i]);
+
+      try {
+        // save them in the database
+        await this.flashcardRepository.save(flashcard);
+      } catch (err) {
+        throw new BadRequestException(err);
+      }
+
+      flashcards.push(flashcard);
+    }
+
+    return flashcards;
+  }
+
+  /**
+   * "Get all the tags that are associated with the lesson."
+   * The function takes an array of tag ids and returns an array of tags.
+   * @param {number[]} tagIds - number[] - an array of tag ids
+   * @returns An array of tags
+   */
+  private async getLessonTags(tagIds: number[]): Promise<Tag[]> {
+    let tags: Tag[];
+
+    try {
+      tags = await this.tagRepository.find({
+        where: {
+          id: In(tagIds),
+        },
+      });
+    } catch (err) {
+      throw new Error(err);
+    }
+
+    return tags;
   }
 }

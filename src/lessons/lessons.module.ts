@@ -6,17 +6,15 @@ import { LessonsController } from './lessons.controller';
 
 // service
 import { LessonsService } from './lessons.service';
-import { UsersService } from 'src/users/users.service';
 
 // entity
 import { Lesson } from './entities/lesson.entity';
 import { Tag } from './entities/tag.entity';
 import { Flashcard } from './entities/flashcard.entity';
-import { User } from 'src/users/entities/user.entity';
 
 @Module({
-  imports: [TypeOrmModule.forFeature([Lesson, Tag, Flashcard, User])],
+  imports: [TypeOrmModule.forFeature([Lesson, Tag, Flashcard])],
   controllers: [LessonsController],
-  providers: [LessonsService, UsersService],
+  providers: [LessonsService],
 })
 export class LessonsModule {}
