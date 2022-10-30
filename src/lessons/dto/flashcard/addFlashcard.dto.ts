@@ -1,7 +1,7 @@
 import { ApiProperty } from '@nestjs/swagger';
 import { IsNotEmpty, IsString } from 'class-validator';
 
-export class AddFlashcard {
+export class AddFlashcardDto {
   @ApiProperty({
     description: 'World on polish',
     type: String,

@@ -4,9 +4,9 @@ import { In, Like, Repository } from 'typeorm';
 
 // dto
 import { AddLessonDto } from './dto/addLesson.dto';
-import { AddTagDto } from './dto/addTag.dto';
+import { AddTagDto } from './dto/tag/addTag.dto';
 import { UpdateLessonDto } from './dto/updateLesson.dto';
-import { AddFlashcard } from './dto/addFlashcard.dto';
+import { AddFlashcardDto } from './dto/flashcard/addFlashcard.dto';
 
 // entity
 import { Lesson } from './entities/lesson.entity';
@@ -188,7 +188,7 @@ export class LessonsService {
 
     try {
       // save tag to the db
-      return this.tagRepository.save(tag);
+      return await this.tagRepository.save(tag);
     } catch (err) {
       throw new BadRequestException(err);
     }
@@ -211,8 +211,7 @@ export class LessonsService {
     // get lesson by id
     let lesson = await this.getLessonById(lessonId);
 
-    // get flashcards
-    dto.flashcards = await this.addFlashcards(dto.flashcards);
+    dto.flashcards = await this.updateLessonFlashcards(dto.flashcards);
 
     // check is lesson author
     if (lesson.creator.id !== creatorId) {
@@ -265,11 +264,11 @@ export class LessonsService {
   /**
    * It takes an array of flashcards data from dto, creates a flashcard objects, saves them in the
    * database and returns their objects.
-   * @param {AddFlashcard[]} flashcardsData - AddFlashcard[]
+   * @param {AddFlashcardDto[]} flashcardsData - AddFlashcard[]
    * @returns An array of flashcards objects
    */
   private async addFlashcards(
-    flashcardsData: AddFlashcard[],
+    flashcardsData: AddFlashcardDto[],
   ): Promise<Flashcard[]> {
     const flashcards = [];
 
@@ -310,5 +309,52 @@ export class LessonsService {
     }
 
     return tags;
+  }
+
+  /**
+   * It takes an array of flashcards data, for each flashcard it calls the updateFlashcard function
+   * and returns array of updated flashcards.
+   * @param {Flashcard[]} flashcardsData - Flashcard[].
+   * @returns An array of updated flashcards objects.
+   */
+  private async updateLessonFlashcards(
+    flashcardsData: Flashcard[],
+  ): Promise<Flashcard[]> {
+    const flashcards = [];
+
+    // update flashcards
+    if (typeof flashcardsData !== 'undefined') {
+      for (let i = 0; i < flashcardsData.length; i++) {
+        flashcards.push(await this.updateFlashcard(flashcardsData[i]));
+      }
+    }
+
+    return flashcards;
+  }
+
+  /**
+   * It takes a flashcard object as an argument, finds the flashcard in the database by id, updates the
+   * flashcard data, and saves the updated flashcard in the database.
+   * @param {Flashcard} flashcardData - Flashcard - this is the data that we're going to update the.
+   * flashcard with.
+   * @returns Flashcard.
+   */
+  private async updateFlashcard(flashcardData: Flashcard): Promise<Flashcard> {
+    // get flashcard from db
+    let flashcard = await this.flashcardRepository.findOneByOrFail({
+      id: flashcardData.id,
+    });
+
+    // update flashcard data
+    flashcard = { ...flashcardData };
+
+    try {
+      // save updated flashcard in the db
+      await this.flashcardRepository.save(flashcard);
+    } catch (err) {
+      throw new BadRequestException('Bad flashcard data');
+    }
+
+    return flashcard;
   }
 }

@@ -1,9 +1,12 @@
 import { ApiProperty } from '@nestjs/swagger';
 import { IsArray, IsOptional, IsString } from 'class-validator';
-import { AddFlashcard } from './addFlashcard.dto';
+
+// entities
+import { Flashcard } from '../entities/flashcard.entity';
+import { UpdateFlashcard } from './flashcard/updateFlashcard.dto';
 
 // dto
-import { AddTagToLesson } from './addTagToLesson.dto';
+import { AddTagToLesson } from './tag/addTagToLesson.dto';
 
 export class UpdateLessonDto {
   @ApiProperty({
@@ -38,11 +41,11 @@ export class UpdateLessonDto {
 
   @ApiProperty({
     description: 'Lesson flashcards',
-    type: [AddFlashcard],
+    type: [UpdateFlashcard],
     nullable: false,
     required: false,
   })
   @IsArray()
   @IsOptional()
-  flashcards?: AddFlashcard[];
+  flashcards?: Flashcard[];
 }

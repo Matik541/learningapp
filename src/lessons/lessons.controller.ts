@@ -21,7 +21,7 @@ import { AuthorizationGuard } from 'src/auth/guards/auth.guard';
 
 // dto
 import { AddLessonDto } from './dto/addLesson.dto';
-import { AddTagDto } from './dto/addTag.dto';
+import { AddTagDto } from './dto/tag/addTag.dto';
 import { GetAllLessonsQueryParametersDto } from './dto/getAllLessonsQueryParameters.dto';
 import { UpdateLessonDto } from './dto/updateLesson.dto';
 
