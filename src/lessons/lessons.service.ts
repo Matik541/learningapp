@@ -1,6 +1,6 @@
 import { BadRequestException, Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
-import { In, Like, Repository } from 'typeorm';
+import { In, IsNull, Like, Repository } from 'typeorm';
 
 // dto
 import { AddLessonDto } from './dto/addLesson.dto';
@@ -46,7 +46,7 @@ export class LessonsService {
         relations: { creator: true, tags: true, flashcards: true },
       });
     } catch (err) {
-      throw new Error(err);
+      throw new BadRequestException(err);
     }
   }
 
@@ -55,15 +55,13 @@ export class LessonsService {
     lessonsSearched: Promise<Lesson[]> | undefined,
   ): Promise<Lesson[]> {
     // get lessons
-    let lessons: Lesson[];
-    if (typeof lessonsSearched === 'undefined') {
-      lessons = await this.getAllLessons();
-    } else {
-      lessons = await lessonsSearched;
-    }
+    let lessons =
+      typeof lessonsSearched === 'undefined'
+        ? await this.getAllLessons()
+        : await lessonsSearched;
 
     // get tags by ids
-    const tags: Tag[] = await this.getLessonTags(tagIds);
+    const tags = await this.getLessonTags(tagIds);
 
     // filter lessons by tags
     tags.forEach((tag) => {
@@ -106,7 +104,7 @@ export class LessonsService {
         relations: { creator: true, tags: true, flashcards: true },
       });
     } catch (err) {
-      throw new Error(err);
+      throw new BadRequestException(err);
     }
   }
 
@@ -119,7 +117,7 @@ export class LessonsService {
     try {
       return await this.tagRepository.find();
     } catch (err) {
-      throw new Error(err);
+      throw new BadRequestException(err);
     }
   }
 
@@ -149,7 +147,7 @@ export class LessonsService {
         relations: { creator: true, tags: true, flashcards: true },
       });
     } catch (err) {
-      throw new Error(err);
+      throw new BadRequestException(err);
     }
   }
 
@@ -223,10 +221,15 @@ export class LessonsService {
 
     // save updated lesson
     try {
-      return await this.lessonsRepository.save(lesson);
+      lesson = await this.lessonsRepository.save(lesson);
     } catch (err) {
       throw new BadRequestException(err);
     }
+
+    // clear useless flashcards
+    await this.removeFlashcardsWithoutLesson();
+
+    return lesson;
   }
 
   /**
@@ -244,21 +247,17 @@ export class LessonsService {
       throw new BadRequestException('You are not allowed to update.');
     }
 
+    // delete lesson flashcards
+    await this.flashcardRepository.delete({ id: lesson.id });
+
     try {
-      // delete flashcards
-      for (let i = 0; i < lesson.flashcards.length; i++) {
-        await this.flashcardRepository.remove(lesson.flashcards[i]);
-      }
+      // remove lesson from db
+      await this.lessonsRepository.remove(lesson);
     } catch (err) {
       throw new BadRequestException(err);
     }
 
-    try {
-      // remove lesson from db
-      return await this.lessonsRepository.remove(lesson);
-    } catch (err) {
-      throw new BadRequestException(err);
-    }
+    return lesson;
   }
 
   /**
@@ -272,21 +271,26 @@ export class LessonsService {
   ): Promise<Flashcard[]> {
     const flashcards = [];
 
+    let flashcard: Flashcard;
     for (let i = 0; i < flashcardsData.length; i++) {
-      // create flashcards object
-      const flashcard = this.flashcardRepository.create(flashcardsData[i]);
-
-      try {
-        // save them in the database
-        await this.flashcardRepository.save(flashcard);
-      } catch (err) {
-        throw new BadRequestException(err);
-      }
+      flashcard = await this.addFlashcard(flashcardsData[i]);
 
       flashcards.push(flashcard);
     }
 
     return flashcards;
+  }
+
+  private async addFlashcard(flashcardData: AddFlashcardDto) {
+    // create flashcards object
+    const flashcard = this.flashcardRepository.create(flashcardData);
+
+    try {
+      // save them in the database
+      return await this.flashcardRepository.save(flashcard);
+    } catch (err) {
+      throw new BadRequestException(err);
+    }
   }
 
   /**
@@ -305,7 +309,7 @@ export class LessonsService {
         },
       });
     } catch (err) {
-      throw new Error(err);
+      throw new BadRequestException(err);
     }
 
     return tags;
@@ -325,7 +329,18 @@ export class LessonsService {
     // update flashcards
     if (typeof flashcardsData !== 'undefined') {
       for (let i = 0; i < flashcardsData.length; i++) {
-        flashcards.push(await this.updateFlashcard(flashcardsData[i]));
+        // get flashcard from db
+        const originalFlashcard = await this.flashcardRepository.findOneBy({
+          id: flashcardsData[i].id,
+        });
+
+        if (originalFlashcard !== null) {
+          flashcards.push(
+            await this.updateFlashcard(originalFlashcard, flashcardsData[i]),
+          );
+        } else {
+          flashcards.push(await this.addFlashcard(flashcardsData[i]));
+        }
       }
     }
 
@@ -339,22 +354,27 @@ export class LessonsService {
    * flashcard with.
    * @returns Flashcard.
    */
-  private async updateFlashcard(flashcardData: Flashcard): Promise<Flashcard> {
-    // get flashcard from db
-    let flashcard = await this.flashcardRepository.findOneByOrFail({
-      id: flashcardData.id,
-    });
-
+  private async updateFlashcard(
+    originalFlashcard: Flashcard,
+    flashcardData: Flashcard,
+  ): Promise<Flashcard> {
     // update flashcard data
-    flashcard = { ...flashcardData };
+    originalFlashcard = { ...flashcardData };
 
     try {
       // save updated flashcard in the db
-      await this.flashcardRepository.save(flashcard);
+      return await this.flashcardRepository.save(originalFlashcard);
     } catch (err) {
-      throw new BadRequestException('Bad flashcard data');
+      throw new BadRequestException(err);
     }
+  }
 
-    return flashcard;
+  private async removeFlashcardsWithoutLesson() {
+    try {
+      // delete flashcards with lesson
+      await this.flashcardRepository.delete({ lesson: IsNull() });
+    } catch (err) {
+      throw new BadRequestException(err);
+    }
   }
 }
