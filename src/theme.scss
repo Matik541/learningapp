@@ -43,6 +43,11 @@ $theme: mat.define-dark-theme(
 @include mat.button-theme($theme);
 @include mat.input-theme($theme);
 
+body{
+  background-color: mat.get-color-from-palette($my_dark, 900);
+  color: mat.get-color-from-palette($my_grey, 400);
+}
+
 nav {
   .btn-primary,
   .search button {

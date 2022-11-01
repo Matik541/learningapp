@@ -3,16 +3,29 @@
 // The list of file replacements can be found in `angular.json`.
 
 export const environment = {
-  production: false
-};
-export const appName = 'LearningApp';
+  production: false,
+}
+export const appName = 'LearningApp'
 
-export const API_URL = 'http://localhost:3000';
+export const API_URL = 'http://localhost:3000'
 
-export const refreshToken = 'refreshToken';
-export const accessToken = 'accessToken';
+export const refreshToken = 'refreshToken'
+export const accessToken = 'accessToken'
 
-export type User = null | { username: string, id: number };
+export type Tag = { id: Number }
+export type Flashcard = {
+  world: string
+  translation: string
+}
+export type User = null | { username: string; sub: number }
+export type Lesson = {
+  title: string
+  description: string
+  // icon: string
+  // author: number | undefined
+  flashcards: Flashcard[]
+  tags: Tag[]
+}
 /*
  * For easier debugging in development mode, you can import the following file
  * to ignore zone related error stack frames such as `zone.run`, `zoneDelegate.invokeTask`.

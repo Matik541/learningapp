@@ -26,7 +26,7 @@
             <mat-form-field appearance="fill">
               <textarea matInput placeholder="Description" formControlName="description"></textarea>
             </mat-form-field>
-            <autocomplete-tags appearance="fill" [match]="true"></autocomplete-tags>
+            <autocomplete-tags appearance="fill" [match]="true" (tagsChange)="refreshTags($event)"></autocomplete-tags>
           </div>
         </div>
         <div>
@@ -42,7 +42,8 @@
         </add-flashcard>
       </mat-accordion>
       <div>
-        <button (click)="addNewFlashcard()">Add new flashcard</button>
+        <br>
+        <button mat-raised-button color="primary" (click)="addNewFlashcard()">Add new flashcard</button>
         <hr>
         <button mat-button matStepperPrevious>Back</button>
         <button mat-button matStepperNext>Next</button>

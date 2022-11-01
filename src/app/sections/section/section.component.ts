@@ -1,14 +1,21 @@
-import { User } from './../../../environments/environment';
-import { UsersService } from './../../users.service';
-import { Component, Input, OnInit, Inject, Injectable, SimpleChanges } from '@angular/core';
-import { MatDialog } from '@angular/material/dialog';
-import { LessonsService } from '../../lessons.service';
-import { CreateComponent } from '../../lessons/create/create.component'; 
-import { Router } from '@angular/router';
+import { User } from './../../../environments/environment'
+import { UsersService } from './../../users.service'
+import {
+  Component,
+  Input,
+  OnInit,
+  Inject,
+  Injectable,
+  SimpleChanges,
+} from '@angular/core'
+import { MatDialog } from '@angular/material/dialog'
+import { LessonsService } from '../../lessons.service'
+import { CreateComponent } from '../../lessons/create/create.component'
+import { Router } from '@angular/router'
 
 type Block = {
-  title: string,
-  icon: string,
+  title: string
+  icon: string
   id: number
 }
 @Component({
@@ -16,21 +23,27 @@ type Block = {
   templateUrl: './section.component.html',
   styleUrls: ['./section.component.scss'],
 })
-
 @Injectable()
 export class SectionComponent implements OnInit {
-  @Input() label: string;
-  @Input() blocks: Block[] = [];
-  @Input() mustloggin: boolean;
+  @Input() label: string
+  @Input() blocks: Block[] = []
+  @Input() mustloggin: boolean
 
-  constructor(public dialog: MatDialog, public usersService: UsersService, private LessonsService: LessonsService) { }
+  constructor(
+    public dialog: MatDialog,
+    public usersService: UsersService,
+    private LessonsService: LessonsService
+  ) {}
 
-  ngOnInit(): void { }
+  ngOnInit(): void {}
 
-  public addNew(enterAnimationDuration: string, exitAnimationDuration: string): void {
+  public addNew(
+    enterAnimationDuration: string,
+    exitAnimationDuration: string
+  ): void {
     this.dialog.open(CreateComponent, {
       enterAnimationDuration,
       exitAnimationDuration,
-    });
+    })
   }
 }

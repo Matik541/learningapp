@@ -1,17 +1,10 @@
-import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core'
+import { Component, OnInit } from '@angular/core'
 import { LessonsService } from '../../lessons.service'
 import { UsersService } from 'src/app/users.service'
-import { MatDialog, MatDialogRef } from '@angular/material/dialog'
+import { MatDialogRef } from '@angular/material/dialog'
 import { FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms'
-import { map, Observable, startWith } from 'rxjs'
-
-type Tags = { name: string }
-type Flashcard = {
-  word: string
-  wordLang: string
-  tran: string
-  tranLang: string
-}
+import { Lesson, Tag, Flashcard } from 'src/environments/environment'
+// get loggedUser from appcomponent
 
 @Component({
   selector: 'app-create',
@@ -147,13 +140,12 @@ export class CreateComponent implements OnInit {
   ]
   menuV: string = this.icons[0]
 
-  lesson: {
-    title: string
-    description: string
-    icon: string
-    author: number
-    flashcards: any[]
-    tags: string[]
+  lesson: Lesson = {
+    title: '',
+    description: '',
+    // icon: this.icons[0],
+    flashcards: [],
+    tags: [],
   }
 
   constructor(
@@ -173,17 +165,23 @@ export class CreateComponent implements OnInit {
     this.formGroup1.valueChanges.subscribe((value) => {
       console.log(value)
     })
-    this.lesson = {
-      author: this.usersService.loggedUser?.id,
-      flashcards: this.flashcards,
-      tags: [],
-      ...this.formGroup1.value,
-    }
+
+    this.lesson.title = this.formGroup1.value.title
+    this.lesson.description = this.formGroup1.value.description
+    this.lesson.flashcards = this.flashcards
+    this.lesson.tags = this.lesson.tags
     console.log(this.lesson)
+
+    this.lessonsService.create(this.lesson).subscribe((lesson) => {
+      console.log(lesson)
+      // this.dialogRef.close()
+    })
   }
   refreshFlashcard(event: any) {
-    console.log(event)
     this.flashcards[event.id] = event.flashcard
+  }
+  refreshTags(event: Tag[]) {
+    this.lesson.tags = event
   }
 
   addNewFlashcard() {

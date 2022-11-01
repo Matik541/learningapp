@@ -163,10 +163,11 @@ nav {
       padding-top: 0.5em;
     }
     div.flashcard {
-      div {
-        display: grid;
-        grid-template-columns: calc(70% - 1rem) 30%;
-        gap: 1rem;
+      display: flex;
+      gap: 1rem;
+      * {
+        width: 100%;
+        flex-grow: 1;
       }
     }
   }
@@ -243,7 +244,7 @@ sections {
         align-items: center;
 
         border-radius: 0.5rem;
-        background-color: #444;
+        background-color: rgba(255, 255, 255, 0.1);
         color: #fff;
         cursor: pointer;
         transition: background-color 0.2s ease-in-out;
