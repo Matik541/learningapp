@@ -82,7 +82,7 @@ export class LessonsService {
    * @returns Lessons where the searchBy string is found in the title or description.
    */
   async getSearchedLessons(searchBy: string): Promise<Lesson[]> {
-    // return lessons where find key worlds in title or description
+    // return lessons where find key words in title or description
     try {
       return await this.lessonsRepository.find({
         select: {

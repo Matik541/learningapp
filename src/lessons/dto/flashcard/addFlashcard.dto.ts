@@ -10,7 +10,7 @@ export class AddFlashcardDto {
   })
   @IsString()
   @IsNotEmpty()
-  world: string;
+  question: string;
 
   @ApiProperty({
     description: 'Translation of the world on polish',
@@ -20,5 +20,5 @@ export class AddFlashcardDto {
   })
   @IsString()
   @IsNotEmpty()
-  translation: string;
+  answer: string;
 }

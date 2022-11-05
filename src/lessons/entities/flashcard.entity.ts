@@ -9,10 +9,10 @@ export class Flashcard {
   id: number;
 
   @Column()
-  world: string;
+  question: string;
 
   @Column()
-  translation: string;
+  answer: string;
 
   @ManyToOne(() => Lesson, (lesson) => lesson.flashcards)
   lesson: Lesson;
