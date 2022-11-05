@@ -1,26 +1,28 @@
-import { NgModule } from '@angular/core';
-import { BrowserModule } from '@angular/platform-browser';
-import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
-import { HttpClientModule } from '@angular/common/http';
-import { MaterialExampleModule } from '../material.module';
-import { FormsModule, ReactiveFormsModule } from '@angular/forms';
-import { MatNativeDateModule } from '@angular/material/core';
-import { MatDialogModule, MatDialogRef } from '@angular/material/dialog';
-import { AppRoutingModule } from './app-routing.module';
-import { AppComponent } from './app.component';
-import { NavbarComponent } from './navbar/navbar.component';
-import { NavbarCreateComponent } from './navbar/create/create.component';
-import { NavbarSearchComponent } from './navbar/search/search.component';
-import { NavbarUserComponent } from './navbar/user/user.component';
-import { SectionComponent } from './sections/section/section.component';
-import { SectionsComponent } from './sections/sections.component';
-import { LoginComponent } from './auth/login/login.component';
-import { RegisterComponent } from './auth/register/register.component';
-import { DragScrollModule } from 'ngx-drag-scroll';
-import { CreateComponent } from './lessons/create/create.component';
-import { AutocompleteTagsComponent } from './components/autocomplete-tags/autocomplete-tags.component';
-import { ErrorsComponent } from './components/errors/errors.component';
-import { FlashcardComponent } from './lessons/create/flashcard/flashcard.component';
+import { BrowserAnimationsModule } from '@angular/platform-browser/animations'
+import { HttpClientModule } from '@angular/common/http'
+import { NgModule } from '@angular/core'
+import { FormsModule, ReactiveFormsModule } from '@angular/forms'
+import { MatNativeDateModule } from '@angular/material/core'
+import { MatDialogModule, MatDialogRef } from '@angular/material/dialog'
+import { BrowserModule } from '@angular/platform-browser'
+import { DragScrollModule } from 'ngx-drag-scroll'
+import { MaterialExampleModule } from 'src/material.module'
+import { AppRoutingModule } from './app-routing.module'
+import { AppComponent } from './app.component'
+import { LoginComponent } from './auth/login/login.component'
+import { RegisterComponent } from './auth/register/register.component'
+import { AutocompleteTagsComponent } from './components/autocomplete-tags/autocomplete-tags.component'
+import { ErrorsComponent } from './components/errors/errors.component'
+import { SectionComponent } from './components/section/section.component'
+import { HomeComponent } from './home/home.component'
+import { CreateComponent } from './lessons/create/create.component'
+import { FlashcardComponent } from './lessons/create/flashcard/flashcard.component'
+import { LessonComponent } from './lessons/lesson/lesson.component'
+import { NavbarCreateComponent } from './navbar/create/create.component'
+import { NavbarComponent } from './navbar/navbar.component'
+import { NavbarSearchComponent } from './navbar/search/search.component'
+import { NavbarUserComponent } from './navbar/user/user.component'
+
 @NgModule({
   declarations: [
     AppComponent,
@@ -29,13 +31,14 @@ import { FlashcardComponent } from './lessons/create/flashcard/flashcard.compone
     NavbarSearchComponent,
     NavbarUserComponent,
     SectionComponent,
-    SectionsComponent,
     LoginComponent,
     RegisterComponent,
     CreateComponent,
     AutocompleteTagsComponent,
     ErrorsComponent,
     FlashcardComponent,
+    LessonComponent,
+    HomeComponent,
   ],
   imports: [
     DragScrollModule,
@@ -54,9 +57,9 @@ import { FlashcardComponent } from './lessons/create/flashcard/flashcard.compone
   providers: [
     {
       provide: MatDialogRef,
-      useValue: {}
+      useValue: {},
     },
   ],
   bootstrap: [AppComponent],
 })
-export class AppModule { }
+export class AppModule {}

@@ -1,37 +1,23 @@
-<mat-expansion-panel (opened)="panelOpenState = true; check()" (closed)="panelOpenState = false; check()">
-  <mat-expansion-panel-header>
+<mat-card class="flashcard">
+  <mat-card-subtitle class="inputs" [formGroup]="flashcardsForm">
 
-    <mat-panel-title *ngIf="!que.value">
-      <mat-icon color="warn">error_outline</mat-icon>
-      <errors innerHTML="Question"></errors>
-    </mat-panel-title>
-    <mat-panel-title *ngIf="!!que.value">
-      {{que.value}}
-    </mat-panel-title>
+    <mat-form-field>
+      <mat-label>Question</mat-label>
+      <input required matInput placeholder="Question" formControlName="question" value="{{que}}">
+    </mat-form-field>
 
-    <mat-panel-description *ngIf="!anw.value">
-      <mat-icon color="warn">error_outline</mat-icon>
-      <errors innerHTML="Anwser"></errors>
-    </mat-panel-description>
-    <mat-panel-description *ngIf="!!anw.value">
-      {{anw.value}}
-    </mat-panel-description>
-  </mat-expansion-panel-header>
-  <div class="flashcard" [formGroup]="flashcardFromGroup">
+    <mat-form-field>
+      <mat-label>Answer</mat-label>
+      <input required matInput placeholder="Answer" formControlName="answer" value="asd">
+    </mat-form-field>
 
-    <div>
-      <mat-form-field>
-        <mat-label>Question</mat-label>
-        <input required matInput placeholder="Question" #que formControlName="que" (change)="check()">
-      </mat-form-field>
+    <div class="status">
+      <mat-icon *ngIf="saved" color="accent">check</mat-icon>
+      <mat-icon *ngIf="!saved" color="warn">close</mat-icon>
     </div>
-
-    <div>
-      <mat-form-field>
-        <mat-label>Anwser</mat-label>
-        <input required matInput placeholder="Anwser" #anw formControlName="anw" (change)="check()">
-      </mat-form-field>
-    </div>
-
-  </div>
-</mat-expansion-panel>
+  </mat-card-subtitle>
+  <mat-card-actions>
+    <button mat-stroked-button (click)="save()" color="accent">{{ (saved) ? "Saved" : "Save"}}</button>
+    <button mat-stroked-button (click)="remove()" color="warn">Delete</button>
+  </mat-card-actions>
+</mat-card>

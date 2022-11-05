@@ -4,7 +4,6 @@ import { UsersService } from 'src/app/users.service'
 import { MatDialogRef } from '@angular/material/dialog'
 import { FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms'
 import { Lesson, Tag, Flashcard } from 'src/environments/environment'
-// get loggedUser from appcomponent
 
 @Component({
   selector: 'app-create',
@@ -167,24 +166,35 @@ export class CreateComponent implements OnInit {
     })
 
     this.lesson.title = this.formGroup1.value.title
-    this.lesson.description = this.formGroup1.value.description
+    this.lesson.description = this.formGroup1.value.description || ''
     this.lesson.flashcards = this.flashcards
     this.lesson.tags = this.lesson.tags
     console.log(this.lesson)
 
     this.lessonsService.create(this.lesson).subscribe((lesson) => {
       console.log(lesson)
-      // this.dialogRef.close()
+      if (lesson) this.dialogRef.close()
     })
-  }
-  refreshFlashcard(event: any) {
-    this.flashcards[event.id] = event.flashcard
   }
   refreshTags(event: Tag[]) {
     this.lesson.tags = event
   }
 
-  addNewFlashcard() {
-    this.flashcards.push({} as Flashcard)
+  // flashcards
+  addFlashcard() {
+    this.flashcards.push({
+      question: '',
+      answer: '',
+    })
+  }
+  removeFlashcard(event: Flashcard, id: number) {
+    console.log(this.flashcards)
+    console.log(event)
+    this.flashcards = this.flashcards.filter((f) => f !== event)
+    console.log(this.flashcards)
+  }
+  refreshFlashcards(event: Flashcard, id: number) {
+    console.log(this.flashcards)
+    this.flashcards[id] = event
   }
 }

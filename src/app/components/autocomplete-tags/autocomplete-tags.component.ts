@@ -36,10 +36,9 @@ export class AutocompleteTagsComponent {
   addOnBlur = true
   separatorKeysCodes: number[] = [ENTER, COMMA]
   tagCtrl = new FormControl()
-  filteredTags: Observable<string[]>
-  tags: string[] = []
-  //TODO: get tags from database - API CALLs for all tags
-  allTags: string[] = []
+  filteredTags: Observable<String[]>
+  tags: Tag[] = []
+  allTags: Tag[] = []
 
   @ViewChild('tagInput', { static: false })
   tagInput: ElementRef<HTMLInputElement>
@@ -47,16 +46,16 @@ export class AutocompleteTagsComponent {
 
   constructor(private lessonsService: LessonsService) {
     this.lessonsService.getTags().subscribe((tags) => {
-      for (let tag of tags) {
-        this.allTags[tag.id] = tag.tagName
-      }
+      this.allTags = tags
       console.log(this.allTags)
     })
 
     this.filteredTags = this.tagCtrl.valueChanges.pipe(
       startWith(null),
-      map((tag: string | null) =>
-        tag ? this._filter(tag) : this.allTags.slice()
+      map((tagName: string | null) =>
+        tagName
+          ? this._filter(tagName)
+          : this.allTags.map((tag) => tag.tagName).slice()
       )
     )
   }
@@ -68,19 +67,13 @@ export class AutocompleteTagsComponent {
 
       if ((value || '').trim()) {
         if (this.match) {
-          if (this.allTags.includes(value) && !this.tags.includes(value)) {
-            this.tags.push(value.trim())
-            let tagIds = this.tags.map((tag) => {
-              return { id: this.allTags.indexOf(tag) }
-            })
-            this.tagsChange.emit(tagIds)
+          if (
+            this.allTags.map((tag) => tag.tagName).includes(value) &&
+            !this.tags.map((tag) => tag.tagName).includes(value)
+          ) {
+            this.tags.push(this.allTags.find((tag) => tag.tagName === value)!)
+            this.emitTags()
           }
-        } else {
-          this.tags.push(value.trim())
-          let tagIds = this.tags.map((tag) => {
-            return { id: this.allTags.indexOf(tag) }
-          })
-          this.tagsChange.emit(tagIds)
         }
       }
       if (input) input.value = ''
@@ -89,43 +82,37 @@ export class AutocompleteTagsComponent {
     }
   }
 
-  remove(tag: string): void {
-    const index = this.tags.indexOf(tag)
-
+  remove(tag: Tag): void {
+    let index = this.tags.indexOf(tag)
     if (index >= 0) this.tags.splice(index, 1)
-    let tagIds = this.tags.map((tag) => {
-      return { id: this.allTags.indexOf(tag) }
-    })
-    this.tagsChange.emit(tagIds)
+    this.emitTags()
   }
 
   selected(event: MatAutocompleteSelectedEvent): void {
     const value = event.option.viewValue
 
     if (this.match) {
-      if (this.allTags.includes(value) && !this.tags.includes(value)) {
-        this.tags.push(event.option.viewValue)
-        let tagIds = this.tags.map((tag) => {
-          return { id: this.allTags.indexOf(tag) }
-        })
-        this.tagsChange.emit(tagIds)
+      if (
+        this.allTags.map((tag) => tag.tagName).includes(value) &&
+        !this.tags.map((tag) => tag.tagName).includes(value)
+      ) {
+        this.tags.push(this.allTags.find((tag) => tag.tagName === value)!)
+        this.emitTags()
       }
-    } else {
-      this.tags.push()
-      let tagIds = this.tags.map((tag) => {
-        return { id: this.allTags.indexOf(tag) }
-      })
-      this.tagsChange.emit(tagIds)
     }
 
     this.tagCtrl.setValue(null)
   }
 
-  private _filter(value: string): string[] {
+  emitTags() {
+    this.tagsChange.emit(this.tags)
+  }
+
+  private _filter(value: string): String[] {
     const filterValue = value.toLowerCase()
 
-    return this.allTags.filter(
-      (tag) => tag.toLowerCase().indexOf(filterValue) === 0
-    )
+    return this.allTags
+      .map((tag) => tag.tagName)
+      .filter((tag) => tag.toLowerCase().indexOf(filterValue) === 0)
   }
 }

@@ -1,5 +1,4 @@
-import { User } from './../../../environments/environment'
-import { UsersService } from './../../users.service'
+import { UsersService } from '../../users.service'
 import {
   Component,
   Input,
@@ -11,7 +10,6 @@ import {
 import { MatDialog } from '@angular/material/dialog'
 import { LessonsService } from '../../lessons.service'
 import { CreateComponent } from '../../lessons/create/create.component'
-import { Router } from '@angular/router'
 
 type Block = {
   title: string

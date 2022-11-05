@@ -1,5 +1,7 @@
 @import url("https://fonts.googleapis.com/css2?family=Noto+Sans+Mono&family=Roboto&display=swap");
 
+$bg-color: rgba(217, 217, 217, 0.1);
+
 body {
   $padding: 3rem;
 
@@ -19,7 +21,7 @@ body {
 }
 
 nav {
-  background-color: #444;
+  background-color: $bg-color;
   width: 100%;
   display: flex;
   justify-content: space-between;
@@ -110,19 +112,22 @@ nav {
   }
 }
 .create-dialog {
-  width: 50vw;
-  form {
-    display: flex;
-    flex-direction: column;
-
-    & > div {
-      gap: 1rem;
+  width: clamp(100%, 90%, 75%);
+  div.mat-horizontal-content-container > div {
+    overflow-x: hidden;
+    form {
       display: flex;
-      width: 100%;
-      autocomplete-tags,
-      mat-form-field {
-        gap: 0;
+      flex-direction: column;
+
+      & > div {
+        display: flex;
+        gap: 1rem;
         width: 100%;
+        autocomplete-tags,
+        mat-form-field {
+          gap: 0;
+          width: 100%;
+        }
       }
     }
   }
@@ -130,8 +135,8 @@ nav {
     display: flex;
     flex-direction: column;
     .row1 {
-      display: flex;
       align-items: center;
+      display: flex;
       gap: 1rem;
 
       .choosen {
@@ -140,8 +145,13 @@ nav {
     }
     .row2 {
       display: flex;
+      gap: 1em;
       width: 100%;
-      gap: 1rem;
+
+      @media screen and (max-width: 600px) {
+        flex-direction: column;
+      }
+
       .mat-form-field-wrapper,
       .mat-form-field-wrapper .mat-form-field-flex,
       .mat-form-field-wrapper .mat-form-field-infix,
@@ -158,16 +168,33 @@ nav {
     max-height: 50vh;
     overflow-y: auto;
   }
-  mat-accordion.flashcard {
-    .mat-expansion-panel-body {
-      padding-top: 0.5em;
-    }
-    div.flashcard {
-      display: flex;
-      gap: 1rem;
-      * {
-        width: 100%;
-        flex-grow: 1;
+  .flashcards {
+    display: flex;
+    flex-direction: column;
+    gap: 0.25rem;
+
+    mat-card.flashcard {
+      .inputs {
+        align-items: center;
+        display: flex;
+        margin-bottom: -0.75rem;
+        gap: 1rem;
+        mat-form-field {
+          width: 100%;
+          flex-grow: 1;
+        }
+      }
+      &:hover {
+        mat-card-actions {
+          height: 3rem;
+          transform: scaleY(1);
+        }
+      }
+      mat-card-actions {
+        height: 0;
+        margin-left: 0rem;
+        transform: scaleY(0);
+        transition: all 0.2s ease-in-out;
       }
     }
   }
@@ -188,7 +215,7 @@ nav {
   }
 }
 
-sections {
+app-home {
   display: flex;
   margin: 5vh 1rem 0;
   flex-direction: column;
@@ -244,7 +271,7 @@ sections {
         align-items: center;
 
         border-radius: 0.5rem;
-        background-color: rgba(255, 255, 255, 0.1);
+        background-color: $bg-color;
         color: #fff;
         cursor: pointer;
         transition: background-color 0.2s ease-in-out;
@@ -259,6 +286,51 @@ sections {
   }
 }
 
+app-lesson {
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  align-items: center;
+  margin: 5vh 1rem 0;
+
+  .menu {
+    $size: 7.5rem;
+    $gap: 1rem;
+    $padding: 3rem;
+
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    align-items: center;
+    height: 100%;
+    gap: $gap;
+
+    .block {
+      margin-right: $gap;
+
+      min-width: $size;
+      min-height: $size;
+
+      display: inline-flex !important;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+
+      border-radius: 0.5rem;
+      background-color: $bg-color;
+      color: #fff;
+      cursor: pointer;
+      transition: background-color 0.2s ease-in-out;
+
+      :first-child {
+        font-size: 2rem;
+        height: 2rem;
+        width: 2rem;
+      }
+    }
+  }
+}
+
 errors {
   font-style: italic;
   font-family: "Noto Sans Mono", monospace;
@@ -266,7 +338,7 @@ errors {
   ::after {
     font-family: "Material Icons";
     -webkit-font-feature-settings: "liga";
-    content: "&#e160;asd";
+    content: "&#e160;";
   }
 }
 

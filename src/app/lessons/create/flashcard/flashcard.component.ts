@@ -1,12 +1,6 @@
-import {
-  Component,
-  ElementRef,
-  EventEmitter,
-  Input,
-  OnInit,
-  Output,
-} from '@angular/core'
+import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core'
 import { FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms'
+import { Flashcard } from 'src/environments/environment'
 
 @Component({
   selector: 'add-flashcard',
@@ -14,30 +8,37 @@ import { FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms'
   styleUrls: ['./flashcard.component.scss'],
 })
 export class FlashcardComponent implements OnInit {
-  @Input() id: number = 0
+  @Input() que: string = ''
+  @Input() ans: string = ''
 
-  @Output() exportForm = new EventEmitter()
+  @Output() push: EventEmitter<Flashcard> = new EventEmitter()
+  @Output() slice: EventEmitter<Flashcard> = new EventEmitter()
 
-  public panelOpenState: boolean = false
+  saved = false
 
-  public flashcardFromGroup: FormGroup = this._formBuilder.group({
-    que: new FormControl('', [Validators.required]),
-    anw: new FormControl('', [Validators.required]),
-  })
+  flashcardsForm: FormGroup<{
+    question: FormControl<string | null>
+    answer: FormControl<string | null>
+  }>
 
   constructor(private _formBuilder: FormBuilder) {}
 
-  ngOnInit() {}
+  ngOnInit() {
+    this.flashcardsForm = this._formBuilder.group({
+      question: new FormControl(this.que, [Validators.required]),
+      answer: new FormControl(this.ans, [Validators.required]),
+    })
+    if (this.ans && this.que) this.saved = true
+  }
 
-  public check(): void {
-    if (this.flashcardFromGroup.valid) {
-      this.exportForm.emit({
-        id: this.id,
-        flashcard: {
-          world: this.flashcardFromGroup.value.que,
-          translation: this.flashcardFromGroup.value.anw,
-        },
-      })
-    }
+  save() {
+    this.saved = true
+    this.ans = this.flashcardsForm.value.answer ?? this.ans
+    this.que = this.flashcardsForm.value.question ?? this.que
+
+    this.push.emit({ question: this.que, answer: this.ans })
+  }
+  remove() {
+    this.slice.emit({ question: this.que, answer: this.ans })
   }
 }

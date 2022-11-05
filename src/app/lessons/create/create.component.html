@@ -36,14 +36,14 @@
     </mat-step>
     <mat-step>
       <ng-template matStepLabel>flashcards</ng-template>
-      <mat-accordion class="flashcard">
-        <add-flashcard *ngFor="let item of [].constructor(flashcards.length); let i = index"
-          (exportForm)="refreshFlashcard($event)" [id]="i">
+      <div class="flashcards">
+        <add-flashcard *ngFor="let flashcard of flashcards; let i = index" [que]="flashcard.question"
+          [ans]="flashcard.answer" (push)="refreshFlashcards($event, i)" (slice)="removeFlashcard($event, i)">
         </add-flashcard>
-      </mat-accordion>
+      </div>
       <div>
         <br>
-        <button mat-raised-button color="primary" (click)="addNewFlashcard()">Add new flashcard</button>
+        <button mat-raised-button color="primary" (click)="addFlashcard()">Add new flashcard</button>
         <hr>
         <button mat-button matStepperPrevious>Back</button>
         <button mat-button matStepperNext>Next</button>

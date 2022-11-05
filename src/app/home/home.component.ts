@@ -9,11 +9,11 @@ type Block = {
   id: number
 }
 @Component({
-  selector: 'sections',
-  templateUrl: './sections.component.html',
-  styleUrls: ['./sections.component.scss'],
+  selector: 'app-home',
+  templateUrl: './home.component.html',
+  styleUrls: ['./home.component.scss'],
 })
-export class SectionsComponent implements OnInit {
+export class HomeComponent implements OnInit {
   LessonsService: any
   user: User = null
 

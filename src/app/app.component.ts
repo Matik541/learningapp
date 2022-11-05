@@ -10,10 +10,7 @@ export class AppComponent {
   title = appName
   loggedUser: User = null
 
-  constructor(
-    private usersService: UsersService,
-    private LessonsService: LessonsService
-  ) {}
+  constructor() {}
 
   ngOnInit(): void {}
 }

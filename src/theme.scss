@@ -43,7 +43,7 @@ $theme: mat.define-dark-theme(
 @include mat.button-theme($theme);
 @include mat.input-theme($theme);
 
-body{
+body {
   background-color: mat.get-color-from-palette($my_dark, 900);
   color: mat.get-color-from-palette($my_grey, 400);
 }
@@ -62,15 +62,6 @@ errors {
   background-color: mat.get-color-from-palette($accent, A200);
 }
 
-mat-accordion.flashcard {
-  mat-expansion-panel-header,
-  mat-expansion-panel-header:hover,
-  mat-expansion-panel-header:focus {
-    background-color: rgba(mat.get-color-from-palette($my_dark, 700), 0.3) !important;
-  }
-  .mat-expansion-panel-body,
-  .mat-expansion-panel-body:hover,
-  .mat-expansion-panel-body:focus {
-    background-color: rgba(mat.get-color-from-palette($my_dark, 700), 0.5) !important;
-  }
+mat-card.flashcard {
+  background-color: rgba(mat.get-color-from-palette($my_dark, 700), 0.5) !important;
 }

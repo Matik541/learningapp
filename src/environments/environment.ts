@@ -12,10 +12,13 @@ export const API_URL = 'http://localhost:3000'
 export const refreshToken = 'refreshToken'
 export const accessToken = 'accessToken'
 
-export type Tag = { id: Number }
+export type Tag = {
+  id: Number
+  tagName: String
+}
 export type Flashcard = {
-  world: string
-  translation: string
+  question: string
+  answer: string
 }
 export type User = null | { username: string; sub: number }
 export type Lesson = {
