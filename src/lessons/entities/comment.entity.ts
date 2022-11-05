@@ -1,7 +1,14 @@
-import { Column, Entity, ManyToOne, PrimaryGeneratedColumn } from 'typeorm';
+import {
+  Column,
+  Entity,
+  JoinTable,
+  ManyToOne,
+  PrimaryGeneratedColumn,
+} from 'typeorm';
 
 // entities
 import { User } from 'src/users/entities/user.entity';
+import { Lesson } from './lesson.entity';
 
 @Entity()
 export class Comment {
@@ -9,7 +16,11 @@ export class Comment {
   id: number;
 
   @ManyToOne(() => User, (user) => user.comments)
+  @JoinTable()
   creator: User;
+
+  @ManyToOne(() => Lesson, (lesson) => lesson.comments)
+  lesson: Lesson;
 
   @Column()
   comment: string;

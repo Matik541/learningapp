@@ -28,9 +28,11 @@ import { UpdateLessonDto } from './dto/updateLesson.dto';
 // entity
 import { Lesson } from './entities/lesson.entity';
 import { Tag } from './entities/tag.entity';
+import { Comment } from './entities/comment.entity';
 
 // service
 import { LessonsService } from './lessons.service';
+import { AddCommentDto } from './dto/comment/addComment.dto';
 
 @ApiTags('lessons')
 @Controller('lessons')
@@ -120,7 +122,7 @@ export class LessonsController {
 
   @ApiBearerAuth()
   @UseGuards(AuthorizationGuard)
-  @Post('tag')
+  @Post('tag/add')
   @HttpCode(HttpStatus.OK)
   @ApiResponse({
     status: HttpStatus.OK,
@@ -128,6 +130,26 @@ export class LessonsController {
   })
   addTag(@Body() addTagDto: AddTagDto): Promise<Tag> {
     return this.lessonsService.addTag(addTagDto);
+  }
+
+  @ApiBearerAuth()
+  @UseGuards(AuthorizationGuard)
+  @Post('comment/add/:lessonId')
+  @HttpCode(HttpStatus.OK)
+  @ApiResponse({
+    status: HttpStatus.OK,
+    description: 'Return added tag. Get tag name.',
+  })
+  addComment(
+    @LoginedUserDecorator('sub') commentCreatorId: number,
+    @Param('lessonId') lessonId: string,
+    @Body() addCommentDto: AddCommentDto,
+  ): Promise<Comment> {
+    return this.lessonsService.addComment(
+      commentCreatorId,
+      +lessonId,
+      addCommentDto,
+    );
   }
 
   @ApiBearerAuth()

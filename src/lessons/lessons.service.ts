@@ -7,11 +7,13 @@ import { AddLessonDto } from './dto/addLesson.dto';
 import { AddTagDto } from './dto/tag/addTag.dto';
 import { UpdateLessonDto } from './dto/updateLesson.dto';
 import { AddFlashcardDto } from './dto/flashcard/addFlashcard.dto';
+import { AddCommentDto } from './dto/comment/addComment.dto';
 
 // entity
 import { Lesson } from './entities/lesson.entity';
 import { Tag } from './entities/tag.entity';
 import { Flashcard } from './entities/flashcard.entity';
+import { Comment } from './entities/comment.entity';
 
 @Injectable()
 export class LessonsService {
@@ -20,6 +22,7 @@ export class LessonsService {
     @InjectRepository(Tag) private tagRepository: Repository<Tag>,
     @InjectRepository(Flashcard)
     private flashcardRepository: Repository<Flashcard>,
+    @InjectRepository(Comment) private commentRepository: Repository<Comment>,
   ) {}
 
   /**
@@ -42,8 +45,23 @@ export class LessonsService {
           },
           tags: true,
           flashcards: true,
+          comments: {
+            id: true,
+            creator: {
+              id: true,
+              userName: true,
+            },
+            comment: true,
+          },
         },
-        relations: { creator: true, tags: true, flashcards: true },
+        relations: {
+          creator: true,
+          tags: true,
+          flashcards: true,
+          comments: {
+            creator: true,
+          },
+        },
       });
     } catch (err) {
       throw new BadRequestException(err);
@@ -96,12 +114,27 @@ export class LessonsService {
           },
           tags: true,
           flashcards: true,
+          comments: {
+            id: true,
+            creator: {
+              id: true,
+              userName: true,
+            },
+            comment: true,
+          },
         },
         where: [
           { title: Like('%' + searchBy + '%') },
           { description: Like('%' + searchBy + '%') },
         ],
-        relations: { creator: true, tags: true, flashcards: true },
+        relations: {
+          creator: true,
+          tags: true,
+          flashcards: true,
+          comments: {
+            creator: true,
+          },
+        },
       });
     } catch (err) {
       throw new BadRequestException(err);
@@ -142,9 +175,24 @@ export class LessonsService {
           },
           tags: true,
           flashcards: true,
+          comments: {
+            id: true,
+            creator: {
+              id: true,
+              userName: true,
+            },
+            comment: true,
+          },
         },
         where: { id },
-        relations: { creator: true, tags: true, flashcards: true },
+        relations: {
+          creator: true,
+          tags: true,
+          flashcards: true,
+          comments: {
+            creator: true,
+          },
+        },
       });
     } catch (err) {
       throw new BadRequestException(err);
@@ -168,7 +216,7 @@ export class LessonsService {
     });
 
     try {
-      // save lesson to the database
+      // save lesson in db
       return await this.lessonsRepository.save(lesson);
     } catch (err) {
       throw new BadRequestException(err);
@@ -185,8 +233,28 @@ export class LessonsService {
     const tag = this.tagRepository.create(addTagDto);
 
     try {
-      // save tag to the db
+      // save tag in db
       return await this.tagRepository.save(tag);
+    } catch (err) {
+      throw new BadRequestException(err);
+    }
+  }
+
+  async addComment(
+    commentCreatorId: number,
+    lessonId: number,
+    dto: AddCommentDto,
+  ): Promise<Comment> {
+    // create comment object
+    const comment = this.commentRepository.create({
+      creator: { id: commentCreatorId },
+      lesson: { id: lessonId },
+      ...dto,
+    });
+
+    try {
+      // save comment in db
+      return await this.commentRepository.save(comment);
     } catch (err) {
       throw new BadRequestException(err);
     }

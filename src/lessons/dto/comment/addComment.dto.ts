@@ -10,5 +10,5 @@ export class AddCommentDto {
   })
   @IsNotEmpty()
   @IsString()
-  title: string;
+  comment: string;
 }
