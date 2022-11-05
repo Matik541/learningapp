@@ -1,9 +1,9 @@
 import { ApiProperty } from '@nestjs/swagger';
 import { IsNotEmpty, IsNumber, IsString } from 'class-validator';
 
-export class UpdateFlashcard {
+export class UpdateCommentDto {
   @ApiProperty({
-    description: 'Flashcard id',
+    description: 'Comment id',
     type: Number,
     nullable: false,
     required: true,
@@ -13,20 +13,12 @@ export class UpdateFlashcard {
   id: number;
 
   @ApiProperty({
+    description: 'Comment text',
     type: String,
     nullable: false,
     required: true,
   })
   @IsString()
   @IsNotEmpty()
-  question?: string;
-
-  @ApiProperty({
-    type: String,
-    nullable: false,
-    required: true,
-  })
-  @IsString()
-  @IsNotEmpty()
-  answer?: string;
+  comment?: string;
 }
