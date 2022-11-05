@@ -3,7 +3,6 @@ import { IsNotEmpty, IsString } from 'class-validator';
 
 export class AddFlashcardDto {
   @ApiProperty({
-    description: 'World on polish',
     type: String,
     nullable: false,
     required: true,
@@ -13,7 +12,6 @@ export class AddFlashcardDto {
   question: string;
 
   @ApiProperty({
-    description: 'Translation of the world on polish',
     type: String,
     nullable: false,
     required: true,
