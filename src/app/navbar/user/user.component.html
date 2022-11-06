@@ -1,12 +1,12 @@
 <div *ngIf="!!logged">
   <button color="accent" mat-button [matMenuTriggerFor]="userMenu">
-    {{ logged.username }}
+    {{ logged.userName }}
     <mat-icon>
       account_circles
     </mat-icon>
   </button>
   <mat-menu #userMenu="matMenu" xPosition="before">
-    <button mat-menu-item> {{ logged.username }} </button>
+    <button mat-menu-item> {{ logged.userName }} </button>
     <hr>
     <button mat-menu-item>Profile</button>
     <button mat-menu-item>...</button>

@@ -18,7 +18,6 @@ import { HomeComponent } from './home/home.component'
 import { CreateComponent } from './lessons/create/create.component'
 import { FlashcardComponent } from './lessons/create/flashcard/flashcard.component'
 import { LessonComponent } from './lessons/lesson/lesson.component'
-import { NavbarCreateComponent } from './navbar/create/create.component'
 import { NavbarComponent } from './navbar/navbar.component'
 import { NavbarSearchComponent } from './navbar/search/search.component'
 import { NavbarUserComponent } from './navbar/user/user.component'
@@ -27,7 +26,6 @@ import { NavbarUserComponent } from './navbar/user/user.component'
   declarations: [
     AppComponent,
     NavbarComponent,
-    NavbarCreateComponent,
     NavbarSearchComponent,
     NavbarUserComponent,
     SectionComponent,

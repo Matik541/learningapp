@@ -16,16 +16,19 @@ export class UsersService {
 
   constructor(private http: HttpClient, private _snackBar: MatSnackBar) {
     if (this.accessToken()) {
-      this.loggedUser = jwt_decode(this.accessToken())
+      let decode = jwt_decode(this.accessToken()) as {
+        username: string
+        sub: number
+      }
+      this.loggedUser = {
+        userName: decode?.username,
+        id: decode?.sub,
+      }
     }
   }
 
   snackBar(message: string, action: string) {
     this._snackBar.open(message, action, { duration: 2000 })
-  }
-
-  isLogged(): User {
-    return this.loggedUser
   }
 
   login(email: string, password: string): Observable<boolean> {
@@ -103,8 +106,15 @@ export class UsersService {
   }
 
   private loggedIn(tokens: any): void {
-    this.loggedUser = jwt_decode(tokens.authToken)
-    console.log(this.loggedUser)
+    let decode = jwt_decode(tokens.authToken) as {
+      username: string
+      sub: number
+    }
+    this.loggedUser = {
+      userName: decode?.username,
+      id: decode?.sub,
+    }
+
     this.strokeTokens(tokens)
   }
   private loggedOut(): void {

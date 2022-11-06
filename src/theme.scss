@@ -62,6 +62,6 @@ errors {
   background-color: mat.get-color-from-palette($accent, A200);
 }
 
-mat-card.flashcard {
+.create-dialog mat-card.flashcard {
   background-color: rgba(mat.get-color-from-palette($my_dark, 700), 0.5) !important;
 }

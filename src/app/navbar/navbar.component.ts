@@ -1,25 +1,28 @@
-import { Component } from '@angular/core';
+import { Component, OnInit } from '@angular/core'
+import { MatDialog, MatDialogRef } from '@angular/material/dialog'
+import { CreateComponent } from '../lessons/create/create.component'
+import { appName } from 'src/environments/environment'
 
-import { appName } from 'src/environments/environment';
-
-/**
- * @title Basic menu
- */
 @Component({
   selector: 'navbar',
   templateUrl: 'navbar.component.html',
 })
-
 export class NavbarComponent {
-  
-  appName: string = appName;
+  appName: string = appName
 
-  constructor() { 
-    // on start*
-    // *do not recommend to use it if no need
-  }
+  constructor(public dialog: MatDialog) {}
 
-  ngOnInit() { 
-    // on app initialize
+  ngOnInit() {}
+
+  addNew(
+    type: string,
+    enterAnimationDuration: string,
+    exitAnimationDuration: string
+  ): void {
+    let dialog: any = type == 'lesson' ? CreateComponent : CreateComponent
+    this.dialog.open(dialog, {
+      enterAnimationDuration,
+      exitAnimationDuration,
+    })
   }
 }

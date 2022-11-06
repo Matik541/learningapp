@@ -142,7 +142,8 @@ export class CreateComponent implements OnInit {
   lesson: Lesson = {
     title: '',
     description: '',
-    // icon: this.icons[0],
+    // icon: manuV,
+    creator: this.usersService.loggedUser,
     flashcards: [],
     tags: [],
   }
@@ -167,6 +168,9 @@ export class CreateComponent implements OnInit {
 
     this.lesson.title = this.formGroup1.value.title
     this.lesson.description = this.formGroup1.value.description || ''
+    console.log(this.usersService.loggedUser)
+    this.lesson.creator = this.usersService.loggedUser
+    // this.lesson.icon = this.menuV
     this.lesson.flashcards = this.flashcards
     this.lesson.tags = this.lesson.tags
     console.log(this.lesson)

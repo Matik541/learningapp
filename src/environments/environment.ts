@@ -20,12 +20,13 @@ export type Flashcard = {
   question: string
   answer: string
 }
-export type User = null | { username: string; sub: number }
+export type User = null | { userName: string; id: number }
+
 export type Lesson = {
   title: string
   description: string
   // icon: string
-  // author: number | undefined
+  creator: User
   flashcards: Flashcard[]
   tags: Tag[]
 }

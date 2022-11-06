@@ -7,11 +7,15 @@ import { LessonComponent } from './lessons/lesson/lesson.component'
 import { HomeComponent } from './home/home.component'
 
 const routes: Routes = [
-  { path: '', component: HomeComponent },
+  { path: '', redirectTo: '/home', pathMatch: 'full' },
   { path: '', component: LoginComponent },
   { path: '', component: RegisterComponent },
   { path: 'home', component: HomeComponent },
-  { path: 'lesson', component: LessonComponent },
+  { path: 'lesson/:id', component: LessonComponent },
+  {
+    path: 'profile/:id',
+    component: /*ProfileComponent | delete ->*/ HomeComponent,
+  },
 ]
 @NgModule({
   declarations: [],

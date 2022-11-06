@@ -1,20 +1,78 @@
 <div>
   <div class="menu">
-    <div drag-scroll-item class="block">
+    <button mat-raised-button class="block">
       <mat-icon>flash_on</mat-icon>
-      <span></span>
+      <span>Flashcards</span>
+    </button>
+    <button mat-raised-button class="block">
+      <mat-icon>flash_on</mat-icon>
+      <span>Flashcards</span>
+    </button>
+    <button mat-raised-button class="block">
+      <mat-icon>flash_on</mat-icon>
+      <span>Flashcards</span>
+    </button>
+    <button mat-raised-button class="block">
+      <mat-icon>flash_on</mat-icon>
+      <span>Flashcards</span>
+    </button>
+  </div>
+  <div class="main">
+    <div class="label">
+      <div class="info">
+        <div class="title">
+          <mat-icon>flash_on</mat-icon>
+          <span>Lesson title</span>
+        </div>
+        <a mat-button color="primary" class="author" [routerLink]="'/profile/'+lesson.creator?.id">
+          <span>{{lesson.creator?.userName}}</span>
+          <mat-icon>
+            account_circle
+          </mat-icon>
+        </a>
+      </div>
+      <div class="description">
+        <span>Lesson description</span>
+      </div>
     </div>
-    <div drag-scroll-item class="block">
-      <mat-icon></mat-icon>
-      <span></span>
-    </div>
-    <div drag-scroll-item class="block">
-      <mat-icon></mat-icon>
-      <span></span>
-    </div>
-    <div drag-scroll-item class="block">
-      <mat-icon></mat-icon>
-      <span></span>
+    <mat-card class="flashcard">
+      <mat-card-content>
+        <div class="front">
+          <div class="content">
+            <span>Front</span>
+          </div>
+        </div>
+        <div class="back">
+          <div class="content">
+            <span>Back</span>
+          </div>
+        </div>
+      </mat-card-content>
+      <mat-card-actions>
+        <button mat-button class="prev">
+          <mat-icon>chevron_left</mat-icon>
+        </button>
+        <button mat-button class="next">
+          <mat-icon>chevron_right</mat-icon>
+        </button>
+      </mat-card-actions>
+    </mat-card>
+    <div class="flashcards">
+      <mat-card class="flashcard" *ngFor="let flashcard of lesson?.flashcards">
+        <mat-card-subtitle>
+          <span>{{ flashcard.question }}</span>
+
+          <span>{{ flashcard.answer }}</span>
+          <div>
+            <button mat-icon-button *ngIf="lesson.creator?.id == logged?.id">
+              <mat-icon>edit</mat-icon>
+            </button>
+            <button mat-icon-button>
+              <mat-icon class="material-icons-round">star</mat-icon>
+            </button>
+          </div>
+        </mat-card-subtitle>
+      </mat-card>
     </div>
   </div>
 </div>

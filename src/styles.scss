@@ -1,4 +1,5 @@
 @import url("https://fonts.googleapis.com/css2?family=Noto+Sans+Mono&family=Roboto&display=swap");
+@import url("https://fonts.googleapis.com/icon?family=Material+Icons|Material+Icons+Round");
 
 $bg-color: rgba(217, 217, 217, 0.1);
 
@@ -18,15 +19,18 @@ body {
 html,
 body {
   height: 100%;
+  overflow: hidden;
 }
 
 nav {
-  background-color: $bg-color;
-  width: 100%;
-  display: flex;
-  justify-content: space-between;
   align-items: center;
+  background-color: $bg-color;
+  display: flex;
   height: 3rem;
+  justify-content: space-between;
+  position: fixed;
+  top: 0;
+  width: 100%;
 
   .brand {
     display: flex;
@@ -216,11 +220,13 @@ nav {
 }
 
 app-home {
+  align-items: center;
   display: flex;
-  margin: 5vh 1rem 0;
   flex-direction: column;
   justify-content: space-between;
-  align-items: center;
+  margin: 3rem 1rem 0;
+  overflow-y: auto;
+  padding-top: 5vh;
 
   app-section {
     .title {
@@ -286,18 +292,21 @@ app-home {
   }
 }
 
-app-lesson {
+app-lesson > div {
+  $gap: 1rem;
+  $padding: 3rem;
+  $size: 7.5rem;
+
   display: flex;
-  flex-direction: column;
-  justify-content: space-between;
-  align-items: center;
-  margin: 5vh 1rem 0;
+  flex-direction: row;
+  justify-content: center;
+  gap: $gap * 3;
+  margin: 3rem 0 0;
+  overflow-y: auto;
+  padding: 5vh 1rem 0;
+  max-height: calc(100vh - 3rem);
 
   .menu {
-    $size: 7.5rem;
-    $gap: 1rem;
-    $padding: 3rem;
-
     display: flex;
     flex-direction: column;
     justify-content: space-between;
@@ -306,26 +315,111 @@ app-lesson {
     gap: $gap;
 
     .block {
-      margin-right: $gap;
-
       min-width: $size;
       min-height: $size;
 
-      display: inline-flex !important;
+      .mat-button-wrapper {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+
+        .mat-icon {
+          font-size: 2.5rem;
+          height: 3rem;
+          width: 2.5rem;
+          padding-top: 0.5rem;
+        }
+      }
+    }
+  }
+  .main {
+    align-items: center;
+    display: flex;
+    flex-direction: column;
+    gap: $gap;
+    height: 100%;
+    justify-content: space-between;
+    max-width: calc(95vh - 3rem);
+
+    .label {
+      display: flex;
       flex-direction: column;
-      justify-content: center;
-      align-items: center;
+      height: $size;
+      justify-content: space-evenly;
+      width: 100%;
 
-      border-radius: 0.5rem;
-      background-color: $bg-color;
-      color: #fff;
-      cursor: pointer;
-      transition: background-color 0.2s ease-in-out;
+      .info {
+        align-items: center;
+        display: flex;
+        flex-direction: row;
+        justify-content: space-between;
+        div {
+          align-items: center;
+          display: flex;
+          flex-direction: row;
+          justify-content: center;
+        }
+        .title {
+          font-size: 1.5rem;
+          font-weight: 500;
+          margin: 0;
+          padding: 0;
+          text-transform: capitalize;
+        }
+        .author {
+          display: flex;
+          flex-direction: row;
+          align-items: center;
+        }
+      }
 
-      :first-child {
-        font-size: 2rem;
-        height: 2rem;
-        width: 2rem;
+      .description {
+        margin-top: 0.5rem;
+        font-size: 0.75rem;
+        font-weight: 400;
+        height: 3rem;
+        text-transform: capitalize;
+      }
+    }
+
+    & > .flashcard {
+      aspect-ratio: 5 / 3;
+      height: 2 * $size + $gap;
+
+      mat-card-actions {
+        align-items: center;
+        display: flex;
+        flex-direction: row;
+        justify-content: space-between;
+
+        button {
+          flex-grow: 1;
+        }
+      }
+    }
+    .flashcards {
+      display: flex;
+      flex-direction: column;
+      gap: $gap;
+      width: 100%;
+
+      mat-card.flashcard {
+        border-radius: 0.25rem;
+        width: 100%;
+        & > * {
+          align-items: center;
+          display: flex;
+          justify-content: space-between;
+          span {
+            flex-grow: 1;
+            text-align: center;
+            text-transform: capitalize;
+            font-size: 0.75rem;
+            font-weight: 400;
+          }
+          div.acction {
+          }
+        }
       }
     }
   }

@@ -6,7 +6,18 @@
     </div>
   </div>
   <div class="mid">
-    <nav-create></nav-create>
+    <div>
+      <button mat-raised-button [matMenuTriggerFor]="create" class="create btn-primary">
+        Create
+        <mat-icon class="expand">
+          expand_more
+        </mat-icon>
+      </button>
+      <mat-menu #create="matMenu">
+        <button mat-menu-item (click)="addNew('lesson', '10ms', '50ms')">Lesson</button>
+        <button mat-menu-item disabled>Folder</button>
+      </mat-menu>
+    </div>
     <nav-search></nav-search>
   </div>
   <nav-user class="nav-user"></nav-user>

@@ -24,7 +24,7 @@ export class RegisterComponent implements OnInit {
 
   initForm() {
     this.formGroup = new FormGroup({
-      username: new FormControl('', [
+      userName: new FormControl('', [
         Validators.required,
         Validators.pattern(/^[a-zA-Z0-9]+$/),
       ]),
@@ -42,7 +42,7 @@ export class RegisterComponent implements OnInit {
       console.log(this.formGroup.value)
       this.usersService
         .register(
-          this.formGroup.value.username,
+          this.formGroup.value.userName,
           this.formGroup.value.email,
           this.formGroup.value.password
         )

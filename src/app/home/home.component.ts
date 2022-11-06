@@ -26,14 +26,14 @@ export class HomeComponent implements OnInit {
     this.sections.forEach(
       (section) => (section.block = this.getBlocks(section.get))
     )
-    this.user = this.usersService.isLogged()
+    this.user = this.usersService.loggedUser
   }
 
   ngOnChanges(changes: SimpleChanges): void {
     this.sections.forEach(
       (section) => (section.block = this.getBlocks(section.get))
     )
-    this.user = this.usersService.isLogged()
+    this.user = this.usersService.loggedUser
   }
 
   sections = [
