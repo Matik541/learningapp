@@ -15,10 +15,10 @@ export class User {
   @Column({ unique: true })
   email: string;
 
-  @Column({ name: 'hashed_password' })
+  @Column()
   hashedPassword: string;
 
-  @Column({ name: 'hashed_refresh_token', nullable: true })
+  @Column({ nullable: true })
   hashedRefreshToken?: string;
 
   @OneToMany(() => Lesson, (lesson) => lesson.creator)
