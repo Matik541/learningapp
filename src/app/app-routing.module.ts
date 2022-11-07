@@ -5,6 +5,7 @@ import { LoginComponent } from './auth/login/login.component'
 import { RegisterComponent } from './auth/register/register.component'
 import { LessonComponent } from './lessons/lesson/lesson.component'
 import { HomeComponent } from './home/home.component'
+import { ErrorComponent } from './error/error.component'
 
 const routes: Routes = [
   { path: '', redirectTo: '/home', pathMatch: 'full' },
@@ -21,6 +22,7 @@ const routes: Routes = [
     path: 'profile/:id',
     component: /*ProfileComponent | delete ->*/ HomeComponent,
   },
+  { path: '**', component: ErrorComponent },
 ]
 @NgModule({
   declarations: [],

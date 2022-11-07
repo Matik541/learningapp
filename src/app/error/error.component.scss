@@ -1,0 +1,36 @@
+section {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  height: 100%;
+  width: 100%;
+
+  .main {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    align-content: center;
+    flex-direction: row;
+
+    .info {
+      display: flex;
+      flex-direction: column;
+
+      .code {
+        font-size: 5rem;
+        font-weight: 700;
+        height: 5rem;
+      }
+      .description {
+        font-size: 1.5rem;
+        font-weight: 400;
+        height: 1.5rem;
+      }
+    }
+
+    .coding-cafe img {
+      height: 6.5rem;
+      width: 6.5rem;
+    }
+  }
+}
