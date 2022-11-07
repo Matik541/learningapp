@@ -11,7 +11,12 @@ const routes: Routes = [
   { path: '', component: LoginComponent },
   { path: '', component: RegisterComponent },
   { path: 'home', component: HomeComponent },
-  { path: 'lesson/:id', component: LessonComponent },
+  {
+    path: 'lesson/:id',
+    redirectTo: '/lesson/:id/flashcards',
+    pathMatch: 'full',
+  },
+  { path: 'lesson/:id/:category', component: LessonComponent },
   {
     path: 'profile/:id',
     component: /*ProfileComponent | delete ->*/ HomeComponent,
@@ -23,3 +28,12 @@ const routes: Routes = [
   exports: [RouterModule],
 })
 export class AppRoutingModule {}
+
+function lessonCategoriesMatcher(url: any) {
+  const categories = ['flashcards', 'tests', 'theory']
+  const path = url[0].path
+  if (categories.includes(path)) {
+    return { consumed: url }
+  }
+  return null
+}

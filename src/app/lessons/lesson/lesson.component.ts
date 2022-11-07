@@ -1,9 +1,11 @@
 import { Flashcard, Lesson, User } from 'src/environments/environment'
+import { Router } from '@angular/router'
 import { Component, OnDestroy, OnInit } from '@angular/core'
 import { ActivatedRoute } from '@angular/router'
 import { UsersService } from 'src/app/users.service'
 import { LessonsService } from 'src/app/lessons.service'
 
+type Category = 'flashcards' | 'learn' | 'quiz' | 'comments'
 @Component({
   selector: 'app-lesson',
   templateUrl: './lesson.component.html',
@@ -11,41 +13,35 @@ import { LessonsService } from 'src/app/lessons.service'
 })
 export class LessonComponent implements OnInit, OnDestroy {
   id: number = 0
+  category: Category = 'flashcards'
   private sub: any
 
   logged: User = this.usersService.loggedUser
 
-  flashcards: Flashcard[] = [
-    { question: 'What is Angular?', answer: 'A framework' },
-  ]
   lesson: Lesson = {} as Lesson
-  private ObsLesson: any
 
   constructor(
-    private route: ActivatedRoute,
+    private activeRoute: ActivatedRoute,
+    private route: Router,
     private usersService: UsersService,
     private lessonsService: LessonsService
   ) {
     this.logged = this.usersService.loggedUser
-    this.sub = this.route.params.subscribe((params) => {
+    this.sub = this.activeRoute.params.subscribe((params) => {
       this.id = +params['id']
+      if (params['category'].match(/flashcards|learn|quiz|comments/) !== null)
+        this.category = params['category']
+      else this.route.navigate(['lesson', this.id, 'flashcards'])
     })
 
-    this.ObsLesson = this.lessonsService
-      .getLesson(this.id)
-      .subscribe((data) => {
-        console.log(this.logged)
-
-        this.lesson.creator = data.creator
-        this.lesson.description = data.description
-        this.lesson.flashcards = data.flashcards
-        // this.lesson.icon = data.icon
-        this.lesson.tags = data.tags
-        this.lesson.title = data.title
-
-        console.log(data)
-        console.log(this.lesson)
-      })
+    this.lessonsService.getLesson(this.id).subscribe((data) => {
+      this.lesson.creator = data.creator
+      this.lesson.description = data.description
+      this.lesson.flashcards = data.flashcards
+      // this.lesson.icon = data.icon
+      this.lesson.tags = data.tags
+      this.lesson.title = data.title
+    })
   }
 
   ngOnInit(): void {}

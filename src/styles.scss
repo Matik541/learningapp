@@ -302,26 +302,28 @@ app-lesson > div {
   justify-content: center;
   gap: $gap * 3;
   margin: 3rem 0 0;
-  overflow-y: auto;
   padding: 5vh 1rem 0;
   max-height: calc(100vh - 3rem);
 
   .menu {
+    align-items: center;
     display: flex;
     flex-direction: column;
-    justify-content: space-between;
-    align-items: center;
-    height: 100%;
     gap: $gap;
+    min-height: 100%;
+    justify-content: flex-start;
 
     .block {
       min-width: $size;
       min-height: $size;
+      transition: color 0.1s;
 
       .mat-button-wrapper {
+        align-items: center;
         display: flex;
         flex-direction: column;
-        align-items: center;
+        height: 100%;
+        justify-content: center;
 
         .mat-icon {
           font-size: 2.5rem;
@@ -339,88 +341,148 @@ app-lesson > div {
     gap: $gap;
     height: 100%;
     justify-content: space-between;
-    max-width: calc(95vh - 3rem);
+    max-height: calc(95vh - 3rem);
+    overflow-y: scroll;
+    overflow-x: hidden;
+    padding-right: 0.5rem;
+    padding-bottom: 5vh;
+    width: calc(16rem / 3 * 5 + 1rem);
 
-    .label {
-      display: flex;
-      flex-direction: column;
-      height: $size;
-      justify-content: space-evenly;
-      width: 100%;
-
-      .info {
-        align-items: center;
+    &.flashcards {
+      .label {
         display: flex;
-        flex-direction: row;
-        justify-content: space-between;
-        div {
+        flex-direction: column;
+        min-height: $size;
+        justify-content: space-evenly;
+        width: 100%;
+
+        .info {
           align-items: center;
           display: flex;
           flex-direction: row;
-          justify-content: center;
+          justify-content: space-between;
+          div {
+            align-items: center;
+            display: flex;
+            flex-direction: row;
+            justify-content: center;
+          }
+          .title {
+            font-size: 1.5rem;
+            font-weight: 500;
+            margin: 0;
+            padding: 0;
+            text-transform: capitalize;
+          }
+          .author {
+            display: flex;
+            flex-direction: row;
+            align-items: center;
+          }
         }
-        .title {
-          font-size: 1.5rem;
-          font-weight: 500;
-          margin: 0;
-          padding: 0;
+
+        .description {
+          margin-top: 0.5rem;
+          font-size: 0.75rem;
+          font-weight: 400;
+          height: 3rem;
           text-transform: capitalize;
         }
-        .author {
+      }
+
+      & > .flashcard {
+        aspect-ratio: 5 / 3;
+        display: flex;
+        flex-direction: column;
+        min-height: 2 * $size + $gap;
+
+        mat-card-content {
+          flex-grow: 1;
+          display: flex;
+          flex-direction: column;
+          justify-content: center;
+          align-items: center;
+          padding: 0;
+          margin: 0;
+
+          .hidden {
+            display: none;
+          }
+        }
+
+        mat-card-actions {
+          align-items: center;
           display: flex;
           flex-direction: row;
-          align-items: center;
-        }
-      }
-
-      .description {
-        margin-top: 0.5rem;
-        font-size: 0.75rem;
-        font-weight: 400;
-        height: 3rem;
-        text-transform: capitalize;
-      }
-    }
-
-    & > .flashcard {
-      aspect-ratio: 5 / 3;
-      height: 2 * $size + $gap;
-
-      mat-card-actions {
-        align-items: center;
-        display: flex;
-        flex-direction: row;
-        justify-content: space-between;
-
-        button {
-          flex-grow: 1;
-        }
-      }
-    }
-    .flashcards {
-      display: flex;
-      flex-direction: column;
-      gap: $gap;
-      width: 100%;
-
-      mat-card.flashcard {
-        border-radius: 0.25rem;
-        width: 100%;
-        & > * {
-          align-items: center;
-          display: flex;
           justify-content: space-between;
-          span {
+
+          button {
             flex-grow: 1;
-            text-align: center;
-            text-transform: capitalize;
-            font-size: 0.75rem;
-            font-weight: 400;
-          }
-          div.acction {
           }
         }
       }
+      .flashcards {
+        display: flex;
+        flex-direction: column;
+        gap: $gap;
+        width: 100%;
+
+        mat-card.flashcard {
+          border-radius: 0.25rem;
+          max-width: 16rem / 3 * 5;
+          width: 100%;
+          & > * {
+            align-items: center;
+            display: flex;
+            justify-content: space-between;
+            .content {
+              flex-grow: 1;
+              display: grid;
+              grid-template-columns: 1fr 1ch 1fr;
+              span {
+                max-width: calc(8rem / 3 * 5 - 1ch - 40px);
+                word-wrap: break-word;
+              }
+            }
+            div.acction {
+              width: 36px;
+              height: 36px;
+              button {
+                min-width: 36px;
+                padding: 0;
+                width: 36px;
+                display: none;
+              }
+              .star {
+                display: block;
+                opacity: 0;
+                &.active {
+                  opacity: 1;
+                }
+              }
+            }
+          }
+          &:hover {
+            div.acction {
+              .edit {
+                display: block;
+              }
+              .star {
+                display: none;
+              }
+            }
+          }
+        }
+      }
+    }
+
+    &.learn {
+    }
+
+    &.quiz {
+    }
+
+    &.comments {
     }
   }
 }
@@ -428,12 +490,6 @@ app-lesson > div {
 errors {
   font-style: italic;
   font-family: "Noto Sans Mono", monospace;
-  ::before,
-  ::after {
-    font-family: "Material Icons";
-    -webkit-font-feature-settings: "liga";
-    content: "&#e160;";
-  }
 }
 
 * {
@@ -447,5 +503,20 @@ errors {
   }
   ::-webkit-scrollbar-thumb:hover {
     background: #666;
+  }
+}
+
+@keyframes flip {
+  0% {
+    -webkit-transform: rotateY(0);
+    transform: rotateY(0);
+  }
+  50% {
+    -webkit-transform: rotateY(-90deg);
+    transform: rotateY(-90deg);
+  }
+  100% {
+    -webkit-transform: rotateY(0);
+    transform: rotateY(0);
   }
 }

@@ -65,3 +65,7 @@ errors {
 .create-dialog mat-card.flashcard {
   background-color: rgba(mat.get-color-from-palette($my_dark, 700), 0.5) !important;
 }
+
+.block:hover {
+  color: mat.get-color-from-palette($primary, A200);
+}

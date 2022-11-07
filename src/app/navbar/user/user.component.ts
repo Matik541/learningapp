@@ -15,7 +15,6 @@ export class NavbarUserComponent implements OnInit {
 
   constructor(public dialog: MatDialog, private usersService: UsersService) {
     this.logged = this.usersService.loggedUser
-    console.log(this.logged)
   }
 
   ngOnInit(): void {}
