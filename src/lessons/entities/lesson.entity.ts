@@ -28,6 +28,9 @@ export class Lesson {
   @Column()
   description: string;
 
+  @Column()
+  iconPath: string;
+
   @ManyToMany(() => Tag)
   @JoinTable()
   tags: Tag[];

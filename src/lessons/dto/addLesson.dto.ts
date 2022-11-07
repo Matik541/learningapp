@@ -27,6 +27,16 @@ export class AddLessonDto {
   description: string;
 
   @ApiProperty({
+    description: 'Path to the icon in ui',
+    type: String,
+    nullable: false,
+    required: true,
+  })
+  @IsNotEmpty()
+  @IsString()
+  iconPath: string;
+
+  @ApiProperty({
     description: 'Lesson tags',
     type: [AddTagToLesson],
     nullable: false,
