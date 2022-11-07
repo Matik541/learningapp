@@ -25,6 +25,39 @@ export class LessonsService {
     @InjectRepository(Comment) private commentRepository: Repository<Comment>,
   ) {}
 
+  // find lesson in db parameters
+  private readonly getLessonFindParameters = {
+    select: {
+      id: true,
+      title: true,
+      description: true,
+      iconPath: true,
+      // get only id and username from creator
+      creator: {
+        id: true,
+        userName: true,
+      },
+      tags: true,
+      flashcards: true,
+      comments: {
+        id: true,
+        creator: {
+          id: true,
+          userName: true,
+        },
+        comment: true,
+      },
+    },
+    relations: {
+      creator: true,
+      tags: true,
+      flashcards: true,
+      comments: {
+        creator: true,
+      },
+    },
+  };
+
   /**
    * Find all lessons, select only the id, title, description and include the creator's id
    * and username fields. Then return selected lessons data.
@@ -34,34 +67,7 @@ export class LessonsService {
     // find and return all lessons
     try {
       return await this.lessonsRepository.find({
-        select: {
-          id: true,
-          title: true,
-          description: true,
-          // get only id and username from creator
-          creator: {
-            id: true,
-            userName: true,
-          },
-          tags: true,
-          flashcards: true,
-          comments: {
-            id: true,
-            creator: {
-              id: true,
-              userName: true,
-            },
-            comment: true,
-          },
-        },
-        relations: {
-          creator: true,
-          tags: true,
-          flashcards: true,
-          comments: {
-            creator: true,
-          },
-        },
+        ...this.getLessonFindParameters,
       });
     } catch (err) {
       throw new BadRequestException(err);
@@ -103,38 +109,11 @@ export class LessonsService {
     // return lessons where find key words in title or description
     try {
       return await this.lessonsRepository.find({
-        select: {
-          id: true,
-          title: true,
-          description: true,
-          // get only id and username from creator
-          creator: {
-            id: true,
-            userName: true,
-          },
-          tags: true,
-          flashcards: true,
-          comments: {
-            id: true,
-            creator: {
-              id: true,
-              userName: true,
-            },
-            comment: true,
-          },
-        },
         where: [
           { title: Like('%' + searchBy + '%') },
           { description: Like('%' + searchBy + '%') },
         ],
-        relations: {
-          creator: true,
-          tags: true,
-          flashcards: true,
-          comments: {
-            creator: true,
-          },
-        },
+        ...this.getLessonFindParameters,
       });
     } catch (err) {
       throw new BadRequestException(err);
@@ -164,35 +143,8 @@ export class LessonsService {
     // find lesson by id and return lesson data
     try {
       return await this.lessonsRepository.findOneOrFail({
-        select: {
-          id: true,
-          title: true,
-          description: true,
-          // get only id and username from creator
-          creator: {
-            id: true,
-            userName: true,
-          },
-          tags: true,
-          flashcards: true,
-          comments: {
-            id: true,
-            creator: {
-              id: true,
-              userName: true,
-            },
-            comment: true,
-          },
-        },
         where: { id },
-        relations: {
-          creator: true,
-          tags: true,
-          flashcards: true,
-          comments: {
-            creator: true,
-          },
-        },
+        ...this.getLessonFindParameters,
       });
     } catch (err) {
       throw new BadRequestException(err);
