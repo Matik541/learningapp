@@ -44,13 +44,27 @@ export class FlashcardsComponent implements OnInit {
   }
 
   changeFlashcard(by: -1 | 1): void {
-    this.indexFleshcard += by
-    if (
-      this.indexFleshcard >= 0 &&
-      this.indexFleshcard < this.lesson.flashcards.length
-    ) {
-      this.flashcard = this.lesson.flashcards[this.indexFleshcard]
-    }
+    let card = document.querySelector('.flashcard')
+
+    card?.setAttribute('style', 'animation: none')
+    card?.setAttribute(
+      'style',
+      `animation: slide-${by == -1 ? 'left' : 'right'} 0.25s ease-in-out 1 `
+    )
+
+    card?.addEventListener('animationend', () =>
+      card?.setAttribute('style', 'animation: none')
+    )
+
+    setTimeout(() => {
+      this.indexFleshcard += by
+      if (
+        this.indexFleshcard >= 0 &&
+        this.indexFleshcard < this.lesson.flashcards.length
+      ) {
+        this.flashcard = this.lesson.flashcards[this.indexFleshcard]
+      }
+    }, 125)
   }
 
   editFlashcard(id: number): void {

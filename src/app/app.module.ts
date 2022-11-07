@@ -20,10 +20,10 @@ import { FlashcardComponent } from './lessons/create/flashcard/flashcard.compone
 import { LessonComponent } from './lessons/lesson/lesson.component'
 import { NavbarComponent } from './navbar/navbar.component'
 import { NavbarSearchComponent } from './navbar/search/search.component'
-import { NavbarUserComponent } from './navbar/user/user.component';
-import { FlashcardsComponent } from './lessons/lesson/flashcards/flashcards.component';
-import { LearnComponent } from './lessons/lesson/learn/learn.component';
-import { QuizComponent } from './lessons/lesson/quiz/quiz.component';
+import { NavbarUserComponent } from './navbar/user/user.component'
+import { FlashcardsComponent } from './lessons/lesson/flashcards/flashcards.component'
+import { LearnComponent } from './lessons/lesson/learn/learn.component'
+import { QuizComponent } from './lessons/lesson/quiz/quiz.component'
 import { CommentsComponent } from './lessons/lesson/comments/comments.component'
 
 @NgModule({
