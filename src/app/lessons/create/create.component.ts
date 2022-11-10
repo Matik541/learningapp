@@ -3,7 +3,7 @@ import { LessonsService } from '../../lessons.service'
 import { UsersService } from 'src/app/users.service'
 import { MatDialogRef } from '@angular/material/dialog'
 import { FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms'
-import { Lesson, Tag, Flashcard } from 'src/environments/environment'
+import { Lesson, Tag, Flashcard, AddLesson } from 'src/environments/environment'
 
 @Component({
   selector: 'app-create',
@@ -139,11 +139,11 @@ export class CreateComponent implements OnInit {
   ]
   menuV: string = this.icons[0]
 
-  lesson: Lesson = {
+  lesson: AddLesson = {
     title: '',
     description: '',
-    // icon: manuV,
-    creator: this.usersService.loggedUser,
+    iconPath: this.icons[0],
+    // creator: this.usersService.loggedUser,
     flashcards: [],
     tags: [],
   }
@@ -169,8 +169,8 @@ export class CreateComponent implements OnInit {
     this.lesson.title = this.formGroup1.value.title
     this.lesson.description = this.formGroup1.value.description || ''
     console.log(this.usersService.loggedUser)
-    this.lesson.creator = this.usersService.loggedUser
-    // this.lesson.icon = this.menuV
+    // this.lesson.creator = this.usersService.loggedUser
+    this.lesson.iconPath = this.menuV
     this.lesson.flashcards = this.flashcards
     this.lesson.tags = this.lesson.tags
     console.log(this.lesson)

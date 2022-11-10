@@ -438,7 +438,11 @@ app-lesson > div {
               flex-grow: 1;
               display: grid;
               grid-template-columns: 1fr 1ch 1fr;
+              & mat-divider {
+                margin-right: 0.5ch;
+              }
               span {
+                padding: 0 1ch;
                 max-width: calc(8rem / 3 * 5 - 1ch - 40px);
                 word-wrap: break-word;
               }

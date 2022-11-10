@@ -19,6 +19,7 @@
   </div>
   <lesson-flashcards [class]="category" *ngIf="category == 'flashcards'" [lesson]="lesson"></lesson-flashcards>
   <lesson-learn [class]="category" *ngIf="category == 'learn'" [lesson]="lesson"></lesson-learn>
-  <lesson-quiz [class]="category" *ngIf="category == 'quiz'" [lesson]="lesson"></lesson-quiz>
+  <lesson-quiz [class]="category" *ngIf="category == 'quiz'" [lesson]="lesson" [quiz]="[write, match, choose]">
+  </lesson-quiz>
   <lesson-comments [class]="category" *ngIf="category == 'comments'" [lesson]="lesson"></lesson-comments>
 </div>

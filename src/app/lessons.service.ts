@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core'
 import { HttpClient, HttpHeaders } from '@angular/common/http'
 import { catchError, map, Observable, of, tap } from 'rxjs'
-import { API_URL, Lesson, Tag } from 'src/environments/environment'
+import { AddLesson, API_URL, Lesson, Tag } from 'src/environments/environment'
 import { UsersService } from './users.service'
 
 type Alltags = {
@@ -41,7 +41,7 @@ export class LessonsService {
     return this.http.delete<boolean>(API_URL + '/lessons/' + id)
   }
 
-  create(lesson: Lesson): Observable<boolean> {
+  create(lesson: AddLesson): Observable<boolean> {
     console.log(lesson)
 
     let headers = { Authorization: `Bearer ${this.usersService.accessToken()}` }

@@ -1,36 +1,33 @@
 section {
   display: flex;
   align-items: center;
-  justify-content: center;
   height: 100%;
+  justify-content: center;
   width: 100%;
-
-  .main {
-    display: flex;
-    justify-content: center;
+  div.container {
     align-items: center;
-    align-content: center;
-    flex-direction: row;
+    display: flex;
+    width: clamp(300px, 50vw, 500px);
 
-    .info {
-      display: flex;
-      flex-direction: column;
-
-      .code {
-        font-size: 5rem;
-        font-weight: 700;
-        height: 5rem;
-      }
-      .description {
-        font-size: 1.5rem;
-        font-weight: 400;
-        height: 1.5rem;
+    .main {
+      max-width: clamp(150px, 25vw, 250px);
+      .info {
+        .code {
+          font-size: 5rem;
+          font-weight: 700;
+          height: 5rem;
+        }
+        .description {
+          font-size: 1.5rem;
+          font-weight: 400;
+          height: 1.5rem;
+        }
       }
     }
 
     .coding-cafe img {
-      height: 6.5rem;
-      width: 6.5rem;
+      height: clamp(150px, 25vw, 250px);
+      width: clamp(150px, 25vw, 250px);
     }
   }
 }

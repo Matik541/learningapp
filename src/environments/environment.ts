@@ -25,8 +25,15 @@ export type User = null | { userName: string; id: number }
 export type Lesson = {
   title: string
   description: string
-  // icon: string
+  iconPath: string
   creator: User
+  flashcards: Flashcard[]
+  tags: Tag[]
+}
+export type AddLesson = {
+  title: string
+  description: string
+  iconPath: string
   flashcards: Flashcard[]
   tags: Tag[]
 }

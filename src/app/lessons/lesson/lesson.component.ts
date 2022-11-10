@@ -15,10 +15,15 @@ export class LessonComponent implements OnInit, OnDestroy {
   id: number = 0
   category: Category = 'flashcards'
   private sub: any
+  private lec: any
 
   logged: User = this.usersService.loggedUser
 
   lesson: Lesson = {} as Lesson
+
+  write: Flashcard[] = []
+  match: { question: string; answers: string[] }[] = []
+  choose: Flashcard[] = []
 
   constructor(
     private activeRoute: ActivatedRoute,
@@ -33,20 +38,64 @@ export class LessonComponent implements OnInit, OnDestroy {
         this.category = params['category']
       else this.route.navigate(['lesson', this.id, 'flashcards'])
     })
+  }
 
-    this.lessonsService.getLesson(this.id).subscribe((data) => {
+  ngOnInit(): void {
+    this.lec = this.lessonsService.getLesson(this.id).subscribe((data) => {
       this.lesson.creator = data.creator
       this.lesson.description = data.description
       this.lesson.flashcards = data.flashcards
       // this.lesson.icon = data.icon
       this.lesson.tags = data.tags
       this.lesson.title = data.title
+
+      this.write = this.setWrite(4)
+      this.match = this.setMatch(5)
+      this.choose = this.setChoose(3)
     })
   }
 
-  ngOnInit(): void {}
+  setWrite(bound: number): Flashcard[] {
+    let write: Flashcard[] = []
+    for (let i = 0; i < bound; i++) {
+      let index = Math.floor(Math.random() * this.lesson.flashcards.length)
+      write.push(this.lesson.flashcards[index])
+    }
+    return write
+  }
+  setMatch(bound: number): { question: string; answers: string[] }[] {
+    let match: { question: string; answers: string[] }[] = []
+    for (let i = 0; i < bound; i++) {
+      let question: Flashcard =
+        this.lesson.flashcards[
+          Math.floor(Math.random() * this.lesson.flashcards.length)
+        ]
+      let answers = this.lesson.flashcards.map((f) => f.answer)
+      answers = answers.filter((a) => a !== question.answer)
+
+      answers.length = 4
+      answers[Math.floor(Math.random() * answers.length)] = question.answer
+      answers.sort(() => Math.random() - 0.5)
+
+      match.push({ question: question.question, answers: answers })
+    }
+    return match
+  }
+  setChoose(bound: number): Flashcard[] {
+    let choose: Flashcard[] = []
+    for (let i = 0; i < bound; i++) {
+      let answers: string[] = this.lesson.flashcards.map((f) => f.answer)
+      let question: Flashcard =
+        this.lesson.flashcards[Math.floor(Math.random() * answers.length)]
+      if (Math.random() < 0.5)
+        question.answer = answers[Math.floor(Math.random() * answers.length)]
+      choose.push(question)
+    }
+    return choose
+  }
 
   ngOnDestroy() {
     this.sub.unsubscribe()
+    this.lec.unsubscribe()
   }
 }
