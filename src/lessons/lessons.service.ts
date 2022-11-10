@@ -8,6 +8,7 @@ import { AddTagDto } from './dto/tag/addTag.dto';
 import { UpdateLessonDto } from './dto/updateLesson.dto';
 import { AddFlashcardDto } from './dto/flashcard/addFlashcard.dto';
 import { AddCommentDto } from './dto/comment/addComment.dto';
+import { UpdateCommentDto } from './dto/comment/updateComment.dto';
 
 // entity
 import { Lesson } from './entities/lesson.entity';
@@ -250,6 +251,43 @@ export class LessonsService {
     await this.removeFlashcardsWithoutLesson();
 
     return lesson;
+  }
+
+  async updateComment(
+    creatorId: number,
+    commentId: number,
+    dto: UpdateCommentDto,
+  ): Promise<Comment> {
+    // get comment by id
+    let comment = await this.commentRepository.findOneOrFail({
+      select: {
+        id: true,
+        comment: true,
+        creator: {
+          id: true,
+          userName: true,
+        },
+      },
+      where: { id: commentId },
+      relations: {
+        creator: true,
+      },
+    });
+
+    // check is comment author
+    if (comment.creator.id !== creatorId) {
+      throw new BadRequestException('You are not allowed to update.');
+    }
+
+    // change data in comment object
+    comment = Object.assign(comment, dto);
+
+    // save updated comment
+    try {
+      return await this.commentRepository.save(comment);
+    } catch (err) {
+      throw new BadRequestException(err);
+    }
   }
 
   /**

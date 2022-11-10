@@ -24,6 +24,8 @@ import { AddLessonDto } from './dto/addLesson.dto';
 import { AddTagDto } from './dto/tag/addTag.dto';
 import { GetAllLessonsQueryParametersDto } from './dto/getAllLessonsQueryParameters.dto';
 import { UpdateLessonDto } from './dto/updateLesson.dto';
+import { AddCommentDto } from './dto/comment/addComment.dto';
+import { UpdateCommentDto } from './dto/comment/updateComment.dto';
 
 // entity
 import { Lesson } from './entities/lesson.entity';
@@ -32,7 +34,6 @@ import { Comment } from './entities/comment.entity';
 
 // service
 import { LessonsService } from './lessons.service';
-import { AddCommentDto } from './dto/comment/addComment.dto';
 
 @ApiTags('lessons')
 @Controller('lessons')
@@ -169,6 +170,26 @@ export class LessonsController {
       creatorId,
       +lessonId,
       updateLessonDto,
+    );
+  }
+
+  @ApiBearerAuth()
+  @UseGuards(AuthorizationGuard)
+  @Put('comment/:id')
+  @HttpCode(HttpStatus.OK)
+  @ApiResponse({
+    status: HttpStatus.OK,
+    description: 'Update and return comment data by id.',
+  })
+  updateComment(
+    @LoginedUserDecorator('sub') creatorId: number,
+    @Param('id') commentId: string,
+    @Body() updateCommentDto: UpdateCommentDto,
+  ): Promise<Comment> {
+    return this.lessonsService.updateComment(
+      creatorId,
+      +commentId,
+      updateCommentDto,
     );
   }
 
