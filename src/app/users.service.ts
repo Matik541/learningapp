@@ -126,7 +126,7 @@ export class UsersService {
     return password
   }
 
-  // TODO: better sorage system for tokens
+  // TODO: better storage system for tokens
   private strokeTokens(tokens: any): void {
     localStorage.setItem('access_token', tokens.authToken)
     localStorage.setItem('refresh_token', tokens.refreshToken)

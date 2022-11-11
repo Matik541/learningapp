@@ -73,3 +73,25 @@ mat-card > mat-card-actions > button.selected {
   background-color: mat.get-color-from-palette($primary, 500);
   transition: background-color 0.15s ease-in-out;
 }
+quiz-result {
+  .spiner {
+    .incorrect > svg > circle {
+      stroke: mat.get-color-from-palette($warn, 700) !important;
+    }
+    .total > svg > circle {
+      stroke: mat.get-color-from-palette($primary, 700) !important;
+    }
+    & > * > svg > circle {
+      transition: stroke-dashoffset 1.5s cubic-bezier(1, -0.01, 0.25, 1.25) !important;
+    }
+
+    .info {
+      .correct {
+        color: mat.get-color-from-palette($accent, A200);
+      }
+      .incorrect {
+        color: mat.get-color-from-palette($warn, 500);
+      }
+    }
+  }
+}

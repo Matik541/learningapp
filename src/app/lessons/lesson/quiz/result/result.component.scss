@@ -1,0 +1,22 @@
+.spiner {
+  display: flex;
+  & > .correct {
+    transform: translateX(-100%);
+  }
+  & > .total {
+    transform: translateX(100%);
+  }
+  .info {
+    display: flex;
+    flex-direction: column;
+    gap: 0.5em;
+    align-items: center;
+    justify-content: flex-start;
+    div {
+      display: flex;
+      gap: 1ch;
+      align-items: center;
+      justify-content: center;
+    }
+  }
+}

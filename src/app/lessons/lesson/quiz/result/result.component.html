@@ -1,0 +1,22 @@
+<div class="result-dialog">
+  <h3 mat-dialog-title>Congratulations! You have successfully completed your quiz</h3>
+  <div class="spiner">
+    <mat-progress-spinner class="total" color="primary" value="100">
+    </mat-progress-spinner>
+    <mat-progress-spinner class="incorrect" color="warn" [value]="incorrect">
+    </mat-progress-spinner>
+    <mat-progress-spinner class="correct" color="accent" [value]="correct">
+    </mat-progress-spinner>
+    <div class="info">
+      <div class="correct">
+        <mat-icon>check_circle</mat-icon>
+        <span>{{data.correct}}/{{data.total}}</span>
+      </div>
+      <div class="incorrect">
+        <mat-icon>cancel</mat-icon>
+        <span>{{data.incorrect}}/{{data.total}}</span>
+      </div>
+    </div>
+  </div>
+
+</div>
