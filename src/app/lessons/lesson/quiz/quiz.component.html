@@ -1,69 +1,26 @@
 <div class="main quiz">
-  <form class="content" (ngSubmit)="onSubmit()" id="quiz">
+  <form class="conteiner">
     <!-- writing, match, choose -->
     <section id="writing">
-      <div class="question" *ngFor="let question of quiz[0]; let i = index">
-        <mat-card class="flashcard">
-          <mat-card-subtitle>
-            <div class="content">
-              <span>{{ question.question }}</span>
-            </div>
-          </mat-card-subtitle>
-          <mat-divider inset></mat-divider>
-          <mat-card-actions>
-            <mat-form-field appearance="outline" class="fullwidth">
-              <mat-label>Answer</mat-label>
-              <input matInput placeholder="Answer" id=answer{{i}} />
-            </mat-form-field>
-          </mat-card-actions>
-        </mat-card>
-      </div>
+      <lesson-question-write *ngFor="let question of quiz[0]; let i = index" [question]="question"
+        (answer)="writeAnswer($event, i)">
+      </lesson-question-write>
     </section>
     <mat-divider></mat-divider>
     <section id="meaning">
-      <div class="question" *ngFor="let question of quiz[1]">
-        <mat-card class="flashcard">
-          <mat-card-subtitle>
-            <div class="content">
-              <span>{{ question.question }}</span>
-            </div>
-          </mat-card-subtitle>
-          <mat-divider inset></mat-divider>
-          <mat-card-actions class="group">
-            <button mat-stroked-button *ngFor="let answer of question.answers" value="{{ answer }}">
-              <span>{{ answer }}</span>
-            </button>
-          </mat-card-actions>
-        </mat-card>
-      </div>
+      <lesson-question-match *ngFor="let question of quiz[1]; let i = index" [question]="question"
+        (answer)="matchAnswer($event, i)">
+      </lesson-question-match>
     </section>
     <mat-divider></mat-divider>
     <section id="choose">
-      <div class="question" *ngFor="let question of quiz[2]">
-        <mat-card class="flashcard">
-          <mat-card-subtitle>
-            <div class="content">
-              <span> {{ question.question }}</span>
-              <mat-divider vertical></mat-divider>
-              <span> {{ question.answer }}</span>
-            </div>
-          </mat-card-subtitle>
-          <mat-card-actions class="group">
-            <button mat-stroked-button>
-              <mat-icon class="material-icons-round">check</mat-icon>
-              <span>True</span>
-            </button>
-            <button mat-stroked-button>
-              <mat-icon class="material-icons-round">close</mat-icon>
-              <span>False</span>
-            </button>
-          </mat-card-actions>
-        </mat-card>
-      </div>
+      <lesson-question-choose class="question" *ngFor="let question of quiz[2]; let i = index" [question]="question"
+        (answer)="chooseAnswer($event, i)">
+      </lesson-question-choose>
     </section>
     <mat-divider></mat-divider>
     <div class="actions">
-      <button mat-raised-button color="primary" type="submit">Check answer</button>
+      <button mat-raised-button color="primary" (click)="submit()">Check answer</button>
     </div>
 
   </form>

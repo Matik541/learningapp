@@ -25,8 +25,10 @@ import { FlashcardsComponent } from './lessons/lesson/flashcards/flashcards.comp
 import { LearnComponent } from './lessons/lesson/learn/learn.component'
 import { QuizComponent } from './lessons/lesson/quiz/quiz.component'
 import { CommentsComponent } from './lessons/lesson/comments/comments.component'
-import { ErrorComponent } from './error/error.component';
-import { QuestionComponent } from './lessons/lesson/quiz/question/question.component'
+import { ErrorComponent } from './error/error.component'
+import { QuestionWriteComponent } from './lessons/lesson/quiz/question-write/question-write.component'
+import { QuestionMatchComponent } from './lessons/lesson/quiz/question-match/question-match.component'
+import { QuestionChooseComponent } from './lessons/lesson/quiz/question-choose/question-choose.component'
 
 @NgModule({
   declarations: [
@@ -48,7 +50,9 @@ import { QuestionComponent } from './lessons/lesson/quiz/question/question.compo
     QuizComponent,
     CommentsComponent,
     ErrorComponent,
-    QuestionComponent,
+    QuestionWriteComponent,
+    QuestionMatchComponent,
+    QuestionChooseComponent,
   ],
   imports: [
     DragScrollModule,

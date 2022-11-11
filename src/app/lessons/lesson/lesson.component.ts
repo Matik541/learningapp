@@ -21,7 +21,7 @@ export class LessonComponent implements OnInit, OnDestroy {
 
   lesson: Lesson = {} as Lesson
 
-  write: Flashcard[] = []
+  write: string[] = []
   match: { question: string; answers: string[] }[] = []
   choose: Flashcard[] = []
 
@@ -55,11 +55,11 @@ export class LessonComponent implements OnInit, OnDestroy {
     })
   }
 
-  setWrite(bound: number): Flashcard[] {
-    let write: Flashcard[] = []
+  setWrite(bound: number): string[] {
+    let write: string[] = []
     for (let i = 0; i < bound; i++) {
       let index = Math.floor(Math.random() * this.lesson.flashcards.length)
-      write.push(this.lesson.flashcards[index])
+      write.push(this.lesson.flashcards[index].question)
     }
     return write
   }

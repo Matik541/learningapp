@@ -69,3 +69,6 @@ errors {
 .block:hover {
   color: mat.get-color-from-palette($primary, A200);
 }
+mat-card > mat-card-actions > button.selected {
+  background-color: mat.get-color-from-palette($primary, 500);
+}
