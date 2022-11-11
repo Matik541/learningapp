@@ -2,20 +2,20 @@
   <form class="conteiner">
     <!-- writing, match, choose -->
     <section id="writing">
-      <lesson-question-write *ngFor="let question of quiz[0]; let i = index" [question]="question"
+      <lesson-question-write *ngFor="let question of quizQuestions[0]; let i = index" [question]="question"
         (answer)="writeAnswer($event, i)">
       </lesson-question-write>
     </section>
     <mat-divider></mat-divider>
     <section id="meaning">
-      <lesson-question-match *ngFor="let question of quiz[1]; let i = index" [question]="question"
+      <lesson-question-match *ngFor="let question of quizQuestions[1]; let i = index" [question]="question"
         (answer)="matchAnswer($event, i)">
       </lesson-question-match>
     </section>
     <mat-divider></mat-divider>
     <section id="choose">
-      <lesson-question-choose class="question" *ngFor="let question of quiz[2]; let i = index" [question]="question"
-        (answer)="chooseAnswer($event, i)">
+      <lesson-question-choose class="question" *ngFor="let question of quizQuestions[2]; let i = index"
+        [question]="question" (answer)="chooseAnswer($event, i)">
       </lesson-question-choose>
     </section>
     <mat-divider></mat-divider>

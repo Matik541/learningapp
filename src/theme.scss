@@ -71,4 +71,5 @@ errors {
 }
 mat-card > mat-card-actions > button.selected {
   background-color: mat.get-color-from-palette($primary, 500);
+  transition: background-color 0.15s ease-in-out;
 }

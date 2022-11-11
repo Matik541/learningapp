@@ -8,7 +8,7 @@ import { Flashcard, Lesson } from 'src/environments/environment'
 })
 export class QuizComponent implements OnInit {
   @Input() lesson: Lesson = {} as Lesson
-  @Input() quiz: any[][] = []
+  @Input() quizQuestions: any[][] = []
 
   answers: any[][] = [[], [], []]
 
@@ -17,7 +17,67 @@ export class QuizComponent implements OnInit {
   ngOnInit(): void {}
 
   submit(): void {
-    console.log(this.answers)
+    let correctAnswers: {
+      question: string
+      answer: string
+      correctAnswer: string
+    }[][] = [[], [], []]
+    let correct: number = 0
+
+    // writing
+    this.quizQuestions[0].forEach((question, index) => {
+      let flashcard = this.lesson.flashcards.find(
+        (card) => card.question === question
+      )
+      if (flashcard) {
+        if (flashcard.answer === this.answers[0][index]) correct++
+        correctAnswers[0].push({
+          question,
+          answer: this.answers[0][index],
+          correctAnswer: flashcard.answer,
+        })
+      }
+    })
+
+    // matching
+    this.quizQuestions[1].forEach((question, index) => {
+      let flashcard = this.lesson.flashcards.find(
+        (card) => card.question === question.question
+      )
+      if (flashcard) {
+        if (flashcard.answer === this.answers[0][index]) correct++
+        correctAnswers[1].push({
+          question,
+          answer: this.answers[1][index],
+          correctAnswer: flashcard.answer,
+        })
+      }
+    })
+
+    // choosing
+    this.quizQuestions[2].forEach((question, index) => {
+      let flashcard = this.lesson.flashcards.find(
+        (card) => card.question === question.question
+      )
+      if (flashcard) {
+        if (
+          (this.answers[2][index] == 'true' &&
+            flashcard.answer === question.answer) ||
+          (this.answers[2][index] == 'false' &&
+            flashcard.answer !== question.answer)
+        )
+          correct++
+
+        correctAnswers[2].push({
+          question: question.question,
+          answer: this.answers[2][index],
+          correctAnswer: flashcard.answer,
+        })
+      }
+    })
+
+    console.log('correct: ' + correct)
+    console.log(correctAnswers)
   }
 
   chooseAnswer(event: string, id: number): void {

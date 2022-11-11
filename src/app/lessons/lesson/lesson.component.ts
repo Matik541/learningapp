@@ -59,7 +59,8 @@ export class LessonComponent implements OnInit, OnDestroy {
     let write: string[] = []
     for (let i = 0; i < bound; i++) {
       let index = Math.floor(Math.random() * this.lesson.flashcards.length)
-      write.push(this.lesson.flashcards[index].question)
+      if (write.includes(this.lesson.flashcards[index].question)) i--
+      else write.push(this.lesson.flashcards[index].question)
     }
     return write
   }
@@ -70,6 +71,10 @@ export class LessonComponent implements OnInit, OnDestroy {
         this.lesson.flashcards[
           Math.floor(Math.random() * this.lesson.flashcards.length)
         ]
+      if (match.map((q) => q.question).includes(question.question)) {
+        i--
+        continue
+      }
       let answers = this.lesson.flashcards.map((f) => f.answer)
       answers = answers.filter((a) => a !== question.answer)
 
@@ -85,10 +90,19 @@ export class LessonComponent implements OnInit, OnDestroy {
     let choose: Flashcard[] = []
     for (let i = 0; i < bound; i++) {
       let answers: string[] = this.lesson.flashcards.map((f) => f.answer)
-      let question: Flashcard =
-        this.lesson.flashcards[Math.floor(Math.random() * answers.length)]
+      let flashcard = this.lesson.flashcards[this.random(answers.length)]
+
+      if (choose.map((q) => q.question).includes(flashcard.question)) {
+        i--
+        continue
+      }
+      let question: Flashcard = {
+        question: flashcard.question,
+        answer: flashcard.answer,
+      }
+      answers = answers.filter((a) => a !== question.answer)
       if (Math.random() < 0.5)
-        question.answer = answers[Math.floor(Math.random() * answers.length)]
+        question.answer = answers[this.random(answers.length)]
       choose.push(question)
     }
     return choose
@@ -97,5 +111,9 @@ export class LessonComponent implements OnInit, OnDestroy {
   ngOnDestroy() {
     this.sub.unsubscribe()
     this.lec.unsubscribe()
+  }
+
+  random(bound: number, offset: number = 0): number {
+    return Math.floor(Math.random() * bound) + offset
   }
 }
