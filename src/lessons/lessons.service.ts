@@ -308,6 +308,9 @@ export class LessonsService {
     // delete lesson flashcards
     await this.flashcardRepository.delete({ id: lesson.id });
 
+    // delete lesson comments
+    await this.commentRepository.delete({ lesson: lesson });
+
     try {
       // remove lesson from db
       await this.lessonsRepository.remove(lesson);
@@ -316,6 +319,36 @@ export class LessonsService {
     }
 
     return lesson;
+  }
+
+  async deleteComment(creatorId: number, commentId: number): Promise<Comment> {
+    // get comment by id
+    const comment = await this.commentRepository.findOneOrFail({
+      select: {
+        id: true,
+        comment: true,
+        creator: {
+          id: true,
+          userName: true,
+        },
+      },
+      where: { id: commentId },
+      relations: {
+        creator: true,
+      },
+    });
+
+    // check is comment author
+    if (comment.creator.id !== creatorId) {
+      throw new BadRequestException('You are not allowed to update.');
+    }
+
+    try {
+      // remove comment from db
+      return await this.commentRepository.remove(comment);
+    } catch (err) {
+      throw new BadRequestException(err);
+    }
   }
 
   /**

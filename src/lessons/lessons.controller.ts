@@ -207,4 +207,19 @@ export class LessonsController {
   ): Promise<Lesson> {
     return this.lessonsService.deleteLesson(creatorId, +lessonId);
   }
+
+  @ApiBearerAuth()
+  @UseGuards(AuthorizationGuard)
+  @Delete('comment/:id')
+  @HttpCode(HttpStatus.OK)
+  @ApiResponse({
+    status: HttpStatus.OK,
+    description: 'Delete and return comment data by id.',
+  })
+  deleteComment(
+    @LoginedUserDecorator('sub') creatorId: number,
+    @Param('id') commentId: string,
+  ): Promise<Comment> {
+    return this.lessonsService.deleteComment(creatorId, +commentId);
+  }
 }
