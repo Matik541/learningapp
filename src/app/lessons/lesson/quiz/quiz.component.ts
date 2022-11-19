@@ -34,7 +34,11 @@ export class QuizComponent implements OnInit {
       )
       if (flashcard) {
         if (flashcard.answer === this.answers[0][index]) correct++
-        if (this.answers[1][index] !== undefined) incorrect++
+        else if (
+          this.answers[0][index] != undefined &&
+          this.answers[0][index] != ''
+        )
+          incorrect++
         correctAnswers[0].push({
           question,
           answer: this.answers[0][index],
@@ -50,9 +54,9 @@ export class QuizComponent implements OnInit {
       )
       if (flashcard) {
         if (flashcard.answer === this.answers[0][index]) correct++
-        if (this.answers[1][index] !== undefined) incorrect++
+        else if (this.answers[1][index] != undefined) incorrect++
         correctAnswers[1].push({
-          question,
+          question: question.question,
           answer: this.answers[1][index],
           correctAnswer: flashcard.answer,
         })
@@ -65,23 +69,31 @@ export class QuizComponent implements OnInit {
         (card) => card.question === question.question
       )
       if (flashcard) {
+        let correctAnswer = false
         if (
           (this.answers[2][index] == 'true' &&
             flashcard.answer === question.answer) ||
           (this.answers[2][index] == 'false' &&
             flashcard.answer !== question.answer)
-        )
+        ) {
           correct++
-        else if (this.answers[2][index] !== undefined) incorrect++
-
+          correctAnswer = true
+        } else if (this.answers[2][index] !== undefined) incorrect++
+        console.log(correctAnswers[2])
         correctAnswers[2].push({
           question: question.question,
-          answer: this.answers[2][index],
+          answer: correctAnswer
+            ? flashcard.answer
+            : this.answers[2][index] != undefined
+            ? this.answers[2][index] == 'true'
+              ? question.answer
+              : ''
+            : undefined,
           correctAnswer: flashcard.answer,
         })
       }
     })
-
+    console.log(correctAnswers)
     this.dialog.open(ResultComponent, {
       width: '50vw',
       enterAnimationDuration: '50ms',

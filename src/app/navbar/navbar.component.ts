@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core'
 import { MatDialog, MatDialogRef } from '@angular/material/dialog'
 import { CreateComponent } from '../lessons/create/create.component'
-import { appName } from 'src/environments/environment'
+import { appName, bar } from 'src/environments/environment'
 
 @Component({
   selector: 'navbar',
@@ -9,6 +9,7 @@ import { appName } from 'src/environments/environment'
 })
 export class NavbarComponent {
   appName: string = appName
+  bar = bar
 
   constructor(public dialog: MatDialog) {}
 

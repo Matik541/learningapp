@@ -30,12 +30,3 @@ const routes: Routes = [
   exports: [RouterModule],
 })
 export class AppRoutingModule {}
-
-function lessonCategoriesMatcher(url: any) {
-  const categories = ['flashcards', 'tests', 'theory']
-  const path = url[0].path
-  if (categories.includes(path)) {
-    return { consumed: url }
-  }
-  return null
-}

@@ -1,22 +1,52 @@
 .spiner {
   display: flex;
-  & > .correct {
+  position: relative;
+  justify-content: center;
+  min-height: 100px;
+  margin-bottom: 1rem;
+  & > mat-progress-spinner {
+    position: absolute;
     transform: translateX(-100%);
-  }
-  & > .total {
-    transform: translateX(100%);
   }
   .info {
     display: flex;
     flex-direction: column;
     gap: 0.5em;
-    align-items: center;
-    justify-content: flex-start;
+    align-items: flex-start;
+    justify-content: center;
     div {
       display: flex;
       gap: 1ch;
       align-items: center;
       justify-content: center;
+    }
+  }
+}
+.details {
+  h3 {
+    display: flex;
+    justify-content: space-between;
+    padding: 0 20%;
+  }
+  .cards {
+    display: flex;
+    flex-direction: column;
+    gap: 0.5em;
+    .content {
+      flex-grow: 1;
+      display: grid;
+      grid-template-columns: 1fr 1ch 1fr;
+      & mat-divider {
+        margin-right: 0.5ch;
+      }
+      & > div {
+        padding: 0 1ch;
+        word-wrap: break-word;
+      }
+      .hint {
+        opacity: 0.5;
+        font-style: italic;
+      }
     }
   }
 }

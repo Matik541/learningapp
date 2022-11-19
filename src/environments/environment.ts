@@ -6,6 +6,7 @@ export const environment = {
   production: false,
 }
 export const appName = 'LearningApp'
+export const bar: 'determinate' | 'indeterminate' | 'query' = 'determinate'
 
 export const API_URL = 'http://localhost:3000'
 
