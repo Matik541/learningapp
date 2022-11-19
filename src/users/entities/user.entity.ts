@@ -3,6 +3,7 @@ import { Column, Entity, OneToMany, PrimaryGeneratedColumn } from 'typeorm';
 // entities
 import { Lesson } from 'src/lessons/entities/lesson.entity';
 import { Comment } from 'src/lessons/entities/comment.entity';
+import { LessonCompleted } from 'src/lessons/entities/lessonCompleted.entity';
 
 @Entity()
 export class User {
@@ -27,5 +28,6 @@ export class User {
   @OneToMany(() => Comment, (comment) => comment.creator)
   comments: Comment[];
 
-  //   TODO: add lessonsCompleted
+  @OneToMany(() => LessonCompleted, (lessonCompleted) => lessonCompleted.user)
+  lessonCompleted: LessonCompleted[];
 }

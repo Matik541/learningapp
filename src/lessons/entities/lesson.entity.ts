@@ -13,6 +13,7 @@ import { User } from 'src/users/entities/user.entity';
 import { Tag } from './tag.entity';
 import { Flashcard } from './flashcard.entity';
 import { Comment } from './comment.entity';
+import { LessonCompleted } from './lessonCompleted.entity';
 
 @Entity()
 export class Lesson {
@@ -40,4 +41,7 @@ export class Lesson {
 
   @OneToMany(() => Comment, (comment) => comment.lesson)
   comments: Comment[];
+
+  @OneToMany(() => LessonCompleted, (lesson) => lesson.lesson)
+  scores: LessonCompleted[];
 }

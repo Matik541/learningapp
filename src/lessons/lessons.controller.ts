@@ -34,6 +34,8 @@ import { Comment } from './entities/comment.entity';
 
 // service
 import { LessonsService } from './lessons.service';
+import { LessonCompletedDto } from './dto/lessonCompleted.dto';
+import { LessonCompleted } from './entities/lessonCompleted.entity';
 
 @ApiTags('lessons')
 @Controller('lessons')
@@ -206,6 +208,22 @@ export class LessonsController {
     @Param('id') lessonId: string,
   ): Promise<Lesson> {
     return this.lessonsService.deleteLesson(creatorId, +lessonId);
+  }
+
+  @ApiBearerAuth()
+  @UseGuards(AuthorizationGuard)
+  @Post('completed/:id')
+  @HttpCode(HttpStatus.OK)
+  @ApiResponse({
+    status: HttpStatus.OK,
+    description: 'Save user score.',
+  })
+  lessonCompleted(
+    @LoginedUserDecorator('sub') userId: number,
+    @Param('id') lessonId: string,
+    @Body() dto: LessonCompletedDto,
+  ): Promise<LessonCompleted> {
+    return this.lessonsService.lessonCompleted(userId, +lessonId, dto);
   }
 
   @ApiBearerAuth()

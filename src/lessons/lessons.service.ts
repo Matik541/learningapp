@@ -9,12 +9,14 @@ import { UpdateLessonDto } from './dto/updateLesson.dto';
 import { AddFlashcardDto } from './dto/flashcard/addFlashcard.dto';
 import { AddCommentDto } from './dto/comment/addComment.dto';
 import { UpdateCommentDto } from './dto/comment/updateComment.dto';
+import { LessonCompletedDto } from './dto/lessonCompleted.dto';
 
 // entity
 import { Lesson } from './entities/lesson.entity';
 import { Tag } from './entities/tag.entity';
 import { Flashcard } from './entities/flashcard.entity';
 import { Comment } from './entities/comment.entity';
+import { LessonCompleted } from './entities/lessonCompleted.entity';
 
 @Injectable()
 export class LessonsService {
@@ -24,6 +26,8 @@ export class LessonsService {
     @InjectRepository(Flashcard)
     private flashcardRepository: Repository<Flashcard>,
     @InjectRepository(Comment) private commentRepository: Repository<Comment>,
+    @InjectRepository(LessonCompleted)
+    private lessonCompletedRepository: Repository<LessonCompleted>,
   ) {}
 
   // find lesson in db parameters
@@ -38,6 +42,7 @@ export class LessonsService {
         id: true,
         userName: true,
       },
+      userScore: true,
       tags: true,
       flashcards: true,
       comments: {
@@ -346,6 +351,33 @@ export class LessonsService {
     try {
       // remove comment from db
       return await this.commentRepository.remove(comment);
+    } catch (err) {
+      throw new BadRequestException(err);
+    }
+  }
+
+  /**
+   * It creates a new LessonCompleted object, saves it to the database, and returns the saved object
+   * @param {number} userId - number - the id of the user who completed the lesson
+   * @param {number} lessonId - The id of the lesson that the user is completing.
+   * @param {LessonCompletedDto} dto - LessonCompletedDto
+   * @returns The lesson completed object
+   */
+  async lessonCompleted(
+    userId: number,
+    lessonId: number,
+    dto: LessonCompletedDto,
+  ): Promise<LessonCompleted> {
+    // create lesson completed object
+    const lessonCompleted = this.lessonCompletedRepository.create({
+      user: { id: userId },
+      lesson: { id: lessonId },
+      score: dto.percent,
+    });
+
+    try {
+      // save user score comment
+      return await this.lessonCompletedRepository.save(lessonCompleted);
     } catch (err) {
       throw new BadRequestException(err);
     }
