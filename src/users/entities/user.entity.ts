@@ -29,5 +29,5 @@ export class User {
   comments: Comment[];
 
   @OneToMany(() => LessonCompleted, (lessonCompleted) => lessonCompleted.user)
-  lessonCompleted: LessonCompleted[];
+  lessonsCompleted: LessonCompleted[];
 }

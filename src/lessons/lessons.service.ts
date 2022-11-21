@@ -42,7 +42,6 @@ export class LessonsService {
         id: true,
         userName: true,
       },
-      userScore: true,
       tags: true,
       flashcards: true,
       comments: {
@@ -69,25 +68,48 @@ export class LessonsService {
    * and username fields. Then return selected lessons data.
    * @returns An array of lessons.
    */
-  async getAllLessons(): Promise<Lesson[]> {
+  async getAllLessons(userId: number | undefined): Promise<Lesson[]> {
+    let lessons: Lesson[];
+
     // find and return all lessons
     try {
-      return await this.lessonsRepository.find({
+      lessons = await this.lessonsRepository.find({
         ...this.getLessonFindParameters,
       });
     } catch (err) {
       throw new BadRequestException(err);
     }
+
+    console.log('user id: ' + userId);
+
+    if (userId !== undefined) {
+      // add user score to the lessons data
+      lessons = await Promise.all(
+        lessons.map(async (lesson: Lesson): Promise<Lesson> => {
+          const lessonCompleted = await this.getLessonCompleted(
+            userId,
+            lesson.id,
+          );
+
+          lesson.score = lessonCompleted.score;
+
+          return lesson;
+        }),
+      );
+    }
+
+    return lessons;
   }
 
   async getAllLessonsWithFilters(
+    userId: number | undefined,
     tagIds: number[],
     lessonsSearched: Promise<Lesson[]> | undefined,
   ): Promise<Lesson[]> {
     // get lessons
     let lessons =
       typeof lessonsSearched === 'undefined'
-        ? await this.getAllLessons()
+        ? await this.getAllLessons(userId)
         : await lessonsSearched;
 
     // get tags by ids
@@ -351,6 +373,23 @@ export class LessonsService {
     try {
       // remove comment from db
       return await this.commentRepository.remove(comment);
+    } catch (err) {
+      throw new BadRequestException(err);
+    }
+  }
+
+  async getLessonCompleted(
+    userId: number,
+    lessonId: number,
+  ): Promise<LessonCompleted> {
+    try {
+      return await this.lessonCompletedRepository.findOneOrFail({
+        where: { lesson: { id: lessonId }, user: { id: userId } },
+        relations: {
+          lesson: true,
+          user: true,
+        },
+      });
     } catch (err) {
       throw new BadRequestException(err);
     }

@@ -50,6 +50,7 @@ export class LessonsController {
       'Return all lessons data. Filter them by tags. Query parameters is tags ids',
   })
   getAllLessons(
+    @LoginedUserDecorator() userId: number | undefined,
     @Query() query: GetAllLessonsQueryParametersDto,
   ): Promise<Lesson[]> {
     let lessons: Promise<Lesson[]>;
@@ -66,11 +67,13 @@ export class LessonsController {
     if (typeof query.tagIds !== 'undefined' && query.tagIds.length > 0) {
       if (typeof lessons === 'undefined') {
         lessons = this.lessonsService.getAllLessonsWithFilters(
+          userId,
           query.tagIds,
           undefined,
         );
       } else {
         lessons = this.lessonsService.getAllLessonsWithFilters(
+          userId,
           query.tagIds,
           lessons,
         );
@@ -82,7 +85,7 @@ export class LessonsController {
       typeof query.tagIds === 'undefined' &&
       typeof query.searchQuery === 'undefined'
     ) {
-      lessons = this.lessonsService.getAllLessons();
+      lessons = this.lessonsService.getAllLessons(userId);
     }
 
     return lessons;

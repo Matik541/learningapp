@@ -42,6 +42,6 @@ export class Lesson {
   @OneToMany(() => Comment, (comment) => comment.lesson)
   comments: Comment[];
 
-  @OneToMany(() => LessonCompleted, (lesson) => lesson.lesson)
-  scores: LessonCompleted[];
+  @OneToMany(() => LessonCompleted, (lessonCompleted) => lessonCompleted.lesson)
+  score: number;
 }
