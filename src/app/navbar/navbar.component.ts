@@ -1,7 +1,9 @@
 import { Component, OnInit } from '@angular/core'
-import { MatDialog, MatDialogRef } from '@angular/material/dialog'
+import { MatDialog } from '@angular/material/dialog'
 import { CreateComponent } from '../lessons/create/create.component'
-import { appName, bar } from 'src/environments/environment'
+import { appName, Bar } from 'src/environments/environment'
+import { NavigationEnd, NavigationStart, Router } from '@angular/router'
+import { ProgressBarService } from './progress-bar.service'
 
 @Component({
   selector: 'navbar',
@@ -9,11 +11,34 @@ import { appName, bar } from 'src/environments/environment'
 })
 export class NavbarComponent {
   appName: string = appName
-  bar = bar
+  loading: Bar = {
+    mode: 'determinate',
+    value: 0,
+    hidden: true,
+  }
 
-  constructor(public dialog: MatDialog) {}
-
-  ngOnInit() {}
+  constructor(
+    public dialog: MatDialog,
+    private router: Router,
+    public progressBar: ProgressBarService
+  ) {}
+  ngOnInit() {
+    this.router.events.subscribe((evt) => {
+      if (evt instanceof NavigationStart) {
+        this.loading.hidden = false
+        this.loading.value = 0
+      }
+      if (evt instanceof NavigationEnd) {
+        this.loading.value = 100
+        setTimeout(() => {
+          this.loading.hidden = true
+        }, 250)
+        setTimeout(() => {
+          this.loading.value = 0
+        }, 500)
+      }
+    })
+  }
 
   addNew(
     type: string,

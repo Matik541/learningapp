@@ -1,4 +1,6 @@
 .spiner {
+  padding-left: 100px;
+  padding-right: 1rem;
   display: flex;
   position: relative;
   justify-content: center;
@@ -27,6 +29,7 @@
     display: flex;
     justify-content: space-between;
     padding: 0 20%;
+    margin: 1rem 0 0.5rem 0;
   }
   .cards {
     display: flex;

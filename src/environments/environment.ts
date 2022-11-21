@@ -6,7 +6,6 @@ export const environment = {
   production: false,
 }
 export const appName = 'LearningApp'
-export const bar: 'determinate' | 'indeterminate' | 'query' = 'determinate'
 
 export const API_URL = 'http://localhost:3000'
 
@@ -21,8 +20,10 @@ export type Flashcard = {
   question: string
   answer: string
 }
-export type User = null | { userName: string; id: number }
-
+export type User = null | {
+  userName: string
+  id: number
+}
 export type Lesson = {
   title: string
   description: string
@@ -37,6 +38,11 @@ export type AddLesson = {
   iconPath: string
   flashcards: Flashcard[]
   tags: Tag[]
+}
+export type Bar = {
+  hidden: boolean
+  mode: 'indeterminate' | 'query' | 'determinate' | 'buffer'
+  value: number
 }
 /*
  * For easier debugging in development mode, you can import the following file

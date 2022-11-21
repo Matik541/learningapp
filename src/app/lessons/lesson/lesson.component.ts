@@ -1,5 +1,5 @@
 import { Flashcard, Lesson, User } from 'src/environments/environment'
-import { Router } from '@angular/router'
+import { NavigationEnd, NavigationStart, Router } from '@angular/router'
 import { Component, OnDestroy, OnInit } from '@angular/core'
 import { ActivatedRoute } from '@angular/router'
 import { UsersService } from 'src/app/users.service'
@@ -24,6 +24,9 @@ export class LessonComponent implements OnInit, OnDestroy {
   write: string[] = []
   match: { question: string; answers: string[] }[] = []
   choose: Flashcard[] = []
+
+  message: string
+  displayMessage: boolean = false
 
   constructor(
     private activeRoute: ActivatedRoute,

@@ -12,7 +12,8 @@ body {
   nav,
   main,
   footer {
-    padding: 0 $padding;
+    padding-left: $padding;
+    padding-right: $padding;
   }
 }
 
@@ -31,6 +32,8 @@ nav {
   position: fixed;
   top: 0;
   width: 100%;
+  padding-top: 3px;
+  padding-bottom: 3px;
 
   .brand {
     display: flex;
@@ -112,12 +115,13 @@ nav {
     left: 0;
     opacity: 0;
     position: absolute;
-    top: 3rem;
+    top: calc(3rem - 3px);
     width: 100%;
     z-index: 9999;
   }
   .loading-bar.load {
     opacity: 1;
+    transition: opacity 0.1s ease-in-out;
   }
 }
 
@@ -357,6 +361,8 @@ app-lesson > div {
     overflow-x: hidden;
     padding-right: 0.5rem;
     padding-bottom: 5vh;
+    scroll-snap-type: y mandatory;
+    scroll-behavior: smooth;
     width: calc(16rem / 3 * 5 + 1rem);
 
     &.flashcards {

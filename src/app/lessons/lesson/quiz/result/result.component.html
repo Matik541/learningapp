@@ -35,7 +35,7 @@
           </span>
         </h3>
         <div class="cards">
-          <mat-card *ngFor="let cAnswers of correctAnswers[i]">
+          <mat-card *ngFor="let cAnswers of correctAnswers[i]" tabindex="0">
             <mat-card-subtitle>
               <div class="content">
                 <div class="question">
@@ -61,4 +61,7 @@
       </div>
     </div>
   </mat-dialog-content>
+  <mat-dialog-actions>
+    <button mat-raised-button color="primary" (click)="close()">Close</button>
+  </mat-dialog-actions>
 </div>

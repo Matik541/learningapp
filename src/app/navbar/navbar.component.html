@@ -21,6 +21,10 @@
     <nav-search></nav-search>
   </div>
   <nav-user class="nav-user"></nav-user>
-  <mat-progress-bar [class]="'loading-bar ' + (bar != 'determinate'? 'load' : '')" color="primary" [mode]="bar">
+  <mat-progress-bar [class]="'loading-bar ' + (progressBar.hidden? '' : 'load')" color="primary"
+    [value]="progressBar.value" [mode]="progressBar.mode">
+  </mat-progress-bar>
+  <mat-progress-bar [class]="'loading-bar ' + (loading.hidden? '' : 'load')" color="primary" [value]="loading.value"
+    mode="determinate">
   </mat-progress-bar>
 </nav>
