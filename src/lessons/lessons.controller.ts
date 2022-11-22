@@ -91,6 +91,22 @@ export class LessonsController {
     return lessons;
   }
 
+  @ApiBearerAuth()
+  @UseGuards(AuthorizationGuard)
+  @Get('logged')
+  @HttpCode(HttpStatus.OK)
+  @ApiResponse({
+    status: HttpStatus.OK,
+    description:
+      'Return all lessons data. Filter them by tags. Query parameters is tags ids',
+  })
+  getAllLessonsForLoggedUser(
+    @LoginedUserDecorator('sub') userId: number,
+    @Query() query: GetAllLessonsQueryParametersDto,
+  ): Promise<Lesson[]> {
+    return this.getAllLessons(userId, query);
+  }
+
   @Get('tags')
   @HttpCode(HttpStatus.OK)
   @ApiResponse({

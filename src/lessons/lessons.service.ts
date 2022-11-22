@@ -80,8 +80,6 @@ export class LessonsService {
       throw new BadRequestException(err);
     }
 
-    console.log('user id: ' + userId);
-
     if (userId !== undefined) {
       // add user score to the lessons data
       lessons = await Promise.all(
@@ -91,7 +89,9 @@ export class LessonsService {
             lesson.id,
           );
 
-          lesson.score = lessonCompleted.score;
+          if (lessonCompleted !== null) {
+            lesson.score = lessonCompleted.score;
+          }
 
           return lesson;
         }),
@@ -378,12 +378,20 @@ export class LessonsService {
     }
   }
 
+  /**
+   * "Get the lesson completed for the given user and lesson."
+   * The function is async, so it returns a promise. The function returns a LessonCompleted object or
+   * null
+   * @param {number} userId - number,
+   * @param {number} lessonId - number - The id of the lesson that the user is trying to complete.
+   * @returns A lesson completed object
+   */
   async getLessonCompleted(
     userId: number,
     lessonId: number,
-  ): Promise<LessonCompleted> {
+  ): Promise<LessonCompleted> | null {
     try {
-      return await this.lessonCompletedRepository.findOneOrFail({
+      return await this.lessonCompletedRepository.findOne({
         where: { lesson: { id: lessonId }, user: { id: userId } },
         relations: {
           lesson: true,
