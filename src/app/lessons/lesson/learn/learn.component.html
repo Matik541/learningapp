@@ -1,4 +1,9 @@
 <div class="main">
+  <div class="settings">
+    <button mat-icon-button class="primary-hover">
+      <mat-icon>{{ true ? "settings" : "settings_suggest" }}</mat-icon>
+    </button>
+  </div>
   <mat-card class="flashcard">
     <mat-card-content>
       {{ flashcards[indexFleshcard%flashcards.length]?.flashcard?.question }}

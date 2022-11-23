@@ -26,9 +26,9 @@ import { LearnComponent } from './lessons/lesson/learn/learn.component'
 import { QuizComponent } from './lessons/lesson/quiz/quiz.component'
 import { CommentsComponent } from './lessons/lesson/comments/comments.component'
 import { ErrorComponent } from './error/error.component'
-import { QuestionWriteComponent } from './lessons/lesson/question-write/question-write.component'
-import { QuestionMatchComponent } from './lessons/lesson/question-match/question-match.component'
-import { QuestionChooseComponent } from './lessons/lesson/question-choose/question-choose.component'
+import { QuestionWriteComponent } from './lessons/lesson/quiz/question-write/question-write.component'
+import { QuestionMatchComponent } from './lessons/lesson/quiz/question-match/question-match.component'
+import { QuestionChooseComponent } from './lessons/lesson/quiz/question-choose/question-choose.component'
 import { ResultComponent } from './lessons/lesson/quiz/result/result.component'
 
 @NgModule({

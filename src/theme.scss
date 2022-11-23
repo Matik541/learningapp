@@ -91,12 +91,15 @@ quiz-result {
   }
 }
 
-.correct {
+.correct,
+.accent-hover:hover {
   color: mat.get-color-from-palette($accent, A200);
 }
-.incorrect {
+.incorrect,
+.warn-hover:hover {
   color: mat.get-color-from-palette($warn, 500);
 }
-.total {
+.total,
+.primary-hover:hover {
   color: mat.get-color-from-palette($primary, 400);
 }
