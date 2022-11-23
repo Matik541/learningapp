@@ -527,6 +527,10 @@ errors {
   }
 }
 
+.mat-form-field-wrapper {
+  padding-bottom: 0;
+}
+
 @keyframes flip {
   0% {
     -webkit-transform: rotateY(0);
@@ -577,5 +581,32 @@ errors {
   100% {
     -webkit-transform: rotateY(0);
     transform: rotateY(0);
+  }
+}
+
+@keyframes shake {
+  0% {
+    -webkit-transform: translateX(0);
+    transform: translateX(0);
+  }
+  20% {
+    -webkit-transform: translateX(-10px);
+    transform: translateX(-10px);
+  }
+  40% {
+    -webkit-transform: translateX(10px);
+    transform: translateX(10px);
+  }
+  60% {
+    -webkit-transform: translateX(-10px);
+    transform: translateX(-10px);
+  }
+  80% {
+    -webkit-transform: translateX(10px);
+    transform: translateX(10px);
+  }
+  100% {
+    -webkit-transform: translateX(0);
+    transform: translateX(0);
   }
 }

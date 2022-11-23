@@ -86,17 +86,17 @@ quiz-result {
       transition: stroke-dashoffset 1.5s cubic-bezier(1, -0.01, 0.25, 1.25) !important;
     }
   }
-
-  .correct {
-    color: mat.get-color-from-palette($accent, A200);
-  }
-  .incorrect {
-    color: mat.get-color-from-palette($warn, 500);
-  }
-  .total {
-    color: mat.get-color-from-palette($primary, 400);
-  }
   .cards mat-card {
     background-color: rgba(mat.get-color-from-palette($my_dark, 700), 0.5) !important;
   }
+}
+
+.correct {
+  color: mat.get-color-from-palette($accent, A200);
+}
+.incorrect {
+  color: mat.get-color-from-palette($warn, 500);
+}
+.total {
+  color: mat.get-color-from-palette($primary, 400);
 }
