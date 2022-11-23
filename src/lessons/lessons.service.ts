@@ -338,6 +338,9 @@ export class LessonsService {
     // delete lesson comments
     await this.commentRepository.delete({ lesson: lesson });
 
+    // delete users score
+    await this.lessonCompletedRepository.delete({ lesson: lesson });
+
     try {
       // remove lesson from db
       await this.lessonsRepository.remove(lesson);
