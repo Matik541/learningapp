@@ -531,6 +531,59 @@ errors {
   padding-bottom: 0;
 }
 
+#chat {
+  align-items: flex-start;
+  justify-content: flex-end;
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+  width: 50ch;
+  right: 0;
+  position: absolute;
+  top: 0;
+
+  .time {
+    align-self: center;
+    opacity: 0.75;
+    font-size: 0.75rem;
+    font-weight: 400;
+    margin: 0;
+    padding: 0;
+    text-align: center;
+  }
+  .messages {
+    .message {
+      animation: fadeBottom 0.05s linear 1;
+      margin: 0.05em;
+      padding: 0.5em 1em;
+      height: 2rem;
+      width: fit-content;
+      border-radius: 1em;
+      transition: border-radius 0.1s ease-in-out;
+      &.user {
+        align-self: flex-end;
+        color: #000;
+        background-color: #f5f5f5;
+      }
+    }
+  }
+  .messages .message + .message {
+    border-top-left-radius: 0.1em;
+  }
+  .messages .message:not(:last-child) {
+    border-bottom-left-radius: 0.1em;
+  }
+}
+
+@keyframes fadeBottom {
+  from {
+    transform: translateY(100%);
+  }
+  to {
+    transform: translateY(0);
+  }
+}
+
 @keyframes flip {
   0% {
     -webkit-transform: rotateY(0);

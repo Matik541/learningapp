@@ -25,9 +25,59 @@ section {
       }
     }
 
-    .coding-cafe img {
+    #coding-cafe svg {
       height: clamp(150px, 25vw, 250px);
       width: clamp(150px, 25vw, 250px);
+      .cup > path {
+        animation: cup 2s linear infinite alternate;
+        transform-origin: 50% 50%;
+      }
+
+      .smoke > path {
+        animation: smoke 2s infinite;
+        transform-origin: 50% 50%;
+      }
     }
+  }
+}
+@keyframes smoke {
+  0% {
+    fill: #dedede4d;
+    transform: scale(1);
+  }
+  50% {
+    fill: #dedede86;
+    transform: scale(1.1);
+  }
+  100% {
+    fill: #dedede4d;
+    transform: scale(1);
+  }
+}
+
+@keyframes cup {
+  0% {
+    transform: rotate(3deg);
+  }
+  50% {
+    transform: rotate(1deg);
+  }
+  100% {
+    transform: rotate(-1deg);
+  }
+}
+
+@keyframes take-cup {
+  0% {
+    transform: translateX(0%);
+  }
+  25% {
+    transform: translateX(500%);
+  }
+  75% {
+    transform: translateX(500%);
+  }
+  100% {
+    transform: translateX(0%);
   }
 }

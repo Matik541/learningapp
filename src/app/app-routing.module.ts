@@ -20,7 +20,7 @@ const routes: Routes = [
   { path: 'lesson/:id/:category', component: LessonComponent },
   {
     path: 'profile/:id',
-    component: /*ProfileComponent | delete ->*/ HomeComponent,
+    component: /*ProfileComponent | delete -> HomeComponent*/ HomeComponent,
   },
   { path: '**', component: ErrorComponent },
 ]

@@ -4,6 +4,7 @@ import { NgModule } from '@angular/core'
 import { FormsModule, ReactiveFormsModule } from '@angular/forms'
 import { MatNativeDateModule } from '@angular/material/core'
 import { MatDialogModule, MatDialogRef } from '@angular/material/dialog'
+import { MatChipsModule } from '@angular/material/chips'
 import { BrowserModule } from '@angular/platform-browser'
 import { DragScrollModule } from 'ngx-drag-scroll'
 import { MaterialExampleModule } from 'src/material.module'
@@ -30,7 +31,6 @@ import { QuestionWriteComponent } from './lessons/lesson/quiz/question-write/que
 import { QuestionMatchComponent } from './lessons/lesson/quiz/question-match/question-match.component'
 import { QuestionChooseComponent } from './lessons/lesson/quiz/question-choose/question-choose.component'
 import { ResultComponent } from './lessons/lesson/quiz/result/result.component'
-
 @NgModule({
   declarations: [
     AppComponent,
@@ -69,6 +69,7 @@ import { ResultComponent } from './lessons/lesson/quiz/result/result.component'
     FormsModule,
     ReactiveFormsModule,
     MatDialogModule,
+    MatChipsModule,
   ],
   providers: [
     {

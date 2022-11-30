@@ -103,3 +103,7 @@ quiz-result {
 .primary-hover:hover {
   color: mat.get-color-from-palette($primary, 400);
 }
+
+.message {
+  background-color: mat.get-color-from-palette($primary, 500);
+}
