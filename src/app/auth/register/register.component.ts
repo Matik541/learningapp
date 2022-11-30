@@ -1,7 +1,7 @@
-import { MatSnackBar } from '@angular/material/snack-bar'
+import { MatLegacySnackBar as MatSnackBar } from '@angular/material/legacy-snack-bar'
 import { Component, OnInit, Optional } from '@angular/core'
 import { UsersService } from '../../users.service'
-import { MatDialog, MatDialogRef } from '@angular/material/dialog'
+import { MatLegacyDialog as MatDialog, MatLegacyDialogRef as MatDialogRef } from '@angular/material/legacy-dialog'
 import { FormControl, FormGroup, Validators } from '@angular/forms'
 
 @Component({

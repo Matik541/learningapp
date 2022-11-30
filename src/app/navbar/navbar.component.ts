@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core'
-import { MatDialog } from '@angular/material/dialog'
+import { MatLegacyDialog as MatDialog } from '@angular/material/legacy-dialog'
 import { CreateComponent } from '../lessons/create/create.component'
 import { appName, Bar } from 'src/environments/environment'
 import { NavigationEnd, NavigationStart, Router } from '@angular/router'
