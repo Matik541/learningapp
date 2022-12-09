@@ -41,35 +41,9 @@
     </mat-card-actions>
   </mat-card>
   <div class="flashcards">
-    <mat-card class="flashcard" *ngFor="let flashcard of lesson?.flashcards; let i = index " id="i">
-      <mat-card-content>
-        <div class="content">
-          <span>{{ flashcard.question }}</span>
-          <mat-divider vertical></mat-divider>
-          <span>{{ flashcard.answer }}</span>
-        </div>
-        <div class="editForm hide" *ngIf="lesson?.creator?.id == logged?.id">
-          <mat-form-field appearance="outline" class="hide-hint">
-            <input matInput placeholder="Question" formControlName="ValidFlashcard" required>
-          </mat-form-field>
-          <mat-divider vertical></mat-divider>
-          <mat-form-field appearance="outline" class="hide-hint">
-            <input matInput placeholder="Answer" formControlName="ValidFlashcard" required>
-          </mat-form-field>
-        </div>
-        <div class="action" *ngIf="lesson?.creator?.id == logged?.id">
-          <button mat-mini-fab color="primary" class="edit" (click)="editFlashcard(i, 'edit')">
-            <mat-icon>edit</mat-icon>
-          </button>
-          <button mat-mini-fab color="accent" class="save hide" (click)="editFlashcard(i, 'save')">
-            <mat-icon>check</mat-icon>
-          </button>
-          <button mat-mini-fab color="warn" class="cancel hide" (click)="editFlashcard(i, 'cancel')">
-            <mat-icon>close</mat-icon>
-          </button>
-        </div>
-      </mat-card-content>
-    </mat-card>
+    <lesson-cards *ngFor="let flashcard of lesson?.flashcards; let i = index " [id]="i" [input]="flashcard"
+      [editable]="(lesson?.creator?.id == logged?.id)" (output)="saveFlashcard(i, $event)">
+    </lesson-cards>
     <div class="submit-update">
       <button mat-stroked-button color="warn" class="delete" (click)="deleteLesson()">
         Delete

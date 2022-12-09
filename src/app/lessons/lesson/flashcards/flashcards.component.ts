@@ -1,5 +1,5 @@
-import { I } from '@angular/cdk/keycodes';
 import { Component, Input, OnInit } from '@angular/core';
+import { FormControl, Validators } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
 import { LessonsService } from 'src/app/lessons.service';
 import { UsersService } from 'src/app/users.service';
@@ -72,27 +72,11 @@ export class FlashcardsComponent implements OnInit {
 			}
 		}, 125);
 	}
-
-	editFlashcard(id: number, intent: 'edit' | 'save' | 'cancel'): void {
-		let buttons = {
-			edit: document.querySelectorAll('mat-card-content > .action > .edit')[id],
-			save: document.querySelectorAll('mat-card-content > .action > .save')[id],
-			// cancel: document.querySelectorAll('mat-card-content > .action > .cancel')[id],
-		};
-		let flashcard = document.querySelectorAll('mat-card-content > .content')[id];
-		let editForm = document.querySelectorAll('mat-card-content > .editForm')[id];
-
-		if (intent == 'edit') {
-			buttons.edit?.classList.add('hide');
-			flashcard?.classList.add('hide');
-			editForm?.classList.remove('hide');
-			buttons.save?.classList.remove('hide');
-		} else {
-			buttons.save?.classList.add('hide');
-			editForm?.classList.add('hide');
-			buttons.edit?.classList.remove('hide');
-			flashcard?.classList.remove('hide');
-			this.edited = intent == 'save' || this.edited;
+	saveFlashcard(id: number, event: any): void {
+		console.log(event, this.lesson);
+		if (this.lesson) {
+			this.lesson.flashcards[id] = event;
+			this.edited = true;
 		}
 	}
 

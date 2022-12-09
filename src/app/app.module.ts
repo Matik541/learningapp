@@ -30,7 +30,8 @@ import { ErrorComponent } from './error/error.component'
 import { QuestionWriteComponent } from './lessons/lesson/quiz/question-write/question-write.component'
 import { QuestionMatchComponent } from './lessons/lesson/quiz/question-match/question-match.component'
 import { QuestionChooseComponent } from './lessons/lesson/quiz/question-choose/question-choose.component'
-import { ResultComponent } from './lessons/lesson/quiz/result/result.component'
+import { ResultComponent } from './lessons/lesson/quiz/result/result.component';
+import { CardsComponent } from './lessons/lesson/flashcards/cards/cards.component'
 @NgModule({
   declarations: [
     AppComponent,
@@ -55,6 +56,7 @@ import { ResultComponent } from './lessons/lesson/quiz/result/result.component'
     QuestionMatchComponent,
     QuestionChooseComponent,
     ResultComponent,
+    CardsComponent,
   ],
   imports: [
     DragScrollModule,

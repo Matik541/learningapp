@@ -16,10 +16,16 @@ export type Tag = {
 	id: Number;
 	tagName: String;
 };
-export type Flashcard = {
-	question: string;
-	answer: string;
-};
+export type Flashcard =
+	| {
+			id: number;
+			question: string;
+			answer: string;
+	  }
+	| {
+			question: string;
+			answer: string;
+	  };
 export type User = null | {
 	userName: string;
 	id: number;

@@ -1,0 +1,29 @@
+<mat-card class="flashcard">
+  <mat-card-content>
+    <div class="content">
+      <span>{{ input.question }}</span>
+      <mat-divider vertical></mat-divider>
+      <span>{{ input.answer }}</span>
+    </div>
+    <div class="editForm hide" *ngIf="editable" [formGroup]="validFlashcard">
+      <mat-form-field appearance="outline" class="hide-hint">
+        <input matInput placeholder="Question" formControlName="question" required>
+      </mat-form-field>
+      <mat-divider vertical></mat-divider>
+      <mat-form-field appearance="outline" class="hide-hint">
+        <input matInput placeholder="Answer" formControlName="answer" required>
+      </mat-form-field>
+    </div>
+    <div class="action" *ngIf="editable">
+      <button mat-mini-fab color="primary" class="edit" (click)="editFlashcard('edit')">
+        <mat-icon>edit</mat-icon>
+      </button>
+      <button mat-mini-fab color="accent" class="save hide" (click)="editFlashcard('save')">
+        <mat-icon>check</mat-icon>
+      </button>
+      <button mat-mini-fab color="warn" class="cancel hide" (click)="editFlashcard('cancel')">
+        <mat-icon>close</mat-icon>
+      </button>
+    </div>
+  </mat-card-content>
+</mat-card>
