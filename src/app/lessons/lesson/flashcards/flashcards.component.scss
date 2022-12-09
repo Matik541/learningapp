@@ -74,9 +74,9 @@
       }
       .action {
         position: absolute;
-        transform: translateX(8px);
         display: none;
         button {
+          // transform: translateX(-50%);
           aspect-ratio: 1 / 1 !important;
           box-shadow: var(
             --mdc-protected-button-container-elevation,
@@ -85,9 +85,12 @@
             0px 1px 5px 0px rgba(0, 0, 0, 0.12)
           );
         }
+        &:has(.edit.hide) .cancel {
+          display: flex;
+        }
       }
       &:hover .action {
-        display: block;
+        display: flex;
       }
       & .hide {
         display: none;

@@ -50,11 +50,11 @@
         </div>
         <div class="editForm hide" *ngIf="lesson?.creator?.id == logged?.id">
           <mat-form-field appearance="outline" class="hide-hint">
-            <input matInput placeholder="Question" [(ngModel)]="flashcard.question">
+            <input matInput placeholder="Question" formControlName="ValidFlashcard" required>
           </mat-form-field>
           <mat-divider vertical></mat-divider>
           <mat-form-field appearance="outline" class="hide-hint">
-            <input matInput placeholder="Answer" [(ngModel)]="flashcard.answer">
+            <input matInput placeholder="Answer" formControlName="ValidFlashcard" required>
           </mat-form-field>
         </div>
         <div class="action" *ngIf="lesson?.creator?.id == logged?.id">
@@ -75,7 +75,7 @@
         Delete
         <mat-icon class="material-icons-outlined">delete</mat-icon>
       </button>
-      <button mat-stroked-button color="warn" class="cancel" [disabled]="!edited" (click)="cancelLesson()">
+      <button mat-stroked-button color="warn" class="cancel" [disabled]="!edited" (click)="refreshLesson()">
         Cancel
         <mat-icon class="material-icons-outlined">close</mat-icon>
       </button>

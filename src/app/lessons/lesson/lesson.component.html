@@ -1,29 +1,28 @@
 <div class="lesson">
-  <aside class="menu">
-    <a [routerLink]="'/lesson/'+id+'/flashcards'" mat-raised-button class="block">
-      <mat-icon class="material-icons-round">web_stories</mat-icon>
-      <span>Flashcards</span>
-    </a>
-    <a [routerLink]="'/lesson/'+id+'/learn'" mat-raised-button class="block">
-      <mat-icon class="material-icons-round">school</mat-icon>
-      <span>Learn</span>
-    </a>
-    <a [routerLink]="'/lesson/'+id+'/quiz'" mat-raised-button class="block">
-      <mat-icon class="material-icons-round">quiz</mat-icon>
-      <span>Quiz</span>
-    </a>
-    <a [routerLink]="'/lesson/'+id+'/comments'" mat-raised-button class="block">
-      <mat-icon class="material-icons-round">message</mat-icon>
-      <span>Comments</span>
-    </a>
-  </aside>
-  <lesson-flashcards [class]="['lesson-component', category]" *ngIf="category == 'flashcards'">
-  </lesson-flashcards>
-  <lesson-learn [class]="['lesson-component', category]" *ngIf="category == 'learn'"></lesson-learn>
-  <lesson-quiz [class]="['lesson-component', category]" *ngIf="category == 'quiz'"
-    [quizQuestions]="[write, match, choose]">
-
-  </lesson-quiz>
-  <lesson-comments [class]="['lesson-component', category]" *ngIf="category == 'comments'">
-  </lesson-comments>
+	<aside class="menu">
+		<a [routerLink]="'/lesson/'+id+'/flashcards'" mat-raised-button class="block">
+			<mat-icon class="material-icons-round">web_stories</mat-icon>
+			<span>Flashcards</span>
+		</a>
+		<a [routerLink]="'/lesson/'+id+'/learn'" mat-raised-button class="block">
+			<mat-icon class="material-icons-round">school</mat-icon>
+			<span>Learn</span>
+		</a>
+		<a [routerLink]="'/lesson/'+id+'/quiz'" mat-raised-button class="block">
+			<mat-icon class="material-icons-round">quiz</mat-icon>
+			<span>Quiz</span>
+		</a>
+		<a [routerLink]="'/lesson/'+id+'/comments'" mat-raised-button class="block">
+			<mat-icon class="material-icons-round">message</mat-icon>
+			<span>Comments</span>
+		</a>
+	</aside>
+	<lesson-flashcards [class]="['lesson-component', category]" *ngIf="category == 'flashcards'" [lesson]="lesson">
+	</lesson-flashcards>
+	<lesson-learn [class]="['lesson-component', category]" *ngIf="category == 'learn'"></lesson-learn>
+	<lesson-quiz [class]="['lesson-component', category]" *ngIf="category == 'quiz'" [lesson]="lesson"
+		[quizQuestions]="[write, match, choose]">
+	</lesson-quiz>
+	<lesson-comments [class]="['lesson-component', category]" *ngIf="category == 'comments'" [lesson]="lesson">
+	</lesson-comments>
 </div>
