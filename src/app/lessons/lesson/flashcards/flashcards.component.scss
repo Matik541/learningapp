@@ -1,0 +1,112 @@
+.main {
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+  .label {
+    display: flex;
+    flex-direction: column;
+    .info {
+      align-items: center;
+      display: flex;
+      justify-content: space-between;
+      .title {
+        display: inline-flex;
+        align-items: center;
+        font-size: 1.5rem;
+        font-weight: bold;
+      }
+    }
+    .description {
+      flex-grow: 1;
+    }
+  }
+  & > .flashcard {
+    mat-card-content {
+      align-items: center;
+      display: flex;
+      flex-grow: 1;
+      justify-content: center;
+      overflow: hidden;
+      & > div {
+        display: block;
+        font-size: 1.5rem;
+        word-break: break-all;
+        &.hidden {
+          display: none;
+        }
+      }
+    }
+    mat-card-actions {
+      & > * {
+        flex-grow: 1;
+      }
+    }
+  }
+  .flashcards {
+    display: flex;
+    flex-direction: column;
+    mat-card-content {
+      align-items: center;
+      display: grid;
+      justify-items: end;
+      grid-template-columns: 100%;
+      grid-template-rows: auto;
+      .content {
+        display: flex;
+        justify-content: space-evenly;
+        overflow: hidden;
+        width: 100%;
+        span {
+          align-self: center;
+        }
+      }
+      .editForm {
+        display: flex;
+        justify-content: space-evenly;
+        width: 100%;
+        mat-form-field {
+          width: 100%;
+          flex-grow: 1;
+          input {
+            text-align: center;
+          }
+        }
+      }
+      .action {
+        position: absolute;
+        transform: translateX(8px);
+        display: none;
+        button {
+          aspect-ratio: 1 / 1 !important;
+          box-shadow: var(
+            --mdc-protected-button-container-elevation,
+            0px 3px 1px -2px rgba(0, 0, 0, 0.2),
+            0px 2px 2px 0px rgba(0, 0, 0, 0.14),
+            0px 1px 5px 0px rgba(0, 0, 0, 0.12)
+          );
+        }
+      }
+      &:hover .action {
+        display: block;
+      }
+      & .hide {
+        display: none;
+      }
+    }
+  }
+  .submit-update {
+    display: grid;
+    grid-template-columns: 1fr 1fr 1fr;
+    grid-template-rows: 1fr;
+    grid-template-areas: "delete cancel update";
+    .cancel {
+      grid-area: cancel;
+    }
+    .update {
+      grid-area: update;
+    }
+    .delete {
+      grid-area: delete;
+    }
+  }
+}

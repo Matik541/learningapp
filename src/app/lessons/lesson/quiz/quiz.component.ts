@@ -1,6 +1,6 @@
 import { Component, Input, OnInit } from '@angular/core'
 import { FormArray, FormBuilder, FormControl, FormGroup } from '@angular/forms'
-import { MatLegacyDialog as MatDialog } from '@angular/material/legacy-dialog'
+import { MatDialog } from '@angular/material/dialog'
 import { Flashcard, Lesson } from 'src/environments/environment'
 import { ResultComponent } from './result/result.component'
 @Component({

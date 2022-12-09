@@ -1,11 +1,15 @@
 @import url("https://fonts.googleapis.com/css2?family=Noto+Sans+Mono&family=Roboto&display=swap");
-@import url("https://fonts.googleapis.com/icon?family=Material+Icons|Material+Icons+Round");
+@import url("https://fonts.googleapis.com/icon?family=Material+Icons|Material+Icons+Round|Material+Icons+Outlined|Material+Icons+Sharp");
 
 $bg-color: rgba(217, 217, 217, 0.1);
 
-body {
-  $padding: 3rem;
+$nav-height: 4rem;
 
+$gap: 1rem;
+$padding: 5rem;
+$size: 10rem;
+
+body {
   font-family: Roboto, "Helvetica Neue", sans-serif;
   margin: 0;
 
@@ -17,17 +21,18 @@ body {
   }
 }
 
-html,
 body {
-  height: 100%;
+  min-height: 100vh;
   overflow: hidden;
 }
-
+navbar {
+  position: fixed;
+}
 nav {
   align-items: center;
   background-color: $bg-color;
   display: flex;
-  height: 3rem;
+  height: $nav-height;
   justify-content: space-between;
   position: fixed;
   top: 0;
@@ -115,7 +120,7 @@ nav {
     left: 0;
     opacity: 0;
     position: absolute;
-    top: calc(3rem - 3px);
+    top: calc($nav-height - 3px);
     width: 100%;
     z-index: 9999;
   }
@@ -308,202 +313,35 @@ app-home {
   }
 }
 
-app-lesson > div {
-  $gap: 1rem;
-  $padding: 3rem;
-  $size: 7.5rem;
-
-  display: flex;
-  flex-direction: row;
-  justify-content: center;
-  gap: $gap * 3;
-  margin: 3rem 0 0;
-  padding: 5vh 1rem 0;
-  max-height: calc(100vh - 3rem);
-
-  .menu {
-    align-items: center;
-    display: flex;
-    flex-direction: column;
-    gap: $gap;
-    min-height: 100%;
-    justify-content: flex-start;
-
-    .block {
-      min-width: $size;
-      min-height: $size;
-      transition: color 0.1s;
-
-      .mat-button-wrapper {
-        align-items: center;
-        display: flex;
-        flex-direction: column;
-        height: 100%;
-        justify-content: center;
-
-        .mat-icon {
-          font-size: 2.5rem;
-          height: 3rem;
-          width: 2.5rem;
-          padding-top: 0.5rem;
-        }
+app-lesson {
+  .lesson {
+    position: relative;
+    grid-template-columns: calc($size + $gap) calc((2 * $size + $gap) / 3 * 5);
+    height: calc(100vh - ($nav-height + $gap));
+    top: $nav-height + $gap;
+    padding-bottom: $nav-height + $gap;
+    overflow-y: scroll;
+    .menu {
+      gap: $gap;
+      .block {
+        height: $size;
+        width: $size;
       }
     }
   }
   .main {
-    align-items: stretch;
-    display: flex;
-    flex-direction: column;
     gap: $gap;
-    justify-content: space-between;
-    max-height: calc(95vh - 3rem);
-    overflow-y: scroll;
-    overflow-x: hidden;
-    padding-right: 0.5rem;
-    padding-bottom: 5vh;
-    scroll-snap-type: y mandatory;
-    scroll-behavior: smooth;
-    width: calc(16rem / 3 * 5 + 1rem);
-
-    &.flashcards {
-      .label {
-        display: flex;
-        flex-direction: column;
-        min-height: $size;
-        justify-content: space-evenly;
-        width: 100%;
-
-        .info {
-          align-items: center;
-          display: flex;
-          flex-direction: row;
-          justify-content: space-between;
-          div {
-            align-items: center;
-            display: flex;
-            flex-direction: row;
-            justify-content: center;
-          }
-          .title {
-            font-size: 1.5rem;
-            font-weight: 500;
-            margin: 0;
-            padding: 0;
-            text-transform: capitalize;
-          }
-          .author {
-            display: flex;
-            flex-direction: row;
-            align-items: center;
-          }
-        }
-
-        .description {
-          margin-top: 0.5rem;
-          font-size: 0.75rem;
-          font-weight: 400;
-          height: 3rem;
-          text-transform: capitalize;
-        }
-      }
-
-      & > .flashcard {
-        aspect-ratio: 5 / 3;
-        display: flex;
-        flex-direction: column;
-        min-height: 2 * $size + $gap;
-
-        mat-card-content {
-          flex-grow: 1;
-          display: flex;
-          flex-direction: column;
-          justify-content: center;
-          align-items: center;
-          padding: 0;
-          margin: 0;
-
-          .hidden {
-            display: none;
-          }
-        }
-
-        mat-card-actions {
-          align-items: center;
-          display: flex;
-          flex-direction: row;
-          justify-content: space-between;
-
-          button {
-            flex-grow: 1;
-          }
-        }
-      }
-      .flashcards {
-        display: flex;
-        flex-direction: column;
-        gap: $gap;
-        width: 100%;
-
-        mat-card.flashcard {
-          border-radius: 0.25rem;
-          max-width: 16rem / 3 * 5;
-          width: 100%;
-          & > * {
-            align-items: center;
-            display: flex;
-            justify-content: space-between;
-            .content {
-              flex-grow: 1;
-              display: grid;
-              grid-template-columns: 1fr 1ch 1fr;
-              & mat-divider {
-                margin-right: 0.5ch;
-              }
-              span {
-                padding: 0 1ch;
-                max-width: calc(8rem / 3 * 5 - 1ch - 40px);
-                word-wrap: break-word;
-              }
-            }
-            div.acction {
-              width: 36px;
-              height: 36px;
-              button {
-                min-width: 36px;
-                padding: 0;
-                width: 36px;
-                display: none;
-              }
-              .star {
-                display: block;
-                opacity: 0;
-                &.active {
-                  opacity: 1;
-                }
-              }
-            }
-          }
-          &:hover {
-            div.acction {
-              .edit {
-                display: block;
-              }
-              .star {
-                display: none;
-              }
-            }
-          }
-        }
-      }
+    .label {
+      height: $size;
     }
-
-    &.learn {
+    & > .flashcard {
+      height: 2 * $size + $gap;
     }
-
-    &.quiz {
+    .flashcards {
+      gap: $gap;
     }
-
-    &.comments {
+    .submit-update {
+      gap: $gap;
     }
   }
 }
@@ -527,8 +365,8 @@ errors {
   }
 }
 
-.mat-form-field-wrapper {
-  padding-bottom: 0;
+.hide-hint .mat-mdc-form-field-bottom-align {
+  display: none !important;
 }
 
 #chat {
@@ -589,9 +427,13 @@ errors {
     -webkit-transform: rotateY(0);
     transform: rotateY(0);
   }
-  50% {
+  49% {
     -webkit-transform: rotateY(-90deg);
     transform: rotateY(-90deg);
+  }
+  50% {
+    -webkit-transform: rotateY(90deg);
+    transform: rotateY(90deg);
   }
   100% {
     -webkit-transform: rotateY(0);
@@ -603,18 +445,22 @@ errors {
   0% {
     -webkit-transform: translateX(0);
     transform: translateX(0);
+    opacity: 1;
   }
   49% {
-    -webkit-transform: translateX(-100%);
-    transform: translateX(-100%);
+    -webkit-transform: translateX(-50%);
+    transform: translateX(-50%);
+    opacity: 0;
   }
   50% {
-    -webkit-transform: translateX(100%);
-    transform: translateX(100%);
+    -webkit-transform: translateX(50%);
+    transform: translateX(50%);
+    opacity: 0;
   }
   100% {
     -webkit-transform: rotateY(0);
     transform: rotateY(0);
+    opacity: 1;
   }
 }
 
@@ -622,18 +468,22 @@ errors {
   0% {
     -webkit-transform: translateX(0);
     transform: translateX(0);
+    opacity: 1;
   }
   49% {
-    -webkit-transform: translateX(100%);
-    transform: translateX(100%);
+    -webkit-transform: translateX(50%);
+    transform: translateX(50%);
+    opacity: 0;
   }
   50% {
-    -webkit-transform: translateX(-100%);
-    transform: translateX(-100%);
+    -webkit-transform: translateX(-50%);
+    transform: translateX(-50%);
+    opacity: 0;
   }
   100% {
     -webkit-transform: rotateY(0);
     transform: rotateY(0);
+    opacity: 1;
   }
 }
 

@@ -9,11 +9,11 @@ import {
 } from '@angular/core'
 import { FormControl } from '@angular/forms'
 import {
-  MatLegacyAutocompleteSelectedEvent as MatAutocompleteSelectedEvent,
-  MatLegacyAutocomplete as MatAutocomplete,
-} from '@angular/material/legacy-autocomplete'
-import { MatLegacyChipInputEvent as MatChipInputEvent } from '@angular/material/legacy-chips'
-import { MatLegacyFormFieldAppearance as MatFormFieldAppearance } from '@angular/material/legacy-form-field'
+  MatAutocompleteSelectedEvent,
+  MatAutocomplete,
+} from '@angular/material/autocomplete'
+import { MatChipInputEvent } from '@angular/material/chips'
+import { MatFormFieldAppearance } from '@angular/material/form-field'
 import { Observable } from 'rxjs'
 import { map, startWith } from 'rxjs/operators'
 import { LessonsService } from 'src/app/lessons.service'

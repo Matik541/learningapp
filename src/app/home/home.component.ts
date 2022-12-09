@@ -54,7 +54,16 @@ export class HomeComponent implements OnInit {
 
   getBlocks(id: number[]): any {
     let blocks: Block[] = []
-    id.forEach((id) => blocks.push(this.lessons.getFlashcards(id)))
+    id.forEach((id) => {
+      this.lessons.getLesson(id).subscribe((data) => {
+        if (data != null)
+          blocks.push({
+            title: data.title,
+            icon: data.iconPath,
+            id,
+          })
+      })
+    })
     return blocks
   }
 }

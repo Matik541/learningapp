@@ -45,16 +45,12 @@ export class LessonComponent implements OnInit, OnDestroy {
 
   ngOnInit(): void {
     this.lec = this.lessonsService.getLesson(this.id).subscribe((data) => {
-      this.lesson.creator = data.creator
-      this.lesson.description = data.description
-      this.lesson.flashcards = data.flashcards
-      // this.lesson.icon = data.icon
-      this.lesson.tags = data.tags
-      this.lesson.title = data.title
-
-      this.write = this.setWrite(4)
-      this.match = this.setMatch(5)
-      this.choose = this.setChoose(3)
+      if (data != null) {
+        this.lesson = data
+        this.write = this.setWrite(5)
+        this.match = this.setMatch(5)
+        this.choose = this.setChoose(5)
+      }
     })
   }
 

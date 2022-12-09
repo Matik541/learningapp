@@ -14,36 +14,47 @@ type Alltags = {
 export class LessonsService {
   constructor(private http: HttpClient, private usersService: UsersService) {}
 
-  getFlashcards(id: number): { title: string; icon: string; id: number } {
-    this.http.get(API_URL + '/lessons/' + id)
-    // .subscribe((data) => { console.log(data) })
-
-    return { title: 'asd', icon: 'flash_on', id: id }
-  }
-
   getLessons(): Observable<Lesson[]> {
     return this.http.get<Lesson[]>(API_URL + '/lessons')
   }
 
   getTags(): Observable<Alltags> {
-    return this.http.get<Alltags>(API_URL + '/lessons/tags')
+    let result = this.http.get<Alltags>(API_URL + '/lessons/tags').pipe(
+      tap((data) => data),
+      catchError((err) => {
+        console.log(err)
+        return of([])
+      })
+    )
+    return result
   }
 
-  getLesson(id: number): Observable<Lesson> {
-    return this.http.get<Lesson>(API_URL + '/lessons/' + id)
+  getLesson(id: number): Observable<Lesson | null> {
+    let result = this.http.get<Lesson>(API_URL + '/lessons/' + id).pipe(
+      tap((data) => data),
+      catchError((err) => {
+        console.error(err)
+        return of(null)
+      })
+    )
+    return result
   }
 
   update(id: number, lesson: Lesson): Observable<boolean> {
-    return this.http.put<boolean>(API_URL + '/lessons/' + id, lesson)
+    let headers = { Authorization: `Bearer ${this.usersService.accessToken()}` }
+    return this.http.put<boolean>(API_URL + '/lessons/' + id, lesson, {
+      headers: headers,
+    })
   }
 
   delete(id: number): Observable<boolean> {
-    return this.http.delete<boolean>(API_URL + '/lessons/' + id)
+    let headers = { Authorization: `Bearer ${this.usersService.accessToken()}` }
+    return this.http.delete<boolean>(API_URL + '/lessons/' + id, {
+      headers: headers,
+    })
   }
 
   create(lesson: AddLesson): Observable<boolean> {
-    console.log(lesson)
-
     let headers = { Authorization: `Bearer ${this.usersService.accessToken()}` }
     return this.http.post<boolean>(API_URL + '/lessons/add', lesson, {
       headers: headers,

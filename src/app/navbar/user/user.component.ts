@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core'
 import { UsersService } from '../../users.service'
-import { MatLegacyDialog as MatDialog, MatLegacyDialogRef as MatDialogRef } from '@angular/material/legacy-dialog'
+import { MatDialog, MatDialogRef } from '@angular/material/dialog'
 import { LoginComponent } from '../../auth/login/login.component'
 import { RegisterComponent } from '../../auth/register/register.component'
 import { User } from 'src/environments/environment'

@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core'
 import { LessonsService } from '../../lessons.service'
 import { UsersService } from 'src/app/users.service'
-import { MatLegacyDialogRef as MatDialogRef } from '@angular/material/legacy-dialog'
+import { MatDialogRef } from '@angular/material/dialog'
 import { FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms'
 import { Lesson, Tag, Flashcard, AddLesson } from 'src/environments/environment'
 

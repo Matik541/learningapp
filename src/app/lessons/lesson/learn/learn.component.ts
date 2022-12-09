@@ -34,15 +34,16 @@ export class LearnComponent implements OnInit {
 
   ngOnInit(): void {
     this.sub = this.lessonsService.getLesson(this.id).subscribe((data) => {
-      this.flashcards = data.flashcards
-        .map((flashcard) => {
-          return {
-            flashcard,
-            answer: '',
-            status: 0 as 0,
-          }
-        })
-        .sort(() => Math.random() - 0.5)
+      if (data != null)
+        this.flashcards = data.flashcards
+          .map((flashcard) => {
+            return {
+              flashcard,
+              answer: '',
+              status: 0 as 0,
+            }
+          })
+          .sort(() => Math.random() - 0.5)
       console.log(this.flashcards)
     })
 

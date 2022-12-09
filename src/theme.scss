@@ -1,118 +1,111 @@
 @use "@angular/material" as mat;
 
-// TODO(v15): As of v15 mat.legacy-core no longer includes default typography styles.
-//  The following line adds:
-//    1. Default typography styles for all components
-//    2. Styles for typography hierarchy classes (e.g. .mat-headline-1)
-//  If you specify typography styles for the components you use elsewhere, you should delete this line.
-//  If you don't need the default component typographies but still want the hierarchy styles,
-//  you can delete this line and instead use:
-//    `@include mat.legacy-typography-hierarchy(mat.define-legacy-typography-config());`
-@include mat.all-legacy-component-typographies();
-@include mat.legacy-core();
+@include mat.core();
+$my-primary: mat.define-palette(mat.$deep-purple-palette);
+$my-accent: mat.define-palette(mat.$green-palette, A200, A100, A400);
+$my-warn: mat.define-palette(mat.$pink-palette);
+$my-alt: mat.define-palette(mat.$grey-palette, A100, A200, A400, A700);
+$my-dark: mat.define-palette(mat.$grey-palette, 700, 800, 900);
+$my-grey: mat.define-palette(mat.$grey-palette, 400, 500, 600);
+$my-light: mat.define-palette(mat.$grey-palette, 100, 200, 300);
 
-$primary: mat.define-palette(mat.$deep-purple-palette);
-$accent: mat.define-palette(mat.$green-palette, A200, A100, A400);
-$warn: mat.define-palette(mat.$pink-palette);
-$alt: mat.define-palette(mat.$grey-palette, A100, A200, A400, A700);
-$my_dark: mat.define-palette(mat.$grey-palette, 700, 800, 900);
-$my_grey: mat.define-palette(mat.$grey-palette, 400, 500, 600);
-$my_light: mat.define-palette(mat.$grey-palette, 100, 200, 300);
-
-$theme: mat.define-light-theme(
+$my-theme: mat.define-light-theme(
   (
     color: (
-      primary: $primary,
-      accent: $accent,
-      warn: $warn,
-      alt: $alt,
-      my_light: $my_light,
-      my_grey: $my_grey,
-      my_dark: $my_dark,
+      primary: $my-primary,
+      accent: $my-accent,
+      warn: $my-warn,
+      alt: $my-alt,
+      my-light: $my-light,
+      my-grey: $my-grey,
+      my-dark: $my-dark,
     ),
   )
 );
-$theme: mat.define-dark-theme(
+$my-theme: mat.define-dark-theme(
   (
     color: (
-      primary: $primary,
-      accent: $accent,
-      warn: $warn,
-      alt: $alt,
-      my_light: $my_light,
-      my_grey: $my_grey,
-      my_dark: $my_dark,
+      primary: $my-primary,
+      accent: $my-accent,
+      warn: $my-warn,
+      alt: $my-alt,
+      my-light: $my-light,
+      my-grey: $my-grey,
+      my-dark: $my-dark,
     ),
   )
 );
 
-@include mat.legacy-core-theme($theme);
-@include mat.all-legacy-component-themes($theme);
+@include mat.all-component-themes($my-theme);
 
-@include mat.legacy-button-theme($theme);
-@include mat.legacy-input-theme($theme);
+@include mat.core-theme($my-theme);
+@include mat.button-theme($my-theme);
 
 body {
-  background-color: mat.get-color-from-palette($my_dark, 900);
-  color: mat.get-color-from-palette($my_grey, 400);
+  background-color: mat.get-color-from-palette($my-dark, 900);
+  color: mat.get-color-from-palette($my-grey, 400);
 }
 
-nav {
-  .btn-primary,
-  .search button {
-    background-color: mat.get-color-from-palette($primary, 500);
-  }
-}
 errors {
-  color: mat.get-color-from-palette($warn, 500);
+  color: mat.get-color-from-palette($my-warn, 500);
 }
 
 #cdk-step-content-0-0 > form > div.create-grid > div.row1 > div > div > button {
-  background-color: mat.get-color-from-palette($accent, A200);
+  background-color: mat.get-color-from-palette($my-accent, A200);
 }
 
 .create-dialog mat-card.flashcard {
-  background-color: rgba(mat.get-color-from-palette($my_dark, 700), 0.5) !important;
+  background-color: rgba(mat.get-color-from-palette($my-dark, 700), 0.5) !important;
 }
 
 .block:hover {
-  color: mat.get-color-from-palette($primary, A200);
+  color: mat.get-color-from-palette($my-primary, A200);
 }
 mat-card > mat-card-actions > button.selected {
-  background-color: mat.get-color-from-palette($primary, 500);
+  background-color: mat.get-color-from-palette($my-primary, 500);
   transition: background-color 0.15s ease-in-out;
+}
+lesson {
+  aside.menu {
+    .block {
+      &.selected {
+        background-color: mat.get-color-from-palette($my-primary, 500);
+        transition: background-color 0.15s ease-in-out;
+      }
+    }
+  }
 }
 quiz-result {
   .spiner {
     .incorrect > svg > circle {
-      stroke: mat.get-color-from-palette($warn, 700) !important;
+      stroke: mat.get-color-from-palette($my-warn, 700) !important;
       transform: rotateX(180deg);
     }
     .total > svg > circle {
-      stroke: mat.get-color-from-palette($primary, 700) !important;
+      stroke: mat.get-color-from-palette($my-primary, 700) !important;
     }
     & > * > svg > circle {
       transition: stroke-dashoffset 1.5s cubic-bezier(1, -0.01, 0.25, 1.25) !important;
     }
   }
   .cards mat-card {
-    background-color: rgba(mat.get-color-from-palette($my_dark, 700), 0.5) !important;
+    background-color: rgba(mat.get-color-from-palette($my-dark, 700), 0.5) !important;
   }
 }
 
 .correct,
 .accent-hover:hover {
-  color: mat.get-color-from-palette($accent, A200);
+  color: mat.get-color-from-palette($my-accent, A200);
 }
 .incorrect,
 .warn-hover:hover {
-  color: mat.get-color-from-palette($warn, 500);
+  color: mat.get-color-from-palette($my-warn, 500);
 }
 .total,
 .primary-hover:hover {
-  color: mat.get-color-from-palette($primary, 400);
+  color: mat.get-color-from-palette($my-primary, 400);
 }
 
 .message {
-  background-color: mat.get-color-from-palette($primary, 500);
+  background-color: mat.get-color-from-palette($my-primary, 500);
 }

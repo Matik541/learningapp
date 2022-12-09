@@ -2,11 +2,11 @@
   <div class="label">
     <div class="info">
       <div class="title">
-        <mat-icon>flash_on</mat-icon>
+        <mat-icon>{{lesson?.iconPath}}</mat-icon>
         <span>Lesson title</span>
       </div>
-      <a mat-button color="primary" class="author" [routerLink]="'/profile/'+lesson.creator?.id">
-        <span>{{lesson.creator?.userName}}</span>
+      <a mat-button color="primary" class="author" [routerLink]="'/profile/'+lesson?.creator?.id">
+        <span>{{lesson?.creator?.userName}}</span>
         <mat-icon>
           account_circle
         </mat-icon>
@@ -29,35 +29,60 @@
         </div>
       </div>
     </mat-card-content>
-    <mat-divider inset></mat-divider>
+    <mat-divider></mat-divider>
     <mat-card-actions>
       <button mat-button class="prev" (click)="changeFlashcard(-1)" [disabled]="indexFleshcard == 0">
         <mat-icon>chevron_left</mat-icon>
       </button>
       <button mat-button class="next" (click)="changeFlashcard(1)"
-        [disabled]="indexFleshcard == (lesson.flashcards?.length ?? 1) - 1">
+        [disabled]="indexFleshcard == (lesson?.flashcards?.length ?? 1) - 1">
         <mat-icon>chevron_right</mat-icon>
       </button>
     </mat-card-actions>
   </mat-card>
   <div class="flashcards">
     <mat-card class="flashcard" *ngFor="let flashcard of lesson?.flashcards; let i = index " id="i">
-      <mat-card-subtitle>
+      <mat-card-content>
         <div class="content">
           <span>{{ flashcard.question }}</span>
           <mat-divider vertical></mat-divider>
           <span>{{ flashcard.answer }}</span>
         </div>
-        <div class="acction">
-          <button mat-flat-button color="primary" class="edit" *ngIf="lesson.creator?.id == logged?.id"
-            (click)="editFlashcard(i)">
+        <div class="editForm hide" *ngIf="lesson?.creator?.id == logged?.id">
+          <mat-form-field appearance="outline" class="hide-hint">
+            <input matInput placeholder="Question" [(ngModel)]="flashcard.question">
+          </mat-form-field>
+          <mat-divider vertical></mat-divider>
+          <mat-form-field appearance="outline" class="hide-hint">
+            <input matInput placeholder="Answer" [(ngModel)]="flashcard.answer">
+          </mat-form-field>
+        </div>
+        <div class="action" *ngIf="lesson?.creator?.id == logged?.id">
+          <button mat-mini-fab color="primary" class="edit" (click)="editFlashcard(i, 'edit')">
             <mat-icon>edit</mat-icon>
           </button>
-          <button mat-flat-button disabled class="star">
-            <mat-icon color="accent" class="material-icons-round">star</mat-icon>
+          <button mat-mini-fab color="accent" class="save hide" (click)="editFlashcard(i, 'save')">
+            <mat-icon>check</mat-icon>
+          </button>
+          <button mat-mini-fab color="warn" class="cancel hide" (click)="editFlashcard(i, 'cancel')">
+            <mat-icon>close</mat-icon>
           </button>
         </div>
-      </mat-card-subtitle>
+      </mat-card-content>
     </mat-card>
+    <div class="submit-update">
+      <button mat-stroked-button color="warn" class="delete" (click)="deleteLesson()">
+        Delete
+        <mat-icon class="material-icons-outlined">delete</mat-icon>
+      </button>
+      <button mat-stroked-button color="warn" class="cancel" [disabled]="!edited" (click)="cancelLesson()">
+        Cancel
+        <mat-icon class="material-icons-outlined">close</mat-icon>
+      </button>
+      <button mat-stroked-button color="accent" class="update" [disabled]="!edited" (click)="updateLesson()">
+        Submit
+        <mat-icon class="material-icons-outlined">done</mat-icon>
+      </button>
+    </div>
   </div>
 </div>

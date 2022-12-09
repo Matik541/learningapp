@@ -1,4 +1,4 @@
-<div *ngIf="!!logged">
+<div *ngIf="!!logged" matBadge="7" [matBadgeHidden]="false">
   <button color="accent" mat-button [matMenuTriggerFor]="userMenu">
     {{ logged.userName }}
     <mat-icon>
