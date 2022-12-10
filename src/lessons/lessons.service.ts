@@ -333,7 +333,7 @@ export class LessonsService {
     }
 
     // delete lesson flashcards
-    await this.flashcardRepository.delete({ id: lesson.id });
+    await this.flashcardRepository.delete({ lesson: lesson });
 
     // delete lesson comments
     await this.commentRepository.delete({ lesson: lesson });
@@ -341,12 +341,8 @@ export class LessonsService {
     // delete users score
     await this.lessonCompletedRepository.delete({ lesson: lesson });
 
-    try {
-      // remove lesson from db
-      await this.lessonsRepository.remove(lesson);
-    } catch (err) {
-      throw new BadRequestException(err);
-    }
+    // remove lesson from db
+    await this.lessonsRepository.remove(lesson);
 
     return lesson;
   }
