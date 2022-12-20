@@ -1,5 +1,6 @@
 import { Module } from '@nestjs/common';
 import { TypeOrmModule } from '@nestjs/typeorm';
+import { JwtModule } from '@nestjs/jwt';
 
 // controller
 import { LessonsController } from './lessons.controller';
@@ -15,6 +16,9 @@ import { User } from 'src/users/entities/user.entity';
 import { Comment } from './entities/comment.entity';
 import { LessonCompleted } from './entities/lessonCompleted.entity';
 
+// utils
+import { JWTUtil } from '../auth/utils/jwt.util';
+
 @Module({
   imports: [
     TypeOrmModule.forFeature([
@@ -25,8 +29,9 @@ import { LessonCompleted } from './entities/lessonCompleted.entity';
       Comment,
       LessonCompleted,
     ]),
+    JwtModule.register({}),
   ],
   controllers: [LessonsController],
-  providers: [LessonsService],
+  providers: [LessonsService, JWTUtil],
 })
 export class LessonsModule {}

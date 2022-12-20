@@ -10,6 +10,7 @@ import {
   UseGuards,
   Delete,
   Query,
+  Headers,
 } from '@nestjs/common';
 import { ApiBearerAuth, ApiResponse, ApiTags } from '@nestjs/swagger';
 
@@ -26,21 +27,27 @@ import { GetAllLessonsQueryParametersDto } from './dto/getAllLessonsQueryParamet
 import { UpdateLessonDto } from './dto/updateLesson.dto';
 import { AddCommentDto } from './dto/comment/addComment.dto';
 import { UpdateCommentDto } from './dto/comment/updateComment.dto';
+import { LessonCompletedDto } from './dto/lessonCompleted.dto';
 
 // entity
 import { Lesson } from './entities/lesson.entity';
 import { Tag } from './entities/tag.entity';
 import { Comment } from './entities/comment.entity';
+import { LessonCompleted } from './entities/lessonCompleted.entity';
 
 // service
 import { LessonsService } from './lessons.service';
-import { LessonCompletedDto } from './dto/lessonCompleted.dto';
-import { LessonCompleted } from './entities/lessonCompleted.entity';
+
+// utils
+import { JWTUtil } from 'src/auth/utils/jwt.util';
 
 @ApiTags('lessons')
 @Controller('lessons')
 export class LessonsController {
-  constructor(private readonly lessonsService: LessonsService) {}
+  constructor(
+    private readonly jwtUtil: JWTUtil,
+    private readonly lessonsService: LessonsService,
+  ) {}
 
   @Get()
   @HttpCode(HttpStatus.OK)
@@ -49,10 +56,10 @@ export class LessonsController {
     description:
       'Return all lessons data. Filter them by tags. Query parameters is tags ids',
   })
-  getAllLessons(
-    @LoginedUserDecorator() userId: number | undefined,
+  async getAllLessons(
+    @Headers('Authorization') userToken,
     @Query() query: GetAllLessonsQueryParametersDto,
-  ): Promise<Lesson[]> {
+  ) {
     let lessons: Promise<Lesson[]>;
 
     // search
@@ -63,48 +70,62 @@ export class LessonsController {
       lessons = this.lessonsService.getSearchedLessons(query.searchQuery);
     }
 
-    // filter
-    if (typeof query.tagIds !== 'undefined' && query.tagIds.length > 0) {
-      if (typeof lessons === 'undefined') {
-        lessons = this.lessonsService.getAllLessonsWithFilters(
-          userId,
-          query.tagIds,
-          undefined,
-        );
-      } else {
-        lessons = this.lessonsService.getAllLessonsWithFilters(
-          userId,
-          query.tagIds,
-          lessons,
-        );
+    if (userToken != undefined) {
+      // decode jwt token and get id of authorized user
+      const userId = await this.jwtUtil.decode(userToken).sub;
+
+      // filter
+      if (typeof query.tagIds !== 'undefined' && query.tagIds.length > 0) {
+        if (typeof lessons === 'undefined') {
+          lessons = this.lessonsService.getAllLessonsWithFilters(
+            query.tagIds,
+            undefined,
+            userId,
+          );
+        } else {
+          lessons = this.lessonsService.getAllLessonsWithFilters(
+            query.tagIds,
+            lessons,
+            userId,
+          );
+        }
+      }
+
+      // simple get all lesson without filters
+      if (
+        typeof query.tagIds === 'undefined' &&
+        typeof query.searchQuery === 'undefined'
+      ) {
+        lessons = this.lessonsService.getAllLessons(userId);
+      }
+    } else {
+      console.log('no');
+
+      // filter
+      if (typeof query.tagIds !== 'undefined' && query.tagIds.length > 0) {
+        if (typeof lessons === 'undefined') {
+          lessons = this.lessonsService.getAllLessonsWithFilters(
+            query.tagIds,
+            undefined,
+          );
+        } else {
+          lessons = this.lessonsService.getAllLessonsWithFilters(
+            query.tagIds,
+            lessons,
+          );
+        }
+      }
+
+      // simple get all lesson without filters
+      if (
+        typeof query.tagIds === 'undefined' &&
+        typeof query.searchQuery === 'undefined'
+      ) {
+        lessons = this.lessonsService.getAllLessons();
       }
     }
 
-    // simple get all lesson without filters
-    if (
-      typeof query.tagIds === 'undefined' &&
-      typeof query.searchQuery === 'undefined'
-    ) {
-      lessons = this.lessonsService.getAllLessons(userId);
-    }
-
     return lessons;
-  }
-
-  @ApiBearerAuth()
-  @UseGuards(AuthorizationGuard)
-  @Get('logged')
-  @HttpCode(HttpStatus.OK)
-  @ApiResponse({
-    status: HttpStatus.OK,
-    description:
-      'Return all lessons data. Filter them by tags. Query parameters is tags ids',
-  })
-  getAllLessonsForLoggedUser(
-    @LoginedUserDecorator('sub') userId: number,
-    @Query() query: GetAllLessonsQueryParametersDto,
-  ): Promise<Lesson[]> {
-    return this.getAllLessons(userId, query);
   }
 
   @Get('tags')

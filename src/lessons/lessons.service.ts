@@ -68,7 +68,9 @@ export class LessonsService {
    * and username fields. Then return selected lessons data.
    * @returns An array of lessons.
    */
-  async getAllLessons(userId: number | undefined): Promise<Lesson[]> {
+  async getAllLessons(
+    userId: number | undefined = undefined,
+  ): Promise<Lesson[]> {
     let lessons: Lesson[];
 
     // find and return all lessons
@@ -102,9 +104,9 @@ export class LessonsService {
   }
 
   async getAllLessonsWithFilters(
-    userId: number | undefined,
     tagIds: number[],
     lessonsSearched: Promise<Lesson[]> | undefined,
+    userId: number | undefined = undefined,
   ): Promise<Lesson[]> {
     // get lessons
     let lessons =
