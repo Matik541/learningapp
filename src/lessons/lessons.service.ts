@@ -1,6 +1,6 @@
 import { BadRequestException, Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
-import { In, IsNull, Like, Repository } from 'typeorm';
+import { In, IsNull, Repository } from 'typeorm';
 
 // dto
 import { AddLessonDto } from './dto/addLesson.dto';
@@ -68,49 +68,6 @@ export class LessonsService {
     userId: number | undefined | null = null,
     queryParams: GetAllLessonsQueryParametersDto | undefined | null = null,
   ): Promise<Lesson[]> {
-    // let getLessonFindParameters: any = this.getLessonFindParameters;
-    // // check is user logged
-    // // if logged add lesson results
-    // if (userId != null || userId != undefined) {
-    //   getLessonFindParameters = {
-    //     select: { ...getLessonFindParameters.select, score: true },
-    //     relations: {
-    //       ...getLessonFindParameters.relations,
-    //       score: true,
-    //     },
-    //   };
-    // }
-    // // console.log(getLessonFindParameters);
-    // if (queryParams != null || queryParams != undefined) {
-    //   if (
-    //     queryParams.searchQuery != null &&
-    //     queryParams.searchQuery.length > 0
-    //   ) {
-    //     getLessonFindParameters = {
-    //       ...getLessonFindParameters,
-    //       where: [
-    //         { title: Like('%' + queryParams.searchQuery + '%') },
-    //         { description: Like('%' + queryParams.searchQuery + '%') },
-    //       ],
-    //     };
-    //   }
-    //   // console.log(getLessonFindParameters);
-    //   if (queryParams.tagIds !== undefined && queryParams.tagIds.length > 0) {
-    //     // const whereTagIds = [];
-    //     // for (const tagId of queryParams.tagIds)
-    //     //   whereTagIds.push({ id: +tagId });
-    //     getLessonFindParameters = {
-    //       ...getLessonFindParameters,
-    //     };
-    //   }
-    //   console.log(getLessonFindParameters.where);
-    // }
-    // try {
-    //   return await this.lessonsRepository.find({ ...getLessonFindParameters });
-    // } catch (err) {
-    //   throw new BadRequestException(err);
-    // }
-
     const lessons = this.lessonsRepository
       .createQueryBuilder('lessons')
       .select([
@@ -121,8 +78,27 @@ export class LessonsService {
         'creator.id',
         'creator.userName',
       ])
-      .leftJoin('lessons.creator', 'creator')
-      .leftJoinAndSelect('lessons.tags', 'tags')
+      .leftJoin('lessons.creator', 'creator');
+
+    // check is user logged
+    // if logged add lesson result
+    if (userId != null || userId != undefined) {
+      lessons
+        .addSelect('score.score')
+        .leftJoin(
+          'lessons.score',
+          'score',
+          'score.lessonId = lessons.id AND score.userId = :user_id',
+          { user_id: userId },
+        );
+    }
+
+    lessons.leftJoinAndSelect('lessons.tags', 'tags');
+
+    if (queryParams.tagIds !== undefined && queryParams.tagIds.length > 0) {
+    }
+
+    lessons
       .leftJoinAndSelect('lessons.flashcards', 'flashcards')
       .leftJoinAndSelect('lessons.comments', 'comments');
 
