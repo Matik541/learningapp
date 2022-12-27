@@ -60,72 +60,14 @@ export class LessonsController {
     @Headers('Authorization') userToken,
     @Query() query: GetAllLessonsQueryParametersDto,
   ) {
-    let lessons: Promise<Lesson[]>;
-
-    // search
-    if (
-      typeof query.searchQuery !== 'undefined' &&
-      query.searchQuery.length > 0
-    ) {
-      lessons = this.lessonsService.getSearchedLessons(query.searchQuery);
-    }
+    let userId: number | null = null;
 
     if (userToken != undefined) {
       // decode jwt token and get id of authorized user
-      const userId = await this.jwtUtil.decode(userToken).sub;
-
-      // filter
-      if (typeof query.tagIds !== 'undefined' && query.tagIds.length > 0) {
-        if (typeof lessons === 'undefined') {
-          lessons = this.lessonsService.getAllLessonsWithFilters(
-            query.tagIds,
-            undefined,
-            userId,
-          );
-        } else {
-          lessons = this.lessonsService.getAllLessonsWithFilters(
-            query.tagIds,
-            lessons,
-            userId,
-          );
-        }
-      }
-
-      // simple get all lesson without filters
-      if (
-        typeof query.tagIds === 'undefined' &&
-        typeof query.searchQuery === 'undefined'
-      ) {
-        lessons = this.lessonsService.getAllLessons(userId);
-      }
-    } else {
-      console.log('no');
-
-      // filter
-      if (typeof query.tagIds !== 'undefined' && query.tagIds.length > 0) {
-        if (typeof lessons === 'undefined') {
-          lessons = this.lessonsService.getAllLessonsWithFilters(
-            query.tagIds,
-            undefined,
-          );
-        } else {
-          lessons = this.lessonsService.getAllLessonsWithFilters(
-            query.tagIds,
-            lessons,
-          );
-        }
-      }
-
-      // simple get all lesson without filters
-      if (
-        typeof query.tagIds === 'undefined' &&
-        typeof query.searchQuery === 'undefined'
-      ) {
-        lessons = this.lessonsService.getAllLessons();
-      }
+      userId = await this.jwtUtil.decode(userToken).sub;
     }
 
-    return lessons;
+    return await this.lessonsService.getAllLessons(userId, query);
   }
 
   @Get('tags')

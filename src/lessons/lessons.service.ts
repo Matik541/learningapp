@@ -10,6 +10,7 @@ import { AddFlashcardDto } from './dto/flashcard/addFlashcard.dto';
 import { AddCommentDto } from './dto/comment/addComment.dto';
 import { UpdateCommentDto } from './dto/comment/updateComment.dto';
 import { LessonCompletedDto } from './dto/lessonCompleted.dto';
+import { GetAllLessonsQueryParametersDto } from './dto/getAllLessonsQueryParameters.dto';
 
 // entity
 import { Lesson } from './entities/lesson.entity';
@@ -63,91 +64,69 @@ export class LessonsService {
     },
   };
 
-  /**
-   * Find all lessons, select only the id, title, description and include the creator's id
-   * and username fields. Then return selected lessons data.
-   * @returns An array of lessons.
-   */
   async getAllLessons(
-    userId: number | undefined = undefined,
+    userId: number | undefined | null = null,
+    queryParams: GetAllLessonsQueryParametersDto | undefined | null = null,
   ): Promise<Lesson[]> {
-    let lessons: Lesson[];
+    // let getLessonFindParameters: any = this.getLessonFindParameters;
+    // // check is user logged
+    // // if logged add lesson results
+    // if (userId != null || userId != undefined) {
+    //   getLessonFindParameters = {
+    //     select: { ...getLessonFindParameters.select, score: true },
+    //     relations: {
+    //       ...getLessonFindParameters.relations,
+    //       score: true,
+    //     },
+    //   };
+    // }
+    // // console.log(getLessonFindParameters);
+    // if (queryParams != null || queryParams != undefined) {
+    //   if (
+    //     queryParams.searchQuery != null &&
+    //     queryParams.searchQuery.length > 0
+    //   ) {
+    //     getLessonFindParameters = {
+    //       ...getLessonFindParameters,
+    //       where: [
+    //         { title: Like('%' + queryParams.searchQuery + '%') },
+    //         { description: Like('%' + queryParams.searchQuery + '%') },
+    //       ],
+    //     };
+    //   }
+    //   // console.log(getLessonFindParameters);
+    //   if (queryParams.tagIds !== undefined && queryParams.tagIds.length > 0) {
+    //     // const whereTagIds = [];
+    //     // for (const tagId of queryParams.tagIds)
+    //     //   whereTagIds.push({ id: +tagId });
+    //     getLessonFindParameters = {
+    //       ...getLessonFindParameters,
+    //     };
+    //   }
+    //   console.log(getLessonFindParameters.where);
+    // }
+    // try {
+    //   return await this.lessonsRepository.find({ ...getLessonFindParameters });
+    // } catch (err) {
+    //   throw new BadRequestException(err);
+    // }
 
-    // find and return all lessons
-    try {
-      lessons = await this.lessonsRepository.find({
-        ...this.getLessonFindParameters,
-      });
-    } catch (err) {
-      throw new BadRequestException(err);
-    }
+    const lessons = this.lessonsRepository
+      .createQueryBuilder('lessons')
+      .select([
+        'lessons.id',
+        'lessons.title',
+        'lessons.description',
+        'lessons.iconPath',
+        'creator.id',
+        'creator.userName',
+      ])
+      .leftJoin('lessons.creator', 'creator')
+      .leftJoinAndSelect('lessons.tags', 'tags')
+      .leftJoinAndSelect('lessons.flashcards', 'flashcards')
+      .leftJoinAndSelect('lessons.comments', 'comments');
 
-    if (userId !== undefined) {
-      // add user score to the lessons data
-      lessons = await Promise.all(
-        lessons.map(async (lesson: Lesson): Promise<Lesson> => {
-          const lessonCompleted = await this.getLessonCompleted(
-            userId,
-            lesson.id,
-          );
-
-          if (lessonCompleted !== null) {
-            lesson.score = lessonCompleted.score;
-          }
-
-          return lesson;
-        }),
-      );
-    }
-
-    return lessons;
-  }
-
-  async getAllLessonsWithFilters(
-    tagIds: number[],
-    lessonsSearched: Promise<Lesson[]> | undefined,
-    userId: number | undefined = undefined,
-  ): Promise<Lesson[]> {
-    // get lessons
-    let lessons =
-      typeof lessonsSearched === 'undefined'
-        ? await this.getAllLessons(userId)
-        : await lessonsSearched;
-
-    // get tags by ids
-    const tags = await this.getLessonTags(tagIds);
-
-    // filter lessons by tags
-    tags.forEach((tag) => {
-      lessons = lessons.filter((lesson) => {
-        if (JSON.stringify(lesson.tags).includes(JSON.stringify(tag))) {
-          return lesson;
-        }
-      });
-    });
-
-    // return filtered lessons
-    return lessons;
-  }
-
-  /**
-   * It returns all lessons where the searchBy string is found in the title or description.
-   * @param {string} searchBy - string - the string we're searching for.
-   * @returns Lessons where the searchBy string is found in the title or description.
-   */
-  async getSearchedLessons(searchBy: string): Promise<Lesson[]> {
-    // return lessons where find key words in title or description
-    try {
-      return await this.lessonsRepository.find({
-        where: [
-          { title: Like('%' + searchBy + '%') },
-          { description: Like('%' + searchBy + '%') },
-        ],
-        ...this.getLessonFindParameters,
-      });
-    } catch (err) {
-      throw new BadRequestException(err);
-    }
+    return await lessons.getMany();
   }
 
   /**

@@ -43,5 +43,5 @@ export class Lesson {
   comments: Comment[];
 
   @OneToMany(() => LessonCompleted, (lessonCompleted) => lessonCompleted.lesson)
-  score: number;
+  score: LessonCompleted;
 }
