@@ -77,8 +77,7 @@ export class LessonsService {
         'lessons.iconPath',
         'creator.id',
         'creator.userName',
-      ])
-      .leftJoin('lessons.creator', 'creator');
+      ]);
 
     // check is user logged
     // if logged add lesson result
@@ -93,16 +92,57 @@ export class LessonsService {
         );
     }
 
-    lessons.leftJoinAndSelect('lessons.tags', 'tags');
+    // create a sub query that find lessons with chosen tags
+    // then filter lessons by sub query
+    if (queryParams.tagIds !== undefined && queryParams.searchQuery !== null) {
+      const subQuery = this.lessonsRepository
+        .createQueryBuilder('l')
+        .select('l.id')
+        .innerJoin('l.tags', 't');
 
-    if (queryParams.tagIds !== undefined && queryParams.tagIds.length > 0) {
+      if (
+        Array.isArray(queryParams.tagIds) === true &&
+        queryParams.tagIds.length > 0
+      ) {
+        subQuery
+          .where('t.id IN (:...ids)', { ids: queryParams.tagIds })
+          .groupBy('l.id')
+          .having('COUNT(t.id) = ' + queryParams.tagIds.length);
+      } else {
+        subQuery.where('t.id = :id', { id: queryParams.tagIds });
+      }
+
+      lessons
+        .andWhere('lessons.id IN (' + subQuery.getQuery() + ')')
+        .setParameters(subQuery.getParameters());
+    }
+
+    // search lessons that have inputted text in title or description
+    if (
+      queryParams.searchQuery !== undefined &&
+      queryParams.searchQuery !== null &&
+      queryParams.searchQuery.length > 0
+    ) {
+      lessons
+        .andWhere('lessons.title LIKE :title', {
+          title: `%${queryParams.searchQuery}%`,
+        })
+        .andWhere('lessons.description LIKE :description', {
+          description: `%${queryParams.searchQuery}%`,
+        });
     }
 
     lessons
+      .leftJoin('lessons.creator', 'creator')
+      .leftJoinAndSelect('lessons.tags', 'tags')
       .leftJoinAndSelect('lessons.flashcards', 'flashcards')
       .leftJoinAndSelect('lessons.comments', 'comments');
 
-    return await lessons.getMany();
+    try {
+      return await lessons.getMany();
+    } catch (err) {
+      throw new BadRequestException(err);
+    }
   }
 
   /**

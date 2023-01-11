@@ -1,5 +1,6 @@
 import { ApiProperty } from '@nestjs/swagger';
-import { IsNotEmpty, IsOptional } from 'class-validator';
+import { Type } from 'class-transformer';
+import { IsNumber, IsOptional } from 'class-validator';
 
 export class GetAllLessonsQueryParametersDto {
   @ApiProperty({
@@ -7,14 +8,16 @@ export class GetAllLessonsQueryParametersDto {
     type: [Number],
     required: false,
   })
-  @IsNotEmpty()
+  @Type(() => Number)
+  @IsNumber({}, { each: true })
   @IsOptional()
-  tagIds: number[];
+  tagIds?: number[];
 
   @ApiProperty({
     description: 'Search parameter',
     type: String,
     required: false,
   })
-  searchQuery: string;
+  @IsOptional()
+  searchQuery?: string;
 }

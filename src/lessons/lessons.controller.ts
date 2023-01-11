@@ -11,6 +11,8 @@ import {
   Delete,
   Query,
   Headers,
+  UsePipes,
+  ValidationPipe,
 } from '@nestjs/common';
 import { ApiBearerAuth, ApiResponse, ApiTags } from '@nestjs/swagger';
 
@@ -51,6 +53,7 @@ export class LessonsController {
 
   @Get()
   @HttpCode(HttpStatus.OK)
+  @UsePipes(new ValidationPipe({ transform: true }))
   @ApiResponse({
     status: HttpStatus.OK,
     description:
