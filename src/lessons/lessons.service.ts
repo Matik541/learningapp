@@ -1,6 +1,6 @@
 import { BadRequestException, Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
-import { In, IsNull, Repository } from 'typeorm';
+import { IsNull, Repository, SelectQueryBuilder } from 'typeorm';
 
 // dto
 import { AddLessonDto } from './dto/addLesson.dto';
@@ -32,65 +32,24 @@ export class LessonsService {
   ) {}
 
   // find lesson in db parameters
-  private readonly getLessonFindParameters = {
-    select: {
-      id: true,
-      title: true,
-      description: true,
-      iconPath: true,
-      // get only id and username from creator
-      creator: {
-        id: true,
-        userName: true,
-      },
-      tags: true,
-      flashcards: true,
-      comments: {
-        id: true,
-        creator: {
-          id: true,
-          userName: true,
-        },
-        comment: true,
-      },
-    },
-    relations: {
-      creator: true,
-      tags: true,
-      flashcards: true,
-      comments: {
-        creator: true,
-      },
-    },
-  };
+  private readonly getLessonSelectParameters = [
+    'lessons.id',
+    'lessons.title',
+    'lessons.description',
+    'lessons.iconPath',
+    'creator.id',
+    'creator.userName',
+  ];
 
   async getAllLessons(
     userId: number | undefined | null = null,
     queryParams: GetAllLessonsQueryParametersDto | undefined | null = null,
   ): Promise<Lesson[]> {
-    const lessons = this.lessonsRepository
+    let lessons = this.lessonsRepository
       .createQueryBuilder('lessons')
-      .select([
-        'lessons.id',
-        'lessons.title',
-        'lessons.description',
-        'lessons.iconPath',
-        'creator.id',
-        'creator.userName',
-      ]);
+      .select(this.getLessonSelectParameters);
 
-    // check is user logged
-    // if logged add lesson result
-    if (userId != null || userId != undefined) {
-      lessons
-        .addSelect('score.score')
-        .leftJoin(
-          'lessons.score',
-          'score',
-          'score.lessonId = lessons.id AND score.userId = :user_id',
-          { user_id: userId },
-        );
-    }
+    lessons = this.getUserScore(lessons, userId);
 
     // create a sub query that find lessons with chosen tags
     // then filter lessons by sub query
@@ -159,18 +118,31 @@ export class LessonsService {
   }
 
   /**
-   * Find a lesson by id, select only the id, title, description and include the creator's id
+   * Find a lesson by id, include the creator's id
    * and username fields. Then return lesson data.
-   * @param {number} id - number - the id of the lesson we want to get.
+   * @param {number} lessonId - number - the id of the lesson we want to get.
    * @returns Lesson object.
    */
-  async getLessonById(id: number): Promise<Lesson> {
+  async getLessonById(
+    lessonId: number,
+    userId: number | undefined | null = null,
+  ): Promise<Lesson> {
     // find lesson by id and return lesson data
+    let lessons = this.lessonsRepository
+      .createQueryBuilder('lessons')
+      .select(this.getLessonSelectParameters);
+
+    lessons = this.getUserScore(lessons, userId);
+
+    lessons
+      .leftJoin('lessons.creator', 'creator')
+      .leftJoinAndSelect('lessons.tags', 'tags')
+      .leftJoinAndSelect('lessons.flashcards', 'flashcards')
+      .leftJoinAndSelect('lessons.comments', 'comments')
+      .where('lessons.id = :lesson_id', { lesson_id: lessonId });
+
     try {
-      return await this.lessonsRepository.findOneOrFail({
-        where: { id },
-        ...this.getLessonFindParameters,
-      });
+      return await lessons.getOneOrFail();
     } catch (err) {
       throw new BadRequestException(err);
     }
@@ -375,31 +347,6 @@ export class LessonsService {
   }
 
   /**
-   * "Get the lesson completed for the given user and lesson."
-   * The function is async, so it returns a promise. The function returns a LessonCompleted object or
-   * null
-   * @param {number} userId - number,
-   * @param {number} lessonId - number - The id of the lesson that the user is trying to complete.
-   * @returns A lesson completed object
-   */
-  async getLessonCompleted(
-    userId: number,
-    lessonId: number,
-  ): Promise<LessonCompleted> | null {
-    try {
-      return await this.lessonCompletedRepository.findOne({
-        where: { lesson: { id: lessonId }, user: { id: userId } },
-        relations: {
-          lesson: true,
-          user: true,
-        },
-      });
-    } catch (err) {
-      throw new BadRequestException(err);
-    }
-  }
-
-  /**
    * It creates a new LessonCompleted object, saves it to the database, and returns the saved object
    * @param {number} userId - number - the id of the user who completed the lesson
    * @param {number} lessonId - The id of the lesson that the user is completing.
@@ -460,25 +407,30 @@ export class LessonsService {
   }
 
   /**
-   * "Get all the tags that are associated with the lesson."
-   * The function takes an array of tag ids and returns an array of tags.
-   * @param {number[]} tagIds - number[] - an array of tag ids
-   * @returns An array of tags
+   * It takes a query builder lessons and a user id, and if the user id is not null or undefined, it adds a
+   * score column to the query builder and joins the score table to the lessons table
+   * @param lessons - SelectQueryBuilder<Lesson> - the query builder object
+   * @param {number} userId - number - the id of the user who is logged in
+   * @returns SelectQueryBuilder<Lesson>
    */
-  private async getLessonTags(tagIds: number[]): Promise<Tag[]> {
-    let tags: Tag[];
-
-    try {
-      tags = await this.tagRepository.find({
-        where: {
-          id: In(tagIds),
-        },
-      });
-    } catch (err) {
-      throw new BadRequestException(err);
+  getUserScore(
+    lessons: SelectQueryBuilder<Lesson>,
+    userId: number,
+  ): SelectQueryBuilder<Lesson> {
+    // check is user logged
+    // if logged add lesson result
+    if (userId != null || userId != undefined) {
+      lessons
+        .addSelect('score.score')
+        .leftJoin(
+          'lessons.score',
+          'score',
+          'score.lessonId = lessons.id AND score.userId = :user_id',
+          { user_id: userId },
+        );
     }
 
-    return tags;
+    return lessons;
   }
 
   /**

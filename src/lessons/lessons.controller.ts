@@ -89,8 +89,18 @@ export class LessonsController {
     status: HttpStatus.OK,
     description: 'Return lesson data by id.',
   })
-  getLessonById(@Param('id') id: string): Promise<Lesson> {
-    return this.lessonsService.getLessonById(+id);
+  async getLessonById(
+    @Param('id') id: string,
+    @Headers('Authorization') userToken,
+  ): Promise<Lesson> {
+    let userId: number | null = null;
+
+    if (userToken != undefined) {
+      // decode jwt token and get id of authorized user
+      userId = await this.jwtUtil.decode(userToken).sub;
+    }
+
+    return await this.lessonsService.getLessonById(+id, userId);
   }
 
   @ApiBearerAuth()
