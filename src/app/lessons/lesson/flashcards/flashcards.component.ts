@@ -11,8 +11,11 @@ import { Flashcard, Lesson, User } from 'src/environments/environment';
 	styleUrls: ['./flashcards.component.scss'],
 })
 export class FlashcardsComponent implements OnInit {
-	@Input() lesson: Lesson | undefined = {} as Lesson;
+	id: number = 0;
+	private sub: any;
+	private lec: any;
 
+	lesson: Lesson | undefined = {} as Lesson;
 	logged: User = {} as User;
 
 	flashcard: Flashcard = {} as Flashcard;
@@ -21,22 +24,36 @@ export class FlashcardsComponent implements OnInit {
 	edited: boolean = false;
 
 	constructor(
-		private usersService: UsersService,
+		private activeRoute: ActivatedRoute,
 		private route: Router,
+		private usersService: UsersService,
 		private lessonsService: LessonsService
 	) {
 		this.logged = this.usersService.loggedUser;
+		this.sub = this.activeRoute.params.subscribe((params) => {
+			this.id = +params['id'];
+		});
 	}
 
 	ngOnInit(): void {
+		this.lec = this.lessonsService.getLesson(this.id).subscribe((data) => {
+			if (data != null) {
+				this.lesson = data;
+			}
+		});
 		setTimeout(() => {
 			if (this.lesson)
 				if (this.lesson.flashcards?.length > 0) this.flashcard = this.lesson.flashcards[0];
 		}, 1);
 	}
+	ngOnDestroy() {
+		this.sub.unsubscribe();
+		this.lec.unsubscribe();
+	}
 
 	flipFlashcard(): void {
 		let card = document.querySelector('.flashcard');
+		let flipBtn = document.querySelector('.flip');
 		let front = document.querySelector('.front');
 		let back = document.querySelector('.back');
 		card?.setAttribute('style', 'animation: none');
@@ -45,6 +62,7 @@ export class FlashcardsComponent implements OnInit {
 		card?.addEventListener('animationend', () => card?.setAttribute('style', 'animation: none'));
 
 		setTimeout(() => {
+			flipBtn?.classList.toggle('flipped');
 			front?.classList.toggle('hidden');
 			back?.classList.toggle('hidden');
 		}, 250);

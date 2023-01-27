@@ -1,6 +1,4 @@
 .main {
-  display: flex;
-  flex-direction: column;
   width: 100%;
   .label {
     display: flex;
@@ -14,6 +12,16 @@
         align-items: center;
         font-size: 1.5rem;
         font-weight: bold;
+        mat-icon {
+          display: flex;
+          justify-content: center;
+          padding: 0.5rem;
+          height: 2.25rem;
+          width: 2.25rem;
+        }
+      }
+      .author {
+        text-decoration: none;
       }
     }
     .description {
@@ -37,8 +45,19 @@
       }
     }
     mat-card-actions {
-      & > * {
+      & > button.change {
         flex-grow: 1;
+      }
+      & > button.flip {
+        padding: 0;
+        display: flex;
+        aspect-ratio: 1/1;
+        mat-icon {
+          margin-right: 0;
+        }
+        &.flipped {
+          transform: rotate(180deg);
+        }
       }
     }
   }

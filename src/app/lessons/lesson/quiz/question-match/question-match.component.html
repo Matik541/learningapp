@@ -1,16 +1,16 @@
 <div class="question">
   <mat-card class="flashcard">
-    <mat-card-subtitle>
+    <mat-card-content>
       <div class="content">
-        <span>{{ question.question }}</span>
+        {{ question.question }}
       </div>
-    </mat-card-subtitle>
-    <mat-divider inset></mat-divider>
-    <mat-card-actions class="group">
-      <button mat-stroked-button *ngFor="let answer of question.answers" value="{{ answer }}"
-        (click)="sendAnswer(answer, $event)">
-        <span>{{ answer }}</span>
-      </button>
-    </mat-card-actions>
+      <!-- <mat-divider></mat-divider> -->
+      <div class="group">
+        <button mat-stroked-button *ngFor="let answer of question.answers" value="{{ answer }}"
+          (click)="sendAnswer(answer, $event)">
+          <span>{{ answer }}</span>
+        </button>
+      </div>
+    </mat-card-content>
   </mat-card>
 </div>

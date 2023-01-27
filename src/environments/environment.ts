@@ -26,6 +26,13 @@ export type Flashcard =
 			question: string;
 			answer: string;
 	  };
+
+export type Comment = {
+	id: number;
+	comment: string;
+	creator: User;
+};
+
 export type User = null | {
 	userName: string;
 	id: number;
@@ -38,6 +45,7 @@ export type Lesson = {
 	creator: User;
 	flashcards: Flashcard[];
 	tags: Tag[];
+	comments: Comment[];
 };
 export type AddLesson = {
 	title: string;

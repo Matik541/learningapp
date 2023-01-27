@@ -7,7 +7,7 @@ import { Flashcard } from 'src/environments/environment';
 	templateUrl: './cards.component.html',
 	styleUrls: ['./cards.component.scss'],
 })
-export class CardsComponent implements OnInit {
+export class FlashcardsCardsComponent implements OnInit {
 	@Input() input: Flashcard = {} as Flashcard;
 	@Input() id: number = 0;
 	@Input() editable: boolean = false;
@@ -28,14 +28,15 @@ export class CardsComponent implements OnInit {
 
 	editFlashcard(intent: 'edit' | 'save' | 'cancel'): void {
 		let buttons = {
-			edit: document.querySelectorAll('mat-card-content > .action > .edit')[this.id],
-			save: document.querySelectorAll('mat-card-content > .action > .save')[this.id],
-			// cancel: document.querySelectorAll('mat-card-content > .action > .cancel')[id],
+			edit: document.querySelectorAll('.flashcard-card > .action > .edit')[this.id],
+			save: document.querySelectorAll('.flashcard-card > .action > .save')[this.id],
+			// cancel: document.querySelectorAll('.flashcard-card > .action > .cancel')[this.id],
 		};
 		let flashcard = document.querySelectorAll('mat-card-content > .content')[this.id];
 		let editForm = document.querySelectorAll('mat-card-content > .editForm')[this.id];
 
 		if (intent == 'edit') {
+			console.log('edit', buttons.edit);
 			buttons.edit?.classList.add('hide');
 			flashcard?.classList.add('hide');
 			editForm?.classList.remove('hide');

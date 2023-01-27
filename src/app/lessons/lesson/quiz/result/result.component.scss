@@ -1,6 +1,20 @@
+.header {
+  color: #fff;
+  text-align: center;
+  margin: 5rem 0;
+  .title {
+    font-weight: 500;
+    margin-bottom: 1rem;
+  }
+  .description {
+    font-size: 1.2rem;
+  }
+}
+
 .spiner {
-  padding-left: 100px;
-  padding-right: 1rem;
+  transform: translateX(100px);
+  margin: auto;
+  width: min-content;
   display: flex;
   position: relative;
   justify-content: center;
@@ -9,6 +23,9 @@
   & > mat-progress-spinner {
     position: absolute;
     transform: translateX(-100%);
+    &.incorrect {
+      transform: translateX(-100%) scaleX(-1);
+    }
   }
   .info {
     display: flex;
@@ -25,10 +42,10 @@
   }
 }
 .details {
-  h3 {
-    display: flex;
-    justify-content: space-between;
-    padding: 0 20%;
+  .title {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    text-align: center;
     margin: 1rem 0 0.5rem 0;
   }
   .cards {
@@ -36,15 +53,13 @@
     flex-direction: column;
     gap: 0.5em;
     .content {
-      flex-grow: 1;
       display: grid;
       grid-template-columns: 1fr 1ch 1fr;
-      & mat-divider {
-        margin-right: 0.5ch;
-      }
       & > div {
-        padding: 0 1ch;
-        word-wrap: break-word;
+        overflow: hidden;
+        text-align: center;
+        text-overflow: ellipsis;
+        white-space: nowrap;
       }
       .hint {
         opacity: 0.5;

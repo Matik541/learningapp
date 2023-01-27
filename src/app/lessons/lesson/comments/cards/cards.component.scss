@@ -1,4 +1,8 @@
-.flashcard-card {
+a {
+  text-decoration: none;
+}
+
+.comment-card {
   display: grid;
   grid-template-columns: 100% auto;
 
@@ -16,19 +20,12 @@
   mat-card {
     z-index: 999;
     mat-card-content {
-      align-items: center;
-      display: grid;
-      justify-items: end;
-      grid-template-columns: 100%;
-      grid-template-rows: auto;
-      padding: 16px 0;
+      padding: 16px;
 
       &:has(.editForm:not(.hide)) {
         padding: 0;
       }
       .content {
-        display: flex;
-        justify-content: space-evenly;
         overflow: hidden;
         width: 100%;
         span {
@@ -36,15 +33,10 @@
         }
       }
       .editForm {
-        display: flex;
-        justify-content: space-evenly;
         width: 100%;
         mat-form-field {
           width: 100%;
           flex-grow: 1;
-          input {
-            text-align: center;
-          }
         }
       }
       & .hide {

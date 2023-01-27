@@ -46,6 +46,12 @@ body {
   color: mat.get-color-from-palette($my-grey, 400);
 }
 
+.mat-mdc-snack-bar-container {
+  --mat-mdc-snack-bar-button-color: #{mat.get-color-from-palette($my-accent, A200)};
+  --mdc-snackbar-container-color: #{mat.get-color-from-palette($my-dark, 800)};
+  --mdc-snackbar-supporting-text-color: #{mat.get-color-from-palette($my-grey, 300)};
+}
+
 errors {
   color: mat.get-color-from-palette($my-warn, 500);
 }
@@ -61,17 +67,26 @@ errors {
 .block:hover {
   color: mat.get-color-from-palette($my-primary, A200);
 }
-mat-card > mat-card-actions > button.selected {
-  background-color: mat.get-color-from-palette($my-primary, 500);
+.question button {
   transition: background-color 0.15s ease-in-out;
+  -webkit-transition: background-color 0.15s ease-in-out;
+  -moz-transition: background-color 0.15s ease-in-out;
+  -ms-transition: background-color 0.15s ease-in-out;
+  -o-transition: background-color 0.15s ease-in-out;
+  &.selected {
+    background-color: mat.get-color-from-palette($my-primary, 500);
+  }
 }
-lesson {
+app-lesson {
   aside.menu {
     .block {
-      &.selected {
-        background-color: mat.get-color-from-palette($my-primary, 500);
-        transition: background-color 0.15s ease-in-out;
-      }
+      color: mat.get-color-from-palette($my-grey, 400);
+    }
+    &.flashcards :nth-child(1).block,
+    &.learn :nth-child(2).block,
+    &.quiz :nth-child(3).block,
+    &.comments :nth-child(4).block {
+      color: mat.get-color-from-palette($my-primary, 400);
     }
   }
 }
@@ -96,14 +111,17 @@ quiz-result {
 .correct,
 .accent-hover:hover {
   color: mat.get-color-from-palette($my-accent, A200);
+  transition: color 0.25s ease-in-out;
 }
 .incorrect,
 .warn-hover:hover {
   color: mat.get-color-from-palette($my-warn, 500);
+  transition: color 0.25s ease-in-out;
 }
 .total,
 .primary-hover:hover {
   color: mat.get-color-from-palette($my-primary, 400);
+  transition: color 0.25s ease-in-out;
 }
 
 .message {

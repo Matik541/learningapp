@@ -1,16 +1,14 @@
 <div class="question">
   <mat-card class="flashcard">
-    <mat-card-subtitle>
+    <mat-card-content>
       <div class="content">
-        <span>{{ question }}</span>
+        {{ question }}
       </div>
-    </mat-card-subtitle>
-    <mat-divider inset></mat-divider>
-    <mat-card-actions>
-      <mat-form-field appearance="outline" class="fullwidth">
+      <!-- <mat-divider></mat-divider> -->
+      <mat-form-field appearance="outline" class="fullwidth hide-hint">
         <mat-label>Answer</mat-label>
         <input matInput placeholder="Answer" [formControl]="answerControl" (change)="sendAnswer()" />
       </mat-form-field>
-    </mat-card-actions>
+    </mat-card-content>
   </mat-card>
 </div>

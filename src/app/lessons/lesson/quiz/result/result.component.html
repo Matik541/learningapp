@@ -1,42 +1,45 @@
 <div class="result-dialog">
-  <h3 mat-dialog-title>Congratulations! You have successfully completed your quiz</h3>
-
+  <mat-icon></mat-icon>
   <mat-dialog-content>
-    <div class="spiner">
-      <mat-progress-spinner class="total" color="primary" value="100" [strokeWidth]="stroke[0]">
-      </mat-progress-spinner>
-      <mat-progress-spinner class="incorrect" color="warn" [value]="incorrect" [strokeWidth]="stroke[1]">
-      </mat-progress-spinner>
-      <mat-progress-spinner class="correct" color="accent" [value]="correct" [strokeWidth]="stroke[2]">
-      </mat-progress-spinner>
-      <div class="info">
-        <div class="correct">
-          <mat-icon>check_circle</mat-icon>
-          <span>{{data.correct}}/{{data.total}}</span>
-        </div>
-        <div class="incorrect">
-          <mat-icon>cancel</mat-icon>
-          <span>{{data.incorrect}}/{{data.total}}</span>
-        </div>
-        <div class="total">
-          <mat-icon>remove_circle</mat-icon>
-          <span>{{data.total - data.incorrect - data.correct}}/{{data.total}}</span>
+    <div class="header">
+      <h1 class="title">Congratulations!</h1>
+      <p class="description">You have successfully completed your quiz!</p>
+      <div class="spiner">
+        <mat-progress-spinner class="total" color="primary" value="100" [strokeWidth]="stroke[0]">
+        </mat-progress-spinner>
+        <mat-progress-spinner class="incorrect" color="warn" [value]="incorrect" [strokeWidth]="stroke[1]">
+        </mat-progress-spinner>
+        <mat-progress-spinner class="correct" color="accent" [value]="correct" [strokeWidth]="stroke[2]">
+        </mat-progress-spinner>
+        <div class="info">
+          <div class="correct">
+            <mat-icon>check_circle</mat-icon>
+            <span>{{data.correct}}/{{data.total}}</span>
+          </div>
+          <div class="incorrect">
+            <mat-icon>cancel</mat-icon>
+            <span>{{data.incorrect}}/{{data.total}}</span>
+          </div>
+          <div class="total">
+            <mat-icon>remove_circle</mat-icon>
+            <span>{{data.total - data.incorrect - data.correct}}/{{data.total}}</span>
+          </div>
         </div>
       </div>
     </div>
     <mat-divider></mat-divider>
     <div class="details">
       <div class="write" *ngFor="let cData of correctData; let i = index">
-        <h3>{{cData.name}}:
+        <h4 class="title">{{cData.name}}:
           <span>
             <span class="correct">{{cData.correct}}</span> /
             <span class="incorrect">{{cData.incorrect}}</span> /
             {{cData.total}}
           </span>
-        </h3>
+        </h4>
         <div class="cards">
-          <mat-card *ngFor="let cAnswers of correctAnswers[i]" tabindex="0">
-            <mat-card-subtitle>
+          <mat-card *ngFor="let cAnswers of allAnswers[i]" tabindex="0">
+            <mat-card-content>
               <div class="content">
                 <div class="question">
                   {{cAnswers.question}}
@@ -55,7 +58,7 @@
                   </div>
                 </div>
               </div>
-            </mat-card-subtitle>
+            </mat-card-content>
           </mat-card>
         </div>
       </div>

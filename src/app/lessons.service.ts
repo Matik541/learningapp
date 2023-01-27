@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { catchError, map, Observable, of, tap } from 'rxjs';
-import { AddLesson, API_URL, Flashcard, Lesson, Tag } from 'src/environments/environment';
+import { AddLesson, API_URL, Flashcard, Lesson, Tag, Comment } from 'src/environments/environment';
 import { UsersService } from './users.service';
 import { MatSnackBar, MatSnackBarRef } from '@angular/material/snack-bar';
 
@@ -87,5 +87,45 @@ export class LessonsService {
 		return this.http.post<boolean>(API_URL + '/lessons/add', lesson, {
 			headers: headers,
 		});
+	}
+
+	addComment(lessonId: number, comment: string): Observable<boolean> {
+		this.snackBar('Comment added', 'OK', { duration: 2000 });
+		let headers = { Authorization: `Bearer ${this.usersService.accessToken()}` };
+		return this.http.post<boolean>(
+			API_URL + '/lessons/comment/add/' + lessonId,
+			{
+				comment: comment,
+			},
+			{
+				headers: headers,
+			}
+		);
+	}
+
+	updateComment(id: number, comment: string) {
+		this.snackBar('Comment updated', 'OK', { duration: 2000 });
+		let headers = { Authorization: `Bearer ${this.usersService.accessToken()}` };
+		return this.http.put<boolean>(
+			API_URL + '/lessons/comment/' + id,
+			{
+				comment: comment,
+			},
+			{
+				headers: headers,
+			}
+		);
+	}
+
+	deleteComment(id: number) {
+		this.snackBar('Comment deleted', 'OK', { duration: 2000 });
+		let headers = { Authorization: `Bearer ${this.usersService.accessToken()}` };
+		return this.http.delete<boolean>(API_URL + '/lessons/comment/' + id, {
+			headers: headers,
+		});
+	}
+
+	reportComment(id: number): void {
+		this.snackBar('Comment reported', 'OK', { duration: 2000 });
 	}
 }

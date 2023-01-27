@@ -5,9 +5,10 @@ $bg-color: rgba(217, 217, 217, 0.1);
 
 $nav-height: 4rem;
 
+$border: 0.25rem;
 $gap: 1rem;
 $padding: 5rem;
-$size: 10rem;
+$size: 9rem;
 
 body {
 	font-family: Roboto, "Helvetica Neue", sans-serif;
@@ -240,6 +241,13 @@ nav {
 	}
 }
 
+.mat-mdc-form-field-infix {
+	width: unset !important;
+}
+.mdc-icon-button {
+	display: inline-flex !important;
+}
+
 app-home {
 	align-items: center;
 	display: flex;
@@ -316,10 +324,10 @@ app-home {
 app-lesson {
 	.lesson {
 		position: relative;
-		grid-template-columns: calc($size + $gap) calc((2 * $size + $gap) / 3 * 5);
+		grid-template-columns: auto calc((2 * $size + $gap) / 3 * 5);
+		gap: $gap;
 		height: calc(100vh - ($nav-height + $gap));
 		top: $nav-height + $gap;
-		padding-bottom: $nav-height + $gap;
 		overflow-y: scroll;
 		.menu {
 			gap: $gap;
@@ -327,10 +335,23 @@ app-lesson {
 				height: $size;
 				width: $size;
 			}
+			&.flashcards :nth-child(1).block,
+			&.learn :nth-child(2).block,
+			&.quiz :nth-child(3).block,
+			&.comments :nth-child(4).block {
+				border-right: $border solid;
+				transition: color 0.25s ease-in-out, border-right 0.25s ease-in-out;
+			}
 		}
 	}
+	.comments .main {
+		gap: 2 * $gap;
+	}
 	.main {
+		display: grid;
+		grid-template-rows: $size calc(2 * $size + $gap) auto;
 		gap: $gap;
+		padding-bottom: $size;
 		.label {
 			height: $size;
 		}
@@ -339,21 +360,29 @@ app-lesson {
 		}
 		.flashcards {
 			gap: $gap;
-			.action {
-				gap: $gap / 2;
-				transform: translateX(calc(100% + $gap));
-				-webkit-transform: translateX(calc(100% + $gap));
-				-moz-transform: translateX(calc(100% + $gap));
-				-ms-transform: translateX(calc(100% + $gap));
-				-o-transform: translateX(calc(100% + $gap));
-			}
 		}
 		.submit-update {
+			gap: $gap;
+		}
+		&.quiz {
+			gap: 2 * $gap;
+			section {
+				gap: $gap;
+			}
+		}
+		.comments {
 			gap: $gap;
 		}
 	}
 }
 
+mat-chip-set.overflow {
+	overflow: auto;
+	.mdc-evolution-chip-set__chips {
+		flex-wrap: nowrap;
+		flex-flow: nowrap;
+	}
+}
 errors {
 	font-style: italic;
 	font-family: "Noto Sans Mono", monospace;
@@ -420,7 +449,6 @@ errors {
 		border-bottom-left-radius: 0.1em;
 	}
 }
-
 @keyframes fadeBottom {
 	from {
 		transform: translateY(100%);

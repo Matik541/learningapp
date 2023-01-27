@@ -5,19 +5,16 @@
   .flashcard {
     border-radius: 0.25rem;
     width: 100%;
-    mat-card-subtitle {
-      align-items: center;
+    mat-card-content {
       display: flex;
-      justify-content: space-between;
+      flex-direction: column;
+      gap: 0.5em;
       .content {
-        padding: 0 1ch;
-        & mat-divider {
-          margin-right: 0.5ch;
-        }
+        overflow: hidden;
+        text-align: center;
+        text-overflow: ellipsis;
+        white-space: nowrap;
       }
-    }
-    mat-card-actions {
-      padding: 0.5ch 2ch;
     }
   }
 }

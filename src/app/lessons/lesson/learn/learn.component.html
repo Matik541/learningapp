@@ -1,17 +1,30 @@
 <div class="main">
   <div class="settings">
-    <button mat-icon-button class="primary-hover">
-      <mat-icon>{{ true ? "settings" : "settings_suggest" }}</mat-icon>
-    </button>
-    <mat-checkbox>Writing</mat-checkbox>
-    <mat-checkbox>Choosing</mat-checkbox>
+    <mat-form-field appearance="fill" disabled>
+      <mat-label>Methods</mat-label>
+      <mat-select disabled>
+        <!-- multiple [formControl]="select" -->
+        <mat-select-trigger>
+          settings
+        </mat-select-trigger>
+        <mat-option value="0">
+          matching
+        </mat-option>
+        <mat-option value="1">
+          writing
+        </mat-option>
+        <mat-option value="2">
+          choosing
+        </mat-option>
+      </mat-select>
+    </mat-form-field>
   </div>
   <mat-card class="flashcard">
     <mat-card-content>
-      {{ flashcards[indexFleshcard%flashcards.length].flashcard.question }}
-      {{ flashcards[indexFleshcard%flashcards.length].flashcard.answer }}
+      {{ flashcards[indexFleshcard%flashcards.length]?.flashcard?.question }}
+      {{ flashcards[indexFleshcard%flashcards.length]?.flashcard?.answer }}
     </mat-card-content>
-    <mat-divider inset></mat-divider>
+    <!-- <mat-divider></mat-divider> -->
     <mat-card-actions>
       <form>
         <mat-form-field appearance="outline" class="full-width">

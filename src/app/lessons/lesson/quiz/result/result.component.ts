@@ -1,83 +1,87 @@
-import { Component, Inject, OnInit } from '@angular/core'
-import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog'
+import { Component, Inject, OnInit } from '@angular/core';
+import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
 
 type Answers = {
-  question: string
-  answer: string
-  correctAnswer: string
-}
+	question: string;
+	answer: string;
+	correctAnswer: string;
+};
 type DataType = {
-  correct: number
-  incorrect: number
-  total: number
-  correctAnswers: Answers[][]
-}
+	correct: number;
+	incorrect: number;
+	total: number;
+	allAnswers: Answers[][];
+};
 @Component({
-  selector: 'quiz-result',
-  templateUrl: './result.component.html',
-  styleUrls: ['./result.component.scss'],
+	selector: 'quiz-result',
+	templateUrl: './result.component.html',
+	styleUrls: ['./result.component.scss'],
 })
 export class ResultComponent implements OnInit {
-  data: DataType = {} as DataType
+	data: DataType = {
+		correct: 0,
+		incorrect: 0,
+		total: 0,
+		allAnswers: [],
+	};
 
-  correct: number = 0
-  incorrect: number = 0
-  stroke: number[] = [15, 15, 15]
+	correct: number = 0;
+	incorrect: number = 0;
+	stroke: number[] = [15, 15, 15];
 
-  correctAnswers: Answers[][] = [] as Answers[][]
-  correctData: {
-    correct: number
-    incorrect: number
-    total: number
-    name: string
-  }[] = [
-    { correct: 0, incorrect: 0, total: 0, name: 'Writing' },
-    { correct: 0, incorrect: 0, total: 0, name: 'Matching' },
-    { correct: 0, incorrect: 0, total: 0, name: 'Choosing' },
-  ]
+	allAnswers: Answers[][] = [] as Answers[][];
+	correctData: {
+		correct: number;
+		incorrect: number;
+		total: number;
+		name: string;
+	}[] = [
+		{ correct: 0, incorrect: 0, total: 0, name: 'Writing' },
+		{ correct: 0, incorrect: 0, total: 0, name: 'Matching' },
+		{ correct: 0, incorrect: 0, total: 0, name: 'Choosing' },
+	];
 
-  interE: any
-  interL: any
+	interE: any;
+	interL: any;
 
-  constructor(
-    public dialogRef: MatDialogRef<ResultComponent>,
-    @Inject(MAT_DIALOG_DATA) data: DataType
-  ) {
-    this.data = data
-    setTimeout(() => {
-      this.stroke = [10, 10, 10]
+	constructor(
+		public dialogRef: MatDialogRef<ResultComponent>,
+		@Inject(MAT_DIALOG_DATA) data: DataType
+	) {
+		this.data = data;
+		console.log(this.data);
+		setTimeout(() => {
+			this.stroke = [10, 10, 10];
 
-      this.correctAnswers = data.correctAnswers
+			this.allAnswers = data.allAnswers;
 
-      this.correctAnswers.forEach((correctAnswer, index) => {
-        this.correctData[index] = {
-          correct: correctAnswer.filter(
-            (answer) => answer.answer === answer.correctAnswer
-          ).length,
-          incorrect: correctAnswer.filter((answer) => {
-            return (
-              (answer.answer != answer.correctAnswer &&
-                answer.answer != undefined) ||
-              (index === 2 && answer.answer === '')
-            )
-          }).length,
-          total: correctAnswer.length,
-          name: ['Writing', 'Matching', 'Choosing'][index],
-        }
-        this.correct += this.correctData[index].correct
-        this.incorrect += this.correctData[index].incorrect
-      })
+			this.allAnswers.forEach((correctAnswer, index) => {
+				this.correctData[index] = {
+					correct: correctAnswer.filter((answer) => answer.answer === answer.correctAnswer).length,
+					incorrect: correctAnswer.filter((answer) => {
+						return (
+							(answer.answer != answer.correctAnswer && answer.answer != undefined) ||
+							(index === 2 && answer.answer === '')
+						);
+					}).length,
+					total: correctAnswer.length,
+					name: ['Writing', 'Matching', 'Choosing'][index],
+				};
+				this.correct += this.correctData[index].correct;
+				this.incorrect += this.correctData[index].incorrect;
+			});
 
-      this.correct = (this.correct / data.total) * 100
-      this.incorrect = (this.incorrect / data.total) * 100
-    }, 1)
-  }
+			this.data.correct = this.correct;
+			this.data.incorrect = this.incorrect;
 
-  ngOnInit(): void {
-    console.log(this.data)
-  }
+			this.correct = (this.correct / data.total) * 100;
+			this.incorrect = (this.incorrect / data.total) * 100;
+		}, 1);
+	}
 
-  close(): void {
-    this.dialogRef.close()
-  }
+	ngOnInit(): void {}
+
+	close(): void {
+		this.dialogRef.close();
+	}
 }

@@ -1,39 +1,30 @@
 .question {
-  color: red;
   .fullwidth {
     width: 100%;
   }
   .flashcard {
     border-radius: 0.25rem;
-    width: 100%;
-    mat-card-subtitle {
-      align-items: center;
+    mat-card-content {
       display: flex;
-      justify-content: space-between;
+      flex-direction: column;
+      gap: 0.5em;
       .content {
-        flex-grow: 1;
-        display: grid;
-        grid-template-columns: 1fr 1ch 1fr;
-        span {
-          padding: 0 1ch;
-        }
-        & mat-divider {
-          margin-right: 0.5ch;
-        }
-      }
-    }
-    mat-card-actions {
-      padding: 1ch 2ch;
-      display: grid;
-      grid-template-columns: 1fr 1fr;
-      gap: 1ch;
-      text-align: center;
-      margin-bottom: -1rem;
-
-      button {
         display: flex;
         justify-content: center;
-        margin: 0 !important;
+        overflow: hidden;
+        & > span {
+          overflow: hidden;
+          text-align: center;
+          white-space: nowrap;
+          text-overflow: ellipsis;
+          width: 100%;
+        }
+      }
+      .actions {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        justify-content: center;
+        gap: 1ch;
       }
     }
   }
