@@ -1,21 +1,24 @@
 <div class="main">
-  <div class="add-comment">
-    <div class="comment-card">
-      <mat-card class="comment">
-        <mat-card-content>
-          <mat-form-field appearance="outline" class="hide-hint">
-            <input matInput placeholder="Add comment" [formControl]="newComment" required>
-          </mat-form-field>
-        </mat-card-content>
-      </mat-card>
-      <div class="action">
-        <button mat-flat-button [color]="(newComment.valid) ? 'primary' : 'warn'" class="add" (click)="addComment()">
-          <mat-icon>{{(newComment.valid) ? 'add' : 'warning'}}</mat-icon>
-        </button>
+  <div class="add-section">
+    <mat-divider></mat-divider>
+    <div class="add-comment">
+      <div class="comment-card">
+        <mat-card class="comment">
+          <mat-card-content>
+            <mat-form-field appearance="outline" class="hide-hint">
+              <input matInput placeholder="Add comment" [formControl]="newComment" required [readonly]="!logged">
+            </mat-form-field>
+          </mat-card-content>
+        </mat-card>
+        <div class="action">
+          <button mat-flat-button [color]="(newComment.valid) ? 'primary' : 'warn'" class="add" (click)="addComment()">
+            <mat-icon>{{(newComment.valid) ? 'add' : 'warning'}}</mat-icon>
+          </button>
+        </div>
       </div>
     </div>
+    <mat-divider></mat-divider>
   </div>
-  <mat-divider></mat-divider>
   <div class="comments">
     <comment-cards *ngFor="let comment of comments; let i = index" [id]="i" [input]="comment"
       [editable]="(comment?.creator?.id == logged?.id)" (output)="saveComment(i, $event)"></comment-cards>

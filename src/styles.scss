@@ -345,7 +345,8 @@ app-lesson {
 		}
 	}
 	.comments .main {
-		gap: 2 * $gap;
+		// gap: 2 $gap;
+		grid-template-rows: $size auto;
 	}
 	.main {
 		display: grid;
