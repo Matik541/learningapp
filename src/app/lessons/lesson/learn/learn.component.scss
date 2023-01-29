@@ -17,8 +17,13 @@
       }
     }
     mat-card-actions {
-      & > * {
+      & > form {
+        align-items: center;
+        display: flex;
         flex-grow: 1;
+        mat-form-field {
+          flex-grow: 1;
+        }
       }
     }
   }

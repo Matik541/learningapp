@@ -3,62 +3,62 @@
 // The list of file replacements can be found in `angular.json`.
 
 export const environment = {
-	production: false,
-};
-export const appName = 'LearningApp';
+  production: false,
+}
+export const appName = 'LearningApp'
 
-export const API_URL = 'http://localhost:3000';
+export const API_URL = 'http://localhost:3000'
 
-export const refreshToken = 'refreshToken';
-export const accessToken = 'accessToken';
+export const refreshToken = 'refreshToken'
+export const accessToken = 'accessToken'
 
 export type Tag = {
-	id: Number;
-	tagName: String;
-};
+  id: Number
+  tagName: String
+}
 export type Flashcard =
-	| {
-			id: number;
-			question: string;
-			answer: string;
-	  }
-	| {
-			question: string;
-			answer: string;
-	  };
+  | {
+      id: number
+      question: string
+      answer: string
+    }
+  | {
+      question: string
+      answer: string
+    }
 
 export type Comment = {
-	id: number;
-	comment: string;
-	creator: User;
-};
+  id: number
+  comment: string
+  creator: User
+}
 
 export type User = null | {
-	userName: string;
-	id: number;
-};
+  userName: string
+  id: number
+}
 export type Lesson = {
-	id: number;
-	title: string;
-	description: string;
-	iconPath: string;
-	creator: User;
-	flashcards: Flashcard[];
-	tags: Tag[];
-	comments: Comment[];
-};
+  id: number
+  title: string
+  description: string
+  iconPath: string
+  creator: User
+  flashcards: Flashcard[]
+  tags: Tag[]
+  comments: Comment[]
+}
 export type AddLesson = {
-	title: string;
-	description: string;
-	iconPath: string;
-	flashcards: Flashcard[];
-	tags: Tag[];
-};
+  title: string
+  description: string
+  iconPath: string
+  flashcards: Flashcard[]
+  tags: Tag[]
+}
 export type Bar = {
-	hidden: boolean;
-	mode: 'indeterminate' | 'query' | 'determinate' | 'buffer';
-	value: number;
-};
+  hidden: boolean
+  mode: 'indeterminate' | 'query' | 'determinate' | 'buffer'
+  value: number
+}
 /*
  * For easier debugging in development mode, you can import the following file
  * to ignore zone related error stack frames such as `zone.run`, `zoneDelegate.invokeTask`.

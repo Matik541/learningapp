@@ -29,6 +29,8 @@ body {
 navbar {
 	position: fixed;
 }
+
+// TODO: separete nav into different files
 nav {
 	align-items: center;
 	background-color: $bg-color;
@@ -147,7 +149,7 @@ nav {
 
 			& > div {
 				display: flex;
-				gap: 1rem;
+				gap: $gap;
 				width: 100%;
 				autocomplete-tags,
 				mat-form-field {
@@ -372,6 +374,12 @@ app-lesson {
 			}
 		}
 		.comments {
+			gap: $gap;
+		}
+	}
+	.learn mat-card.flashcard mat-card-actions {
+		padding: $gap;
+		form {
 			gap: $gap;
 		}
 	}

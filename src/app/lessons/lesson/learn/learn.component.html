@@ -21,13 +21,11 @@
   </div>
   <mat-card class="flashcard">
     <mat-card-content>
-      {{ flashcards[indexFleshcard%flashcards.length]?.flashcard?.question }}
-      {{ flashcards[indexFleshcard%flashcards.length]?.flashcard?.answer }}
+      {{ currentQuesion }}
     </mat-card-content>
-    <!-- <mat-divider></mat-divider> -->
     <mat-card-actions>
       <form>
-        <mat-form-field appearance="outline" class="full-width">
+        <mat-form-field appearance="outline" class="full-width hide-hint">
           <mat-label>Answer</mat-label>
           <input matInput [(ngModel)]="answer" [ngModelOptions]="{standalone: true}" autocomplete="off">
         </mat-form-field>
