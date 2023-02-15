@@ -1,23 +1,22 @@
-<mat-card class="flashcard">
-  <mat-card-subtitle class="inputs" [formGroup]="flashcardsForm">
-
-    <mat-form-field>
-      <mat-label>Question</mat-label>
-      <input required matInput placeholder="Question" formControlName="question" value="{{que}}">
-    </mat-form-field>
-
-    <mat-form-field>
-      <mat-label>Answer</mat-label>
-      <input required matInput placeholder="Answer" formControlName="answer" value="asd">
-    </mat-form-field>
-
-    <div class="status">
-      <mat-icon *ngIf="saved" color="accent">check</mat-icon>
-      <mat-icon *ngIf="!saved" color="warn">close</mat-icon>
-    </div>
-  </mat-card-subtitle>
-  <mat-card-actions>
-    <button mat-stroked-button (click)="save()" color="accent">{{ (saved) ? "Saved" : "Save"}}</button>
-    <button mat-stroked-button (click)="remove()" color="warn">Delete</button>
-  </mat-card-actions>
-</mat-card>
+<div class="flashcard-add">
+  <mat-card class="flashcard">
+    <mat-card-content>
+      <div class="editForm" [formGroup]="validFlashcard">
+        <mat-form-field appearance="outline" class="hide-hint">
+          <input matInput placeholder="Question" formControlName="question" required (change)="saved=false">
+        </mat-form-field>
+        <mat-form-field appearance="outline" class="hide-hint">
+          <input matInput placeholder="Answer" formControlName="answer" required (change)="saved=false">
+        </mat-form-field>
+      </div>
+    </mat-card-content>
+  </mat-card>
+  <div class="action">
+    <button mat-flat-button [color]="(saved)?'accent':'primary'" class="save" (click)="editFlashcard('save')">
+      <mat-icon class="material-icons-outlined">{{(saved)?"check_circle":"check"}}</mat-icon>
+    </button>
+    <button mat-flat-button color="warn" class="remove" (click)="editFlashcard('remove')">
+      <mat-icon>close</mat-icon>
+    </button>
+  </div>
+</div>

@@ -5,29 +5,33 @@
         <ng-template matStepLabel>Lesson</ng-template>
         <div class="create-grid">
           <div class="row1">
-            <mat-form-field appearance="fill">
+            <mat-form-field appearance="fill" class="hide-hint">
               <mat-label>Title</mat-label>
               <input required matInput placeholder="Title" formControlName="title">
             </mat-form-field>
             <div>
-              <div class="choosen">
+              <div>
                 <button mat-mini-fab [matMenuTriggerFor]="menu">
                   <mat-icon>{{menuV}}</mat-icon>
                 </button>
               </div>
               <mat-menu #menu class="choose-icon">
-                <button mat-menu-item *ngFor="let item of icons" (click)="this.menuV = item">
-                  <mat-icon [color]="((this.menuV == item)? 'accent' : '')">{{item}}</mat-icon>
-                </button>
+                <div class="section" *ngFor="let icon of icons">
+                  <div class="label">{{ icon.label }}</div>
+                  <div class="icons">
+                    <button mat-menu-item *ngFor="let item of icon.icons" (click)="this.menuV = item">
+                      <mat-icon [color]="((this.menuV == item)? 'accent' : '')">{{item}}</mat-icon>
+                    </button>
+                  </div>
+                </div>
               </mat-menu>
             </div>
           </div>
-          <div class="row2">
-            <mat-form-field appearance="fill">
-              <textarea matInput placeholder="Description" formControlName="description"></textarea>
-            </mat-form-field>
-            <autocomplete-tags appearance="fill" [match]="true" (tagsChange)="refreshTags($event)"></autocomplete-tags>
-          </div>
+          <autocomplete-tags appearance="outline" [match]="true" [class]="['hide-hint']"
+            (tagsChange)="refreshTags($event)"></autocomplete-tags>
+          <mat-form-field appearance="fill">
+            <textarea matInput placeholder="Description" formControlName="description"></textarea>
+          </mat-form-field>
         </div>
         <div>
           <button mat-button matStepperNext>Next</button>
@@ -37,8 +41,8 @@
     <mat-step>
       <ng-template matStepLabel>flashcards</ng-template>
       <div class="flashcards">
-        <add-flashcard *ngFor="let flashcard of flashcards; let i = index" [que]="flashcard.question"
-          [ans]="flashcard.answer" (push)="refreshFlashcards($event, i)" (slice)="removeFlashcard($event, i)">
+        <add-flashcard *ngFor="let flashcard of flashcards; let i = index" [index]="i" [input]="flashcard"
+          (push)="refreshFlashcards($event, i)" (slice)="removeFlashcard(i)">
         </add-flashcard>
       </div>
       <div>

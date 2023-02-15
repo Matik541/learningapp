@@ -14,11 +14,10 @@ type Block = {
   styleUrls: ['./home.component.scss'],
 })
 export class HomeComponent implements OnInit {
-  LessonsService: any
   user: User = null
 
   constructor(
-    private lessons: LessonsService,
+    private lessonsService: LessonsService,
     private usersService: UsersService
   ) {}
 
@@ -36,34 +35,51 @@ export class HomeComponent implements OnInit {
     this.user = this.usersService.loggedUser
   }
 
-  sections = [
-    { title: 'last opened', block: [], get: [1, 2, 3, 4], mustloggin: false },
+  sections: {
+    title: string
+    block: Block[]
+    get: number[] | 'all'
+    mustLoggin: boolean
+  }[] = [
+    { title: 'last opened', block: [], get: [1, 2, 3, 4], mustLoggin: false },
     {
-      title: 'most popular',
+      title: 'All lessons',
       block: [],
-      get: [11, 12, 13, 14, 15, 16, 17, 18, 19],
-      mustloggin: false,
+      get: 'all',
+      mustLoggin: false,
     },
     {
       title: 'your lessons',
       block: [],
       get: [5, 6, 7, 8, 9, 10],
-      mustloggin: true,
+      mustLoggin: true,
     },
   ]
 
-  getBlocks(id: number[]): any {
+  getBlocks(id: number[] | 'all'): any {
     let blocks: Block[] = []
-    id.forEach((id) => {
-      this.lessons.getLesson(id).subscribe((data) => {
-        if (data != null)
-          blocks.push({
-            title: data.title,
-            icon: data.iconPath,
-            id,
-          })
+    if (id == 'all') {
+      this.lessonsService.getLessons().subscribe((data) => {
+        data.forEach((lesson) => {
+          if (lesson != null)
+            blocks.push({
+              title: lesson.title,
+              icon: lesson.iconPath,
+              id: lesson.id,
+            })
+        })
       })
-    })
+    } else
+      id.forEach((id) => {
+        this.lessonsService.getLesson(id).subscribe((data) => {
+          if (data != null)
+            blocks.push({
+              title: data.title,
+              icon: data.iconPath,
+              id,
+            })
+        })
+      })
     return blocks
   }
 }

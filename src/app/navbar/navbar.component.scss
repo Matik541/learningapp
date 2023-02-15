@@ -1,0 +1,42 @@
+nav {
+  align-items: center;
+  display: grid;
+  align-content: center;
+  justify-items: stretch;
+
+  position: fixed;
+  top: 0;
+  width: 100vw;
+
+  .brand {
+    display: flex;
+    align-items: center;
+    justify-content: flex-end;
+
+    .logo {
+      filter: invert(25%) sepia(67%) saturate(2928%) hue-rotate(251deg) brightness(75%) contrast(87%);
+    }
+  }
+
+  .create {
+    display: flex;
+    justify-content: center;
+    cursor: pointer;
+  }
+
+  .nav-user {
+    display: flex;
+  }
+  .loading-bar {
+    height: 3px;
+    left: 0;
+    opacity: 0;
+    position: absolute;
+    width: 100%;
+    z-index: 9999;
+  }
+  .loading-bar.load {
+    opacity: 1;
+    transition: opacity 0.1s ease-in-out;
+  }
+}

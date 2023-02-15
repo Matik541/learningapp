@@ -27,6 +27,7 @@ import { Tag } from 'src/environments/environment'
 export class AutocompleteTagsComponent {
   @Input() appearance: MatFormFieldAppearance
   @Input() match: boolean = false
+  @Input() class: string[] = []
 
   @Output() tagsChange = new EventEmitter<Tag[]>()
 

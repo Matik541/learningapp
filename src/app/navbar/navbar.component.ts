@@ -8,6 +8,7 @@ import { ProgressBarService } from './progress-bar.service'
 @Component({
   selector: 'navbar',
   templateUrl: 'navbar.component.html',
+  styleUrls: ['./navbar.component.scss'],
 })
 export class NavbarComponent {
   appName: string = appName

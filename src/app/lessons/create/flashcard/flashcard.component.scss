@@ -1,0 +1,71 @@
+.flashcard-add {
+  display: grid;
+  grid-template-columns: 1fr auto;
+
+  &:hover .action,
+  &:has(:focus) .action {
+    margin-right: 0;
+    opacity: 1;
+    pointer-events: auto;
+  }
+
+  .hide {
+    display: none;
+  }
+
+  mat-card {
+    z-index: 999;
+    mat-card-content {
+      align-items: center;
+      display: grid;
+      justify-items: end;
+      grid-template-columns: 100%;
+      grid-template-rows: auto;
+      padding: 16px 0;
+
+      &:has(.editForm:not(.hide)) {
+        padding: 0;
+      }
+      .content {
+        display: flex;
+        justify-content: space-evenly;
+        overflow: hidden;
+        width: 100%;
+        span {
+          align-self: center;
+        }
+      }
+      .editForm {
+        display: flex;
+        justify-content: space-evenly;
+        width: 100%;
+        mat-form-field {
+          width: 100%;
+          flex-grow: 1;
+          input {
+            text-align: center;
+          }
+        }
+      }
+      & .hide {
+        display: none;
+      }
+    }
+  }
+  .action {
+    display: flex;
+    flex-direction: row-reverse;
+    transition: margin-right 0.2s ease-in-out;
+    margin-right: 50%;
+    pointer-events: none;
+    button {
+      height: 100%;
+      min-width: unset;
+      padding: 0 0.75em 0 1.5em;
+      margin-left: -0.75em;
+      mat-icon {
+        margin: 0;
+      }
+    }
+  }
+}

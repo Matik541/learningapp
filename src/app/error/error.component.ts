@@ -9,13 +9,18 @@ import { Router } from '@angular/router'
 export class ErrorComponent implements OnInit {
   run: number = 0
 
+  decisionElement: any
+
   constructor(private router: Router) {}
 
-  ngOnInit(): void {}
+  ngOnInit(): void {
+    this.decisionElement = document.querySelector('#decision')
+    this.decisionElement.setAttribute('style', 'display: none')
+  }
 
   cafe(): void {
-    if (this.run % 2 == 1) return
-    if (this.run == 0) this.run = 1
+    if (this.run != 0) return
+    this.run++
     let chat = document.querySelector('#chat')
     let delay: number = 0
 
@@ -25,8 +30,18 @@ export class ErrorComponent implements OnInit {
     time.innerHTML =
       date.getHours() +
       ':' +
-      (date.getMinutes() < 0 ? '0' + date.getMinutes() : date.getMinutes())
+      (date.getMinutes() < 10 ? '0' + date.getMinutes() : date.getMinutes())
     chat?.appendChild(time)
+
+    let cup = document.querySelector('#coding-cafe')
+    let smoke = document.querySelector('.smoke')
+    cup?.setAttribute('style', 'animation: take-cup 3s ease-in-out 1;')
+    setTimeout(() => {
+      smoke?.setAttribute('style', 'display: none;')
+    }, 1500)
+    setTimeout(() => {
+      cup?.setAttribute('style', 'animation: none;')
+    }, 3000)
 
     let dialog: any = {
       messages: [
@@ -49,13 +64,34 @@ export class ErrorComponent implements OnInit {
       setTimeout(() => messageBlock.appendChild(msg.element), delay + msg.delay)
       delay += msg.delay
     }
-    setTimeout(() => {}, delay)
+    setTimeout(() => {
+      this.decisionElement.setAttribute('style', 'display: flex')
+    }, delay)
   }
-  secondDialog(): void {
+  decision(value: string) {
+    if (this.run != 1) return
+    this.decisionElement.setAttribute('style', 'display: none')
+    this.run++
     let chat = document.querySelector('#chat')
+    let delay: number = 0
+
+    let time = document.createElement('span')
+    let date = new Date()
+    time.classList.add('time')
+    time.innerHTML =
+      date.getHours() +
+      ':' +
+      (date.getMinutes() < 10 ? '0' + date.getMinutes() : date.getMinutes())
+    chat?.appendChild(time)
+
+    let cup = document.querySelector('#coding-cafe')
+    let smoke = document.querySelector('.smoke')
+    cup?.setAttribute('style', 'animation: take-cup 3s ease-in-out 1;')
+
     let dialog: any = {
-      messages: ['Oh, are you going to the store?'],
-      bad: [
+      user: ['Okay, I`ll go to the store.'],
+      messages: ['Really?', 'Thank you!'],
+      nothing: [
         'Em... I have a question...',
         'Why my cup is still empty?',
         "You didn't buy me a new cup, did you?",
@@ -63,9 +99,53 @@ export class ErrorComponent implements OnInit {
         'LIKE SECOND TIME!',
         'You are so mean...',
         'Get out of here!',
-        'QUIT',
+        'QUIT!',
       ],
-      good: ['I really appreciate it!', 'Thank you so much!'],
+      matik: [
+        'But...',
+        'I don`t actually like a Tea, but one of our Devs is a Tea lover.',
+        'I`ll take it to <a href="https://wlo.link/@matik" target="_blank">Matik</a>, a front-end developer.',
+        'He will love it!',
+      ],
+      houtaroum: [
+        'But...',
+        'I don`t actually like a Coffee, but one of our Devs is a Coffee lover.',
+        'I`ll take it to <a href="https://github.com/HoutarouM" target="_blank">HoutarouM</a>, a back-end developer.',
+        'He will love it!',
+      ],
+    }
+    let messageBlockDivs: any[] = []
+    for (let i = 0; i < 3; i++) {
+      messageBlockDivs[i] = document.createElement('div')
+      messageBlockDivs[i].classList.add('messages')
+      chat?.appendChild(messageBlockDivs[i])
+    }
+    messageBlock(dialog.user, messageBlockDivs[0], ['user'])
+    messageBlock(dialog.messages, messageBlockDivs[1], [])
+    messageBlock(dialog[value], messageBlockDivs[2], ['nothing'])
+
+    if (value != 'nothing') {
+      setTimeout(() => {
+        smoke?.setAttribute('style', 'display: block;')
+      }, 1500)
+    }
+
+    function messageBlock(
+      thisDialog: string[],
+      messageBlock: any,
+      messageClasses: string[]
+    ) {
+      for (let message of thisDialog) {
+        let msg: DialogMessage = new DialogMessage(message, [
+          'message',
+          ...messageClasses,
+        ])
+        setTimeout(
+          () => messageBlock.appendChild(msg.element),
+          delay + msg.delay
+        )
+        delay += msg.delay
+      }
     }
   }
 }

@@ -1,4 +1,4 @@
-<mat-form-field class="full-width" [appearance]="appearance">
+<mat-form-field [class]="['full-width', 'autocomplete', class]" [appearance]="appearance">
   <mat-chip-grid #chipGrid aria-label="Tag selection">
     <mat-chip-row *ngFor="let tag of tags" [removable]="removable" (removed)="remove(tag)">
       {{tag.tagName}}
@@ -6,7 +6,7 @@
         <mat-icon>cancel</mat-icon>
       </button>
     </mat-chip-row>
-    <input placeholder="Choose tag..." #fruitInput [formControl]="tagCtrl" [matAutocomplete]="auto"
+    <input placeholder="Choose tag..." #tagInput [formControl]="tagCtrl" [matAutocomplete]="auto"
       [matChipInputFor]="chipGrid" [matChipInputSeparatorKeyCodes]="separatorKeysCodes"
       [matChipInputAddOnBlur]="addOnBlur" (matChipInputTokenEnd)="add($event)">
   </mat-chip-grid>

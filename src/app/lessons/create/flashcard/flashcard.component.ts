@@ -8,37 +8,62 @@ import { Flashcard } from 'src/environments/environment'
   styleUrls: ['./flashcard.component.scss'],
 })
 export class FlashcardComponent implements OnInit {
-  @Input() que: string = ''
-  @Input() ans: string = ''
+  @Input() input: Flashcard = {} as Flashcard
+  @Input() index: number
 
   @Output() push: EventEmitter<Flashcard> = new EventEmitter()
   @Output() slice: EventEmitter<Flashcard> = new EventEmitter()
 
   saved = false
 
-  flashcardsForm: FormGroup<{
-    question: FormControl<string | null>
-    answer: FormControl<string | null>
-  }>
-
   constructor(private _formBuilder: FormBuilder) {}
 
-  ngOnInit() {
-    this.flashcardsForm = this._formBuilder.group({
-      question: new FormControl(this.que, [Validators.required]),
-      answer: new FormControl(this.ans, [Validators.required]),
+  validFlashcard = new FormGroup({
+    question: new FormControl(this.input.question, [Validators.required]),
+    answer: new FormControl(this.input.answer, [Validators.required]),
+  })
+
+  ngOnInit(): void {
+    this.validFlashcard.setValue({
+      question: this.input.question,
+      answer: this.input.answer,
     })
-    if (this.ans && this.que) this.saved = true
+    if (this.input.answer && this.input.question) this.saved = true
   }
 
-  save() {
-    this.saved = true
-    this.ans = this.flashcardsForm.value.answer ?? this.ans
-    this.que = this.flashcardsForm.value.question ?? this.que
-
-    this.push.emit({ question: this.que, answer: this.ans })
-  }
+  save() {}
   remove() {
-    this.slice.emit({ question: this.que, answer: this.ans })
+    this.slice.emit({
+      question: this.input.question,
+      answer: this.input.answer,
+    })
+  }
+
+  editFlashcard(intent: 'save' | 'remove'): void {
+    if (intent == 'remove') {
+      this.slice.emit()
+      return
+    }
+    if (
+      this.validFlashcard.value.question != undefined &&
+      this.validFlashcard.value.answer != undefined &&
+      this.validFlashcard.value.question != null &&
+      this.validFlashcard.value.answer != null &&
+      this.validFlashcard.value.question != '' &&
+      this.validFlashcard.value.answer != '' &&
+      intent == 'save'
+    ) {
+      this.input.question = this.validFlashcard.value.question as string
+      this.input.answer = this.validFlashcard.value.answer as string
+    }
+    this.saved = true
+    this.input.answer = this.validFlashcard.value.answer ?? this.input.answer
+    this.input.question =
+      this.validFlashcard.value.question ?? this.input.question
+
+    this.push.emit({
+      question: this.input.question,
+      answer: this.input.answer,
+    })
   }
 }

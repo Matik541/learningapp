@@ -61,7 +61,7 @@ errors {
 }
 
 .create-dialog mat-card.flashcard {
-  background-color: rgba(mat.get-color-from-palette($my-dark, 700), 0.5) !important;
+  background-color: mat.get-color-from-palette($my-dark, 700) !important;
 }
 
 .block:hover {
@@ -108,19 +108,36 @@ quiz-result {
   }
 }
 
+#chat .user {
+  color: mat.get-color-from-palette($my-grey, 50);
+  background-color: mat.get-color-from-palette($my-dark, 700);
+}
+
 .correct,
+.accent,
 .accent-hover:hover {
   color: mat.get-color-from-palette($my-accent, A200);
-  transition: color 0.25s ease-in-out;
 }
 .incorrect,
+.warn,
 .warn-hover:hover {
   color: mat.get-color-from-palette($my-warn, 500);
-  transition: color 0.25s ease-in-out;
 }
 .total,
+.primary,
 .primary-hover:hover {
   color: mat.get-color-from-palette($my-primary, 400);
+}
+
+.primary,
+.primary-hover,
+.accent,
+.accent-hover,
+.warn,
+.warn-hover,
+.total,
+.correct,
+.incorrect {
   transition: color 0.25s ease-in-out;
 }
 

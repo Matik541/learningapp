@@ -27,11 +27,7 @@ export class SectionComponent implements OnInit {
   @Input() blocks: Block[] = []
   @Input() mustloggin: boolean
 
-  constructor(
-    public dialog: MatDialog,
-    public usersService: UsersService,
-    private LessonsService: LessonsService
-  ) {}
+  constructor(public dialog: MatDialog, public usersService: UsersService) {}
 
   ngOnInit(): void {}
 

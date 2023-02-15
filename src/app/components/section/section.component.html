@@ -1,10 +1,10 @@
 <h2 class="title">{{ label }}</h2>
 <div class="section" *ngIf="!mustloggin">
   <div class="blocks">
-    <div *ngFor="let block of blocks" class="block">
+    <a *ngFor="let block of blocks" class="block" [routerLink]="'/lessons/' + block.id">
       <mat-icon> {{ block.icon }} </mat-icon>
       <span>{{ block.title }}</span>
-    </div>
+    </a>
   </div>
   <div *ngIf="!!this.usersService.loggedUser" class="add block" (click)="addNew('10ms', '50ms')">
     <mat-icon>

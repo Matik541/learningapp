@@ -1,14 +1,14 @@
 <div>
-  <form class="search">
-    <div>
-      <button mat-raised-button type="submit">
+  <form class="search" [formGroup]="queryForm" (ngSubmit)="onSubmit()">
+    <mat-form-field appearance="outline" class="hide-hint nav-input">
+      <input matInput type="text" placeholder="Search" autocomplete="off" formControlName="query">
+    </mat-form-field>
+    <div class="action">
+      <button mat-raised-button color="primary" type="submit">
         <mat-icon>
           search
         </mat-icon>
       </button>
     </div>
-    <mat-form-field>
-      <input matInput type="text" placeholder="Search" autocomplete="off">
-    </mat-form-field>
   </form>
 </div>
