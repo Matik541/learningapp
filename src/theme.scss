@@ -41,6 +41,12 @@ $my-theme: mat.define-dark-theme(
 @include mat.core-theme($my-theme);
 @include mat.button-theme($my-theme);
 
+:root {
+  --my-primary: #{mat.get-color-from-palette($my-primary, 400)};
+  --my-accent: #{mat.get-color-from-palette($my-accent, A200)};
+  --my-warn: #{mat.get-color-from-palette($my-warn, 500)};
+}
+
 body {
   background-color: mat.get-color-from-palette($my-dark, 900);
   color: mat.get-color-from-palette($my-grey, 400);

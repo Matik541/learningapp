@@ -38,7 +38,9 @@
               "node_modules/bootstrap/dist/css/bootstrap.min.css"
             ],
             "stylePreprocessorOptions": {
-              "includePaths": ["node_modules/"]
+              "includePaths": [
+                "node_modules/"
+              ]
             },
             "scripts": [
               "node_modules/bootstrap/dist/js/bootstrap.bundle.min.js"

@@ -125,6 +125,24 @@ export class UsersService {
     return password
   }
 
+  getMe(): Observable<User> {
+    let headers = new HttpHeaders({
+      Authorization: `Bearer ${this.accessToken()}`,
+    })
+    return this.http.get<User>(`${API_URL}/users/me`, { headers: headers })
+  }
+
+  getUserById(id: number): Observable<User> {
+    let user = this.http.get<User>(`${API_URL}/users/${id}`).pipe(
+      tap((data) => data),
+      catchError((err) => {
+        console.log(err)
+        return of(null)
+      })
+    )
+    return user
+  }
+
   // TODO: better storage system for tokens
   private strokeTokens(tokens: any): void {
     localStorage.setItem('access_token', tokens.authToken)

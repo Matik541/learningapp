@@ -45,15 +45,15 @@ export class FlashcardsCardsComponent implements OnInit {
 
     if (intent == 'edit') {
       console.log('edit', buttons.edit)
-      buttons.edit?.classList.add('hide')
-      flashcard?.classList.add('hide')
-      editForm?.classList.remove('hide')
       buttons.save?.classList.remove('hide')
+      buttons.edit?.classList.add('hide')
+      editForm?.classList.remove('hide')
+      flashcard?.classList.add('hide')
     } else {
       if (intent == 'cancel') {
         buttons.save?.classList.add('hide')
-        editForm?.classList.add('hide')
         buttons.edit?.classList.remove('hide')
+        editForm?.classList.add('hide')
         flashcard?.classList.remove('hide')
         this.validFlashcard.setValue({
           question: this.input.question,

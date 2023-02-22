@@ -1,0 +1,11 @@
+<button mat-icon-button [matMenuTriggerFor]="shareMenu" color="accent" class="share-menu-btn">
+  <mat-icon>share</mat-icon>
+</button>
+<mat-menu #shareMenu="matMenu" class="share-menu">
+  <button *ngFor="let item of shareMethods" mat-menu-item (click)="share(item.icon)" [disabled]="!item.avable"
+    [style]="'--hover-color: ' + item.color ">
+    <mat-icon *ngIf="item.type == 'font'" [fontIcon]="item.icon"></mat-icon>
+    <mat-icon *ngIf="item.type == 'svg'" [svgIcon]="item.icon"></mat-icon>
+    <span>{{item.name}}</span>
+  </button>
+</mat-menu>

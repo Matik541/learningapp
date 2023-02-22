@@ -1,0 +1,16 @@
+button.share-menu-btn {
+  font-size: 1em;
+  width: 1em;
+  height: 1em;
+  padding: 0.2em;
+
+  & > span {
+    width: 1em !important;
+    height: 1em !important;
+  }
+  & > mat-icon {
+    width: 1.2em;
+    height: 1.2em;
+    font-size: 0.6em;
+  }
+}

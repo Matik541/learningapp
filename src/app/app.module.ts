@@ -31,7 +31,9 @@ import { QuestionMatchComponent } from './lessons/lesson/quiz/question-match/que
 import { QuestionChooseComponent } from './lessons/lesson/quiz/question-choose/question-choose.component'
 import { ResultComponent } from './lessons/lesson/quiz/result/result.component'
 import { FlashcardsCardsComponent } from './lessons/lesson/flashcards/cards/cards.component'
-import { CommentsCardsComponent } from './lessons/lesson/comments/cards/cards.component'
+import { CommentsCardsComponent } from './lessons/lesson/comments/cards/cards.component';
+import { ProfileComponent } from './profile/profile.component';
+import { SocialShareComponent } from './components/social-share/social-share.component'
 @NgModule({
   declarations: [
     AppComponent,
@@ -58,6 +60,8 @@ import { CommentsCardsComponent } from './lessons/lesson/comments/cards/cards.co
     ResultComponent,
     FlashcardsCardsComponent,
     CommentsCardsComponent,
+    ProfileComponent,
+    SocialShareComponent,
   ],
   imports: [
     BrowserAnimationsModule,

@@ -6,6 +6,7 @@ import { RegisterComponent } from './auth/register/register.component'
 import { LessonComponent } from './lessons/lesson/lesson.component'
 import { HomeComponent } from './home/home.component'
 import { ErrorComponent } from './error/error.component'
+import { ProfileComponent } from './profile/profile.component'
 
 const routes: Routes = [
   { path: '', redirectTo: '/home', pathMatch: 'full' },
@@ -24,7 +25,12 @@ const routes: Routes = [
   },
   {
     path: 'profile/:id',
-    component: /*ProfileComponent | delete -> HomeComponent*/ HomeComponent,
+    component: ProfileComponent,
+  },
+  {
+    path: 'profile',
+    redirectTo: '/profile/me',
+    pathMatch: 'full',
   },
   { path: '**', component: ErrorComponent },
 ]

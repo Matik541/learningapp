@@ -32,7 +32,7 @@ navbar {
 	// TODO: separete nav into different files
 	nav {
 		background-color: $bg-color;
-		grid-template-columns: 1fr $size calc((2 * $size + $gap) / 3 * 5) 1fr;
+		grid-template-columns: 1fr $size calc((2 * $size + $gap) / 3 * 5) $size 1fr;
 		gap: $gap;
 		height: $nav-height;
 		padding-top: 0.25 * $gap;
@@ -44,7 +44,6 @@ navbar {
 			.logo {
 				width: 2.25 * $gap;
 				height: 2.25 * $gap;
-				margin-right: $gap;
 			}
 		}
 		.loading-bar {
@@ -78,6 +77,18 @@ navbar {
 		.mat-menu-item {
 			cursor: pointer;
 		}
+	}
+}
+.share-menu button {
+	&:hover {
+		mat-icon,
+		span {
+			color: var(--hover-color);
+		}
+	}
+
+	&:disabled > span {
+		text-decoration: line-through;
 	}
 }
 
@@ -161,10 +172,32 @@ app-home {
 	}
 }
 
+app-profile {
+	.profile {
+		position: relative;
+		grid-template-columns: $size calc((2 * $size + $gap) / 3 * 5) $size;
+		gap: $gap;
+		height: calc(100vh - ($nav-height + $gap));
+		top: $nav-height + $gap;
+		overflow-y: scroll;
+		.menu {
+			gap: $gap;
+			.block {
+				height: $size;
+				width: $size;
+			}
+		}
+		.main {
+			gap: $gap / 2;
+			grid-template-rows: $size 0 auto;
+		}
+	}
+}
+
 app-lesson {
 	.lesson {
 		position: relative;
-		grid-template-columns: auto calc((2 * $size + $gap) / 3 * 5);
+		grid-template-columns: $size calc((2 * $size + $gap) / 3 * 5) $size;
 		gap: $gap;
 		height: calc(100vh - ($nav-height + $gap));
 		top: $nav-height + $gap;
@@ -257,6 +290,10 @@ errors {
 	height: 2.25rem;
 	min-height: 2.25rem;
 	padding: 6px 0;
+}
+
+mat-icon > svg {
+	fill: currentColor;
 }
 
 .chat {

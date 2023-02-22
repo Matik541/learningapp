@@ -5,12 +5,17 @@
         <mat-icon color="accent">{{lesson?.iconPath}}</mat-icon>
         <span>Lesson title</span>
       </div>
-      <a mat-raised-button color="primary" class="author" [routerLink]="'/profile/'+lesson?.creator?.id">
-        <span>{{lesson?.creator?.userName}}</span>
-        <mat-icon>
-          account_circle
-        </mat-icon>
-      </a>
+      <div class="actions">
+        <social-share></social-share>
+
+        <a [routerLink]="'/profile/'+lesson?.creator?.id">
+          <button mat-icon-button color="accent" class="author">
+            <mat-icon>
+              account_circle
+            </mat-icon>
+          </button>
+        </a>
+      </div>
     </div>
 
     <mat-chip-set class="overflow" cdkDropListOrientation="horizontal">
@@ -18,6 +23,7 @@
         {{tag.tagName}}
       </mat-chip>
     </mat-chip-set>
+
     <div class="description">
       <span>Lesson description</span>
     </div>

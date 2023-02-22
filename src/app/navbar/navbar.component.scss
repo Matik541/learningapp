@@ -11,7 +11,6 @@ nav {
   .brand {
     display: flex;
     align-items: center;
-    justify-content: flex-end;
 
     .logo {
       filter: invert(25%) sepia(67%) saturate(2928%) hue-rotate(251deg) brightness(75%) contrast(87%);
@@ -26,6 +25,7 @@ nav {
 
   .nav-user {
     display: flex;
+    justify-content: flex-end;
   }
   .loading-bar {
     height: 3px;
