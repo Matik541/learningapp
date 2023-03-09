@@ -413,7 +413,7 @@ export class LessonsService {
    * @param {number} userId - number - the id of the user who is logged in
    * @returns SelectQueryBuilder<Lesson>
    */
-  getUserScore(
+  private getUserScore(
     lessons: SelectQueryBuilder<Lesson>,
     userId: number,
   ): SelectQueryBuilder<Lesson> {

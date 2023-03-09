@@ -10,7 +10,6 @@ import {
   UseGuards,
   Delete,
   Query,
-  Headers,
   UsePipes,
   ValidationPipe,
 } from '@nestjs/common';
@@ -21,6 +20,7 @@ import { LoginedUserDecorator } from 'src/auth/decorators/loginedUser.decorator'
 
 // guard
 import { AuthorizationGuard } from 'src/auth/guards/auth.guard';
+import { OptionalAuthGuard } from 'src/auth/guards/optionalAuth.guard';
 
 // dto
 import { AddLessonDto } from './dto/addLesson.dto';
@@ -40,16 +40,12 @@ import { LessonCompleted } from './entities/lessonCompleted.entity';
 // service
 import { LessonsService } from './lessons.service';
 
-// utils
-import { JWTUtil } from 'src/auth/utils/jwt.util';
-
+@ApiBearerAuth()
+@UseGuards(OptionalAuthGuard)
 @ApiTags('lessons')
 @Controller('lessons')
 export class LessonsController {
-  constructor(
-    private readonly jwtUtil: JWTUtil,
-    private readonly lessonsService: LessonsService,
-  ) {}
+  constructor(private readonly lessonsService: LessonsService) {}
 
   @Get()
   @HttpCode(HttpStatus.OK)
@@ -60,16 +56,9 @@ export class LessonsController {
       'Return all lessons data. Filter them by tags. Query parameters is tags ids',
   })
   async getAllLessons(
-    @Headers('Authorization') userToken,
     @Query() query: GetAllLessonsQueryParametersDto,
+    @LoginedUserDecorator() userId: number = null,
   ) {
-    let userId: number | null = null;
-
-    if (userToken != undefined) {
-      // decode jwt token and get id of authorized user
-      userId = await this.jwtUtil.decode(userToken).sub;
-    }
-
     return await this.lessonsService.getAllLessons(userId, query);
   }
 
@@ -83,6 +72,8 @@ export class LessonsController {
     return this.lessonsService.getTags();
   }
 
+  @ApiBearerAuth()
+  @UseGuards(OptionalAuthGuard)
   @Get(':id')
   @HttpCode(HttpStatus.OK)
   @ApiResponse({
@@ -91,15 +82,8 @@ export class LessonsController {
   })
   async getLessonById(
     @Param('id') id: string,
-    @Headers('Authorization') userToken,
+    @LoginedUserDecorator('sub') userId: number = null,
   ): Promise<Lesson> {
-    let userId: number | null = null;
-
-    if (userToken != undefined) {
-      // decode jwt token and get id of authorized user
-      userId = await this.jwtUtil.decode(userToken).sub;
-    }
-
     return await this.lessonsService.getLessonById(+id, userId);
   }
 
