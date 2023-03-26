@@ -7,9 +7,9 @@
   </section>
   <mat-divider></mat-divider>
   <section id="meaning">
-    <lesson-question-match *ngFor="let question of quizQuestions.match; let i = index" [question]="question"
+    <lesson-question-select *ngFor="let question of quizQuestions.match; let i = index" [question]="question"
       (answer)="matchAnswer($event, i)">
-    </lesson-question-match>
+    </lesson-question-select>
   </section>
   <mat-divider></mat-divider>
   <section id="choose">
@@ -26,5 +26,4 @@
       </mat-icon>
     </button>
   </div>
-
 </form>
