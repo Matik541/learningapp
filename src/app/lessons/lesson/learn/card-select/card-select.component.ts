@@ -10,10 +10,15 @@ export class CardSelectComponent {
   @Input() answers: string[] = [];
   @Output() answered = new EventEmitter<string>();
 
-  answer: string = '';
+  onClick(answer: string, event: Event) {
+    let btn = event.target as HTMLElement;
+    while (btn.tagName != 'BUTTON') btn = btn.parentElement ?? btn;
+    let siblings = btn?.parentElement?.children;
+    if (siblings)
+      for (let i = 0; i < siblings.length; i++)
+        siblings[i].classList.remove('selected');
 
-  onClick(answer: string) {
-    this.answer = answer;
+    btn.classList.add('selected');
     this.answered.emit(answer);
   }
 }

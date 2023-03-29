@@ -1,11 +1,9 @@
 import { MatSnackBar } from '@angular/material/snack-bar';
-import { Component, Input, OnInit } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { FormControl, Validators } from '@angular/forms';
 import { ActivatedRoute } from '@angular/router';
 import { LessonsService } from 'src/app/lessons.service';
 import { ProgressBarService } from 'src/app/navbar/progress-bar.service';
-import { Flashcard, Lesson } from 'src/environments/environment';
-import { I } from '@angular/cdk/keycodes';
 
 enum FlashcardStatus {
   NotLearned = 0,
@@ -83,6 +81,14 @@ export class LearnComponent implements OnInit {
         return;
       }
 
+      if (Math.random() > 0.5) {
+        this.currentQuesion = card.question;
+        this.currentType = 'question';
+      } else {
+        this.currentQuesion = card.answer;
+        this.currentType = 'answer';
+      }
+
       let method = this.selectMode.value?.sort(() => Math.random() - 0.5)[0];
 
       if (method) {
@@ -115,14 +121,6 @@ export class LearnComponent implements OnInit {
       }
       if (this.currentMethod === 'TrueFalse') {
         this.answers = ['True', 'False'];
-      }
-
-      if (Math.random() > 0.5) {
-        this.currentQuesion = card.question;
-        this.currentType = 'answer';
-      } else {
-        this.currentQuesion = card.answer;
-        this.currentType = 'question';
       }
     },
     generateRound: () => {
@@ -219,6 +217,7 @@ export class LearnComponent implements OnInit {
 
     let result = this.percentWordMatch(answers, this.answer);
 
+    console.log(this.currentQuesion);
     console.log(this.answer);
     console.log(answers);
     console.log(result);
