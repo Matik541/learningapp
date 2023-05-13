@@ -55,11 +55,11 @@ export class LessonsController {
     description:
       'Return all lessons data. Filter them by tags. Query parameters is tags ids',
   })
-  async getAllLessons(
+  getAllLessons(
     @Query() query: GetAllLessonsQueryParametersDto,
     @LoginedUserDecorator() userId: number = null,
   ) {
-    return await this.lessonsService.getAllLessons(userId, query);
+    return this.lessonsService.getAllLessons(userId, query);
   }
 
   @Get('tags')
@@ -80,11 +80,11 @@ export class LessonsController {
     status: HttpStatus.OK,
     description: 'Return lesson data by id.',
   })
-  async getLessonById(
+  getLessonById(
     @Param('id') id: string,
     @LoginedUserDecorator('sub') userId: number = null,
   ): Promise<Lesson> {
-    return await this.lessonsService.getLessonById(+id, userId);
+    return this.lessonsService.getLessonById(+id, userId);
   }
 
   @ApiBearerAuth()
