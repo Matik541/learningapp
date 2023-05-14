@@ -6,6 +6,8 @@ import { JwtService } from '@nestjs/jwt';
 
 const jwtService: JwtService = new JwtService();
 
+const users: SignUpDto[] = [];
+
 /**
  * It takes an id and user name, generate a JWT with them as the payload and returns a promise
  * of a Tokens type.
@@ -47,21 +49,13 @@ const getTokens = async (id: number, userName: string): Promise<Tokens> => {
 
 export const mockAuthService = {
   signUp: jest.fn().mockImplementation(async (signUpDto: SignUpDto) => {
-    // create user
-    // const user = userRepository.create(signUpDto);
-
-    try {
+    if (users.findIndex((u) => u.email === signUpDto.email) == -1) {
       // save them in db
-      //   await userRepository.save(user);
+      users.push(signUpDto);
 
       // generate tokens
-      const tokens = await getTokens(1, signUpDto.userName);
-
-      // update user refresh token in db
-      //   await updateRefreshTokenAsHash(user.id, tokens.refreshToken);
-
-      return tokens;
-    } catch (err) {
+      return await getTokens(1, signUpDto.userName);
+    } else {
       throw new BadRequestException('Email is already in use.');
     }
   }),
