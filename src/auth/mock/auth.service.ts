@@ -1,10 +1,12 @@
 import { BadRequestException } from '@nestjs/common';
+import { JwtService } from '@nestjs/jwt';
+
+import { User } from 'src/users/entities/user.entity';
 
 import { SignUpDto } from '../dto/signup.dto';
-import { Tokens } from '../type/tokens.type';
-import { JwtService } from '@nestjs/jwt';
 import { SignInDto } from '../dto/signin.dto';
-import { User } from 'src/users/entities/user.entity';
+
+import { Tokens } from '../type/tokens.type';
 
 const jwtService: JwtService = new JwtService();
 
@@ -51,39 +53,63 @@ const getTokens = async (id: number, userName: string): Promise<Tokens> => {
 };
 
 export const mockAuthService = {
-  signUp: jest.fn().mockImplementation(async (signUpDto: SignUpDto) => {
-    if (users.findIndex((u) => u.email === signUpDto.email) == -1) {
-      const user = new User();
-      user.id = 1;
-      user.email = signUpDto.email;
-      user.userName = signUpDto.userName;
-      user.hashedPassword = signUpDto.hashedPassword;
+  signUp: jest
+    .fn()
+    .mockImplementation(async (signUpDto: SignUpDto): Promise<Tokens> => {
+      if (users.findIndex((u) => u.email === signUpDto.email) == -1) {
+        const user = new User();
+        user.id = 1;
+        user.email = signUpDto.email;
+        user.userName = signUpDto.userName;
+        user.hashedPassword = signUpDto.hashedPassword;
 
-      // save them in db
-      users.push(user);
+        // generate tokens
+        const tokens = await getTokens(user.id, user.userName);
 
-      // generate tokens
-      return await getTokens(user.id, user.userName);
+        user.hashedRefreshToken = tokens.refreshToken;
+
+        // save them in db
+        users.push(user);
+
+        return tokens;
+      } else {
+        throw new BadRequestException('Email is already in use.');
+      }
+    }),
+
+  signIn: jest
+    .fn()
+    .mockImplementation(async (signInDto: SignInDto): Promise<Tokens> => {
+      try {
+        // find user in mock repository
+        const user = users.find((u) => {
+          if (
+            u.email === signInDto.email &&
+            u.hashedPassword === signInDto.hashedPassword
+          )
+            return u;
+        });
+
+        // generate tokens
+        return await getTokens(user.id, user.userName);
+      } catch (err) {
+        throw new BadRequestException('Bad user credentials.');
+      }
+    }),
+
+  logout: jest.fn().mockImplementation(async (id: number): Promise<void> => {
+    // find user in mock repository
+    const user = users.find((u) => {
+      if (u.id === id) return u;
+      else throw new BadRequestException('Bad request.');
+    });
+
+    // check if user is logged in
+    if (user.hashedRefreshToken !== null) {
+      // change user refresh token in db to null
+      user.hashedRefreshToken = null;
     } else {
-      throw new BadRequestException('Email is already in use.');
-    }
-  }),
-
-  signIn: jest.fn().mockImplementation(async (signInDto: SignInDto) => {
-    try {
-      // find user in mock repository
-      const user = users.find((u) => {
-        if (
-          u.email === signInDto.email &&
-          u.hashedPassword === signInDto.hashedPassword
-        )
-          return u;
-      });
-
-      // generate tokens
-      return await getTokens(user.id, user.userName);
-    } catch (err) {
-      throw new BadRequestException('Bad user credentials.');
+      throw new BadRequestException('Bad request.');
     }
   }),
 };

@@ -38,8 +38,8 @@ export class AuthController {
     description:
       'Return access and refresh tokens. Create a new user and save them in the database.',
   })
-  signUp(@Body() signUpDto: SignUpDto): Promise<Tokens> {
-    return this.authService.signUp(signUpDto);
+  async signUp(@Body() signUpDto: SignUpDto): Promise<Tokens> {
+    return await this.authService.signUp(signUpDto);
   }
 
   //   login
@@ -50,8 +50,8 @@ export class AuthController {
     description:
       'Return access and refresh tokens. Save refresh token in database.',
   })
-  signIn(@Body() signInDto: SignInDto): Promise<Tokens> {
-    return this.authService.signIn(signInDto);
+  async signIn(@Body() signInDto: SignInDto): Promise<Tokens> {
+    return await this.authService.signIn(signInDto);
   }
 
   // logout
@@ -63,8 +63,8 @@ export class AuthController {
     status: HttpStatus.OK,
     description: 'Return nothing. Remove refresh token from db.',
   })
-  logout(@LoginedUserDecorator('sub') id: number): Promise<void> {
-    return this.authService.logout(id);
+  async logout(@LoginedUserDecorator('sub') id: number): Promise<void> {
+    return await this.authService.logout(id);
   }
 
   // refresh token
@@ -77,10 +77,10 @@ export class AuthController {
     description:
       'Return new access and refresh tokens. And update the refresh token in the database.',
   })
-  refreshToken(
+  async refreshToken(
     @LoginedUserDecorator('sub') id: number,
     @LoginedUserDecorator('refreshT') refreshToken: string,
   ): Promise<Tokens> {
-    return this.authService.refreshToken(id, refreshToken);
+    return await this.authService.refreshToken(id, refreshToken);
   }
 }

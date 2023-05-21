@@ -80,7 +80,7 @@ export class AuthService {
   }
 
   /**
-   * Find user by id, check if user is logged in, if yes, change user refresh token in db to null, save
+   * Find user by id, check if user is logged in and change user refresh token in db to null, save
    * new refresh token value in db.
    * @param {number} id - number - the id of the user to log out
    */
@@ -91,14 +91,14 @@ export class AuthService {
 
       // check if user is logged in
       if (user.hashedRefreshToken !== null) {
-        // if yes, change user refresh token in db to null
+        // change user refresh token in db to null
         user.hashedRefreshToken = null;
 
         // save new refresh token value in db
         await this.userRepository.save(user);
       }
     } catch (err) {
-      throw new BadRequestException(err);
+      throw new BadRequestException('Bad request.');
     }
   }
 

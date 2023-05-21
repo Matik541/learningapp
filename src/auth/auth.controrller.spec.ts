@@ -108,5 +108,22 @@ describe('AuthController', () => {
     });
   });
 
-  describe('log out', () => {});
+  describe('log out', () => {
+    afterEach(() => {
+      // expect that mock service will be called
+      expect(mockAuthService.logout).toHaveBeenCalled();
+    });
+
+    it('should log out', async () => {
+      // it should log out without errors
+      expect(await authController.logout(1)).toBe(undefined);
+    });
+
+    it('should fail', async () => {
+      // fails if user not exist
+      await expect(authController.logout(6)).rejects.toThrowError(
+        new BadRequestException('Bad request.'),
+      );
+    });
+  });
 });
