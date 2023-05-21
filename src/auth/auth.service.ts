@@ -75,7 +75,7 @@ export class AuthService {
 
       return tokens;
     } catch (err) {
-      throw new Error(err);
+      throw new BadRequestException('Bad user credentials.');
     }
   }
 
@@ -98,7 +98,7 @@ export class AuthService {
         await this.userRepository.save(user);
       }
     } catch (err) {
-      throw new Error(err);
+      throw new BadRequestException(err);
     }
   }
 
@@ -138,7 +138,7 @@ export class AuthService {
 
       return tokens;
     } catch (err) {
-      throw new Error(err);
+      throw new BadRequestException(err);
     }
   }
 
@@ -205,7 +205,7 @@ export class AuthService {
       // save user with new refresh token
       return await this.userRepository.save(user);
     } catch (err) {
-      throw new Error(err);
+      throw new BadRequestException(err);
     }
   }
 }
