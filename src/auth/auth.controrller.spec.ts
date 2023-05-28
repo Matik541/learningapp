@@ -1,5 +1,5 @@
 import { Test, TestingModule } from '@nestjs/testing';
-import { BadRequestException } from '@nestjs/common';
+import { BadRequestException, ForbiddenException } from '@nestjs/common';
 import { plainToInstance } from 'class-transformer';
 import { validate } from 'class-validator';
 
@@ -8,6 +8,7 @@ import { AuthService } from './auth.service';
 import { mockAuthService } from './mock/auth.service';
 import { SignUpDto } from './dto/signup.dto';
 import { SignInDto } from './dto/signin.dto';
+import { Tokens } from './type/tokens.type';
 
 describe('AuthController', () => {
   let authController: AuthController;
@@ -38,7 +39,6 @@ describe('AuthController', () => {
     };
 
     afterEach(() => {
-      // expect that mock service will be called
       expect(mockAuthService.signUp).toHaveBeenCalled();
     });
 
@@ -75,7 +75,6 @@ describe('AuthController', () => {
     };
 
     afterEach(() => {
-      // expect that mock service will be called
       expect(mockAuthService.signIn).toHaveBeenCalled();
     });
 
@@ -110,7 +109,6 @@ describe('AuthController', () => {
 
   describe('log out', () => {
     afterEach(() => {
-      // expect that mock service will be called
       expect(mockAuthService.logout).toHaveBeenCalled();
     });
 
@@ -123,6 +121,38 @@ describe('AuthController', () => {
       // fails if user not exist
       await expect(authController.logout(6)).rejects.toThrowError(
         new BadRequestException('Bad request.'),
+      );
+    });
+  });
+
+  describe('refresh token', () => {
+    const singInData: SignInDto = {
+      email: 'email@gmail.com',
+      hashedPassword: 'password',
+    };
+
+    let tokens: Tokens;
+
+    beforeAll(async () => {
+      // login to get the refresh token
+      tokens = await authController.signIn(singInData);
+    });
+
+    afterEach(() => {
+      expect(mockAuthService.refreshToken).toHaveBeenCalled();
+    });
+
+    it('should refresh tokens', async () => {
+      // expect to refresh the tokens
+      tokens = await authController.refreshToken(1, tokens.refreshToken);
+
+      expect(tokens).toHaveProperty('authToken');
+      expect(tokens).toHaveProperty('refreshToken');
+    });
+
+    it('should fail', async () => {
+      await expect(authController.refreshToken(2, 'asdasd')).rejects.toThrow(
+        new ForbiddenException('Access denied'),
       );
     });
   });

@@ -1,5 +1,6 @@
-import { BadRequestException } from '@nestjs/common';
+import { BadRequestException, ForbiddenException } from '@nestjs/common';
 import { JwtService } from '@nestjs/jwt';
+import * as bcrypt from 'bcrypt';
 
 import { User } from 'src/users/entities/user.entity';
 
@@ -52,6 +53,29 @@ const getTokens = async (id: number, userName: string): Promise<Tokens> => {
   };
 };
 
+/**
+ * Changes user's hashed refresh token to the new and saves.
+ * @param {number} id - number - the id of the user
+ * @param {string} refreshToken - string - the refresh token that was sent to the client
+ * @returns The user with the new refresh token.
+ */
+const updateRefreshTokenAsHash = async (id: number, refreshToken: string) => {
+  // hash token
+  const hashedToken = await bcrypt.hash(refreshToken, 5);
+
+  // find user by id
+  const user = users.find((u) => {
+    if (u.id === id) return u;
+    else throw new ForbiddenException('Access denied');
+  });
+
+  // change data in hashed refresh token
+  user.hashedRefreshToken = hashedToken;
+
+  // save user with new refresh token
+  return user;
+};
+
 export const mockAuthService = {
   signUp: jest
     .fn()
@@ -63,13 +87,13 @@ export const mockAuthService = {
         user.userName = signUpDto.userName;
         user.hashedPassword = signUpDto.hashedPassword;
 
+        // save them in db
+        users.push(user);
+
         // generate tokens
         const tokens = await getTokens(user.id, user.userName);
 
-        user.hashedRefreshToken = tokens.refreshToken;
-
-        // save them in db
-        users.push(user);
+        await updateRefreshTokenAsHash(user.id, tokens.refreshToken);
 
         return tokens;
       } else {
@@ -91,7 +115,11 @@ export const mockAuthService = {
         });
 
         // generate tokens
-        return await getTokens(user.id, user.userName);
+        const tokens = await getTokens(user.id, user.userName);
+
+        await updateRefreshTokenAsHash(user.id, tokens.refreshToken);
+
+        return tokens;
       } catch (err) {
         throw new BadRequestException('Bad user credentials.');
       }
@@ -112,4 +140,33 @@ export const mockAuthService = {
       throw new BadRequestException('Bad request.');
     }
   }),
+
+  refreshToken: jest
+    .fn()
+    .mockImplementation(
+      async (id: number, refreshToken: string): Promise<Tokens> => {
+        // find user by id
+        const user = users.find((u) => {
+          if (u.id === id) return u;
+          else throw new ForbiddenException('Access denied');
+        });
+
+        // compare user refresh token with refresh token in db
+        const tokensMatches = await bcrypt.compare(
+          refreshToken,
+          user.hashedRefreshToken,
+        );
+
+        // is the refresh token not matches show exception
+        if (!tokensMatches) {
+          throw new ForbiddenException('Access denied');
+        }
+
+        const tokens = await getTokens(user.id, user.userName);
+
+        await updateRefreshTokenAsHash(user.id, tokens.refreshToken);
+
+        return tokens;
+      },
+    ),
 };

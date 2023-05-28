@@ -110,36 +110,32 @@ export class AuthService {
    * @returns Tokens
    */
   async refreshToken(id: number, refreshToken: string): Promise<Tokens> {
-    try {
-      // find user by id
-      const user = await this.userRepository.findOneOrFail({ where: { id } });
+    // find user by id
+    const user = await this.userRepository.findOneOrFail({ where: { id } });
 
-      // check is user exists
-      if (!user) {
-        throw new ForbiddenException('Access denied');
-      }
-
-      // compare user refresh token with refresh token in db
-      const tokensMatches = await bcrypt.compare(
-        refreshToken,
-        user.hashedRefreshToken,
-      );
-
-      // is the refresh token not matches show exception
-      if (!tokensMatches) {
-        throw new ForbiddenException('Access denied');
-      }
-
-      // generate tokens
-      const tokens = await this.getTokens(user.id, user.userName);
-
-      // update user refresh token in db
-      await this.updateRefreshTokenAsHash(user.id, tokens.refreshToken);
-
-      return tokens;
-    } catch (err) {
-      throw new BadRequestException(err);
+    // check is user exists
+    if (!user) {
+      throw new ForbiddenException('Access denied');
     }
+
+    // compare user refresh token with refresh token in db
+    const tokensMatches = await bcrypt.compare(
+      refreshToken,
+      user.hashedRefreshToken,
+    );
+
+    // is the refresh token not matches show exception
+    if (!tokensMatches) {
+      throw new ForbiddenException('Access denied');
+    }
+
+    // generate tokens
+    const tokens = await this.getTokens(user.id, user.userName);
+
+    // update user refresh token in db
+    await this.updateRefreshTokenAsHash(user.id, tokens.refreshToken);
+
+    return tokens;
   }
 
   /**
