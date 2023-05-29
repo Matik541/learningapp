@@ -16,11 +16,11 @@ import {
 import { ApiBearerAuth, ApiResponse, ApiTags } from '@nestjs/swagger';
 
 // decorator
-import { LoginedUserDecorator } from 'src/auth/decorators/loginedUser.decorator';
+import { LoginedUserDecorator } from '../auth/decorators/loginedUser.decorator';
 
 // guard
-import { AuthorizationGuard } from 'src/auth/guards/auth.guard';
-import { OptionalAuthGuard } from 'src/auth/guards/optionalAuth.guard';
+import { AuthorizationGuard } from '../auth/guards/auth.guard';
+import { OptionalAuthGuard } from '../auth/guards/optionalAuth.guard';
 
 // dto
 import { AddLessonDto } from './dto/addLesson.dto';

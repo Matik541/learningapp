@@ -7,7 +7,7 @@ import { ConfigModule } from '@nestjs/config';
 import { AuthController } from './auth.controller';
 
 // entities
-import { User } from 'src/users/entities/user.entity';
+import { User } from '../users/entities/user.entity';
 
 // services
 import { AuthService } from './auth.service';

@@ -4,7 +4,7 @@ import { Repository } from 'typeorm';
 
 // entities
 import { User } from './entities/user.entity';
-import { Lesson } from 'src/lessons/entities/lesson.entity';
+import { Lesson } from '../lessons/entities/lesson.entity';
 
 @Injectable()
 export class UsersService {

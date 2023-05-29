@@ -12,7 +12,7 @@ import { LessonsService } from './lessons.service';
 import { Lesson } from './entities/lesson.entity';
 import { Tag } from './entities/tag.entity';
 import { Flashcard } from './entities/flashcard.entity';
-import { User } from 'src/users/entities/user.entity';
+import { User } from '../users/entities/user.entity';
 import { Comment } from './entities/comment.entity';
 import { LessonCompleted } from './entities/lessonCompleted.entity';
 

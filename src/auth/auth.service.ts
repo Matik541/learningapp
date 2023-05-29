@@ -14,7 +14,7 @@ import { SignUpDto } from './dto/signup.dto';
 import { SignInDto } from './dto/signin.dto';
 
 // entities
-import { User } from 'src/users/entities/user.entity';
+import { User } from '../users/entities/user.entity';
 
 // types
 import { Tokens } from './type/tokens.type';

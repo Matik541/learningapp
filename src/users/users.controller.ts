@@ -9,10 +9,10 @@ import {
 import { ApiBearerAuth, ApiResponse, ApiTags } from '@nestjs/swagger';
 
 // decorators
-import { LoginedUserDecorator } from 'src/auth/decorators/loginedUser.decorator';
+import { LoginedUserDecorator } from '../auth/decorators/loginedUser.decorator';
 
 // guards
-import { AuthorizationGuard } from 'src/auth/guards/auth.guard';
+import { AuthorizationGuard } from '../auth/guards/auth.guard';
 
 // entities
 import { User } from './entities/user.entity';

@@ -7,7 +7,7 @@ import {
 } from 'typeorm';
 
 // entities
-import { User } from 'src/users/entities/user.entity';
+import { User } from '../../users/entities/user.entity';
 import { Lesson } from './lesson.entity';
 
 @Entity()
