@@ -19,7 +19,7 @@ export class RefreshTokenStrategy extends PassportStrategy(
     let refreshT: string;
 
     if (req) {
-      refreshT = req.get('authorization').replace('Bearer', '').trim();
+      refreshT = req.get('Authorization').replace('Bearer ', '').trim();
     }
 
     return { ...data, refreshT };

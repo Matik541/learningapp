@@ -7,14 +7,27 @@ import { LessonsModule } from './lessons/lessons.module';
 
 @Module({
   imports: [
-    TypeOrmModule.forRoot({
-      type: 'sqlite',
-      database: 'LearningApp.db',
-      entities: [__dirname + '/**/*.entity{.ts,.js}'],
-      // change to false in production mode
-      synchronize: true,
+    ConfigModule.forRoot({ isGlobal: true }),
+    TypeOrmModule.forRootAsync({
+      useFactory: async () => {
+        if (process.env.APPLICATION_MODE === 'test') {
+          return {
+            type: 'sqlite',
+            database: ':memory:',
+            entities: [__dirname + '/**/*.entity{.ts,.js}'],
+            synchronize: true,
+          };
+        }
+
+        return {
+          type: 'sqlite',
+          database: 'LearningApp.db',
+          entities: [__dirname + '/**/*.entity{.ts,.js}'],
+          // change to false in production mode
+          synchronize: true,
+        };
+      },
     }),
-    ConfigModule.forRoot(),
     UsersModule,
     AuthModule,
     LessonsModule,
