@@ -42,3 +42,4 @@ todo
 
 # private data
 .env
+.env.test
