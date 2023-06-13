@@ -31,20 +31,41 @@ describe('UsersController (e2e)', () => {
       });
   });
 
-  it('/users/me (GET)', async () => {
+  it('/tags (GET)', async () => {
     return request(app.getHttpServer())
-      .get('/users/me')
-      .set('Authorization', `Bearer ${tokens.authToken}`)
+      .get('/tags')
       .expect(HttpStatus.OK)
       .then((res) => {
         console.log(res.body);
-        console.log(res.headers);
       });
   });
 
-  it('/users/{id} (GET)', async () => {
+  it('/tags/add (POST)', async () => {
     return request(app.getHttpServer())
-      .get('/users/1')
+      .post('/tags/add')
+      .set('Authorization', `Bearer ${tokens.authToken}`)
+      .send({ tagName: 'english' })
+      .expect(HttpStatus.CREATED)
+      .then((res) => {
+        console.log(res.body);
+      });
+  });
+
+  it('/tags/{id} (PUT)', async () => {
+    return request(app.getHttpServer())
+      .put('/tags/1')
+      .set('Authorization', `Bearer ${tokens.authToken}`)
+      .send({ tagName: 'test_name' })
+      .expect(HttpStatus.OK)
+      .then((res) => {
+        console.log(res.body);
+      });
+  });
+
+  it('/tags/delete/{id} (DELETE)', async () => {
+    return request(app.getHttpServer())
+      .delete('/tags/1')
+      .set('Authorization', `Bearer ${tokens.authToken}`)
       .expect(HttpStatus.OK)
       .then((res) => {
         console.log(res.body);

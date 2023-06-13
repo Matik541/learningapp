@@ -6,7 +6,7 @@ import { Flashcard } from '../entities/flashcard.entity';
 import { UpdateFlashcard } from './flashcard/updateFlashcard.dto';
 
 // dto
-import { AddTagToLesson } from './tag/addTagToLesson.dto';
+import { AddTagToLesson } from '../../tags/dto/addTagToLesson.dto';
 
 export class UpdateLessonDto {
   @ApiProperty({
@@ -37,7 +37,7 @@ export class UpdateLessonDto {
   })
   @IsString()
   @IsOptional()
-  iconPath: string;
+  iconPath?: string;
 
   @ApiProperty({
     description: 'Lesson tags',

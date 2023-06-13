@@ -4,7 +4,6 @@ import { IsNull, Repository, SelectQueryBuilder } from 'typeorm';
 
 // dto
 import { AddLessonDto } from './dto/addLesson.dto';
-import { AddTagDto } from './dto/tag/addTag.dto';
 import { UpdateLessonDto } from './dto/updateLesson.dto';
 import { AddFlashcardDto } from './dto/flashcard/addFlashcard.dto';
 import { AddCommentDto } from './dto/comment/addComment.dto';
@@ -14,7 +13,6 @@ import { GetAllLessonsQueryParametersDto } from './dto/getAllLessonsQueryParamet
 
 // entity
 import { Lesson } from './entities/lesson.entity';
-import { Tag } from './entities/tag.entity';
 import { Flashcard } from './entities/flashcard.entity';
 import { Comment } from './entities/comment.entity';
 import { LessonCompleted } from './entities/lessonCompleted.entity';
@@ -23,7 +21,6 @@ import { LessonCompleted } from './entities/lessonCompleted.entity';
 export class LessonsService {
   constructor(
     @InjectRepository(Lesson) private lessonsRepository: Repository<Lesson>,
-    @InjectRepository(Tag) private tagRepository: Repository<Tag>,
     @InjectRepository(Flashcard)
     private flashcardRepository: Repository<Flashcard>,
     @InjectRepository(Comment) private commentRepository: Repository<Comment>,
@@ -105,19 +102,6 @@ export class LessonsService {
   }
 
   /**
-   * It returns a promise of an array of Tag objects.
-   * @returns An array of Tag objects.
-   */
-  async getTags(): Promise<Tag[]> {
-    // find and return all tags
-    try {
-      return await this.tagRepository.find();
-    } catch (err) {
-      throw new BadRequestException(err);
-    }
-  }
-
-  /**
    * Find a lesson by id, include the creator's id
    * and username fields. Then return lesson data.
    * @param {number} lessonId - number - the id of the lesson we want to get.
@@ -167,23 +151,6 @@ export class LessonsService {
     try {
       // save lesson in db
       return await this.lessonsRepository.save(lesson);
-    } catch (err) {
-      throw new BadRequestException(err);
-    }
-  }
-
-  /**
-   * It creates a new tag object and them in the database.
-   * @param {AddTagDto} addTagDto - AddTagDto - this is the DTO that we created earlier.
-   * @returns The tag object that was created and saved to the db.
-   */
-  async addTag(addTagDto: AddTagDto): Promise<Tag> {
-    // create tag object
-    const tag = this.tagRepository.create(addTagDto);
-
-    try {
-      // save tag in db
-      return await this.tagRepository.save(tag);
     } catch (err) {
       throw new BadRequestException(err);
     }

@@ -10,7 +10,7 @@ import {
 
 // entities
 import { User } from '../../users/entities/user.entity';
-import { Tag } from './tag.entity';
+import { Tag } from '../../tags/entities/tag.entity';
 import { Flashcard } from './flashcard.entity';
 import { Comment } from './comment.entity';
 import { LessonCompleted } from './lessonCompleted.entity';

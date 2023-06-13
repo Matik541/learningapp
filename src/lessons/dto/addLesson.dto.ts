@@ -2,7 +2,7 @@ import { ApiProperty } from '@nestjs/swagger';
 import { IsArray, IsNotEmpty, IsString } from 'class-validator';
 
 // dto
-import { AddTagToLesson } from './tag/addTagToLesson.dto';
+import { AddTagToLesson } from '../../tags/dto/addTagToLesson.dto';
 import { AddFlashcardDto } from './flashcard/addFlashcard.dto';
 
 export class AddLessonDto {

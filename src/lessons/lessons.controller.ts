@@ -24,7 +24,6 @@ import { OptionalAuthGuard } from '../auth/guards/optionalAuth.guard';
 
 // dto
 import { AddLessonDto } from './dto/addLesson.dto';
-import { AddTagDto } from './dto/tag/addTag.dto';
 import { GetAllLessonsQueryParametersDto } from './dto/getAllLessonsQueryParameters.dto';
 import { UpdateLessonDto } from './dto/updateLesson.dto';
 import { AddCommentDto } from './dto/comment/addComment.dto';
@@ -33,7 +32,6 @@ import { LessonCompletedDto } from './dto/lessonCompleted.dto';
 
 // entity
 import { Lesson } from './entities/lesson.entity';
-import { Tag } from './entities/tag.entity';
 import { Comment } from './entities/comment.entity';
 import { LessonCompleted } from './entities/lessonCompleted.entity';
 
@@ -60,16 +58,6 @@ export class LessonsController {
     @LoginedUserDecorator() userId: number = null,
   ) {
     return this.lessonsService.getAllLessons(userId, query);
-  }
-
-  @Get('tags')
-  @HttpCode(HttpStatus.OK)
-  @ApiResponse({
-    status: HttpStatus.OK,
-    description: 'Return all tags',
-  })
-  getLessonTags(): Promise<Tag[]> {
-    return this.lessonsService.getTags();
   }
 
   @ApiBearerAuth()
@@ -100,18 +88,6 @@ export class LessonsController {
     @Body() addLessonDto: AddLessonDto,
   ): Promise<Lesson> {
     return this.lessonsService.addLesson(lessonCreatorId, addLessonDto);
-  }
-
-  @ApiBearerAuth()
-  @UseGuards(AuthorizationGuard)
-  @Post('tag/add')
-  @HttpCode(HttpStatus.OK)
-  @ApiResponse({
-    status: HttpStatus.OK,
-    description: 'Return added tag. Get tag name.',
-  })
-  addTag(@Body() addTagDto: AddTagDto): Promise<Tag> {
-    return this.lessonsService.addTag(addTagDto);
   }
 
   @ApiBearerAuth()

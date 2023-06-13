@@ -10,7 +10,7 @@ import { LessonsService } from './lessons.service';
 
 // entity
 import { Lesson } from './entities/lesson.entity';
-import { Tag } from './entities/tag.entity';
+import { Tag } from '../tags/entities/tag.entity';
 import { Flashcard } from './entities/flashcard.entity';
 import { User } from '../users/entities/user.entity';
 import { Comment } from './entities/comment.entity';
@@ -23,7 +23,6 @@ import { JWTUtil } from '../auth/utils/jwt.util';
   imports: [
     TypeOrmModule.forFeature([
       Lesson,
-      Tag,
       Flashcard,
       User,
       Comment,
