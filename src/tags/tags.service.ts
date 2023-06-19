@@ -43,6 +43,15 @@ export class TagsService {
     }
   }
 
+  /**
+   * Updates a tag's data in the database based on the provided ID and UpdateTagDto.
+   * @param {number} id - The id parameter is a number that represents the unique identifier of the tag
+   * that needs to be updated.
+   * @param {UpdateTagDto} updateTagDto - UpdateTagDto is a data transfer object that contains the
+   * updated information for a tag. It may have a property called "tagName" which represents the new
+   * name of the tag.
+   * @returns This function is returning a Promise that resolves to a Tag object.
+   */
   async updateTag(id: number, updateTagDto: UpdateTagDto): Promise<Tag> {
     try {
       // find tag by id
@@ -59,6 +68,13 @@ export class TagsService {
     }
   }
 
+  /**
+   * Deletes a tag from the database by its ID.
+   * @param {number} id - The `id` parameter is a number that represents the unique identifier of the
+   * tag that needs to be deleted from the database.
+   * @returns This function is returning a Promise that resolves to a Tag object after deleting a tag
+   * from the database.
+   */
   async deleteTag(id: number): Promise<Tag> {
     try {
       // find tag by id
