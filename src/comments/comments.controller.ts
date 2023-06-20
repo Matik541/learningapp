@@ -92,7 +92,10 @@ export class CommentsController {
     status: HttpStatus.OK,
     description: 'Delete lessons comments.',
   })
-  deleteLessonsComments(@Param('lessonId') lessonId: string) {
-    return this.commentsService.deleteLessonsComments(+lessonId);
+  deleteLessonsComments(
+    @LoginedUserDecorator('sub') creatorId: number,
+    @Param('lessonId') lessonId: string,
+  ): Promise<Comment[]> {
+    return this.commentsService.deleteLessonsComments(+lessonId, creatorId);
   }
 }

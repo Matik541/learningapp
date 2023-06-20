@@ -14,10 +14,13 @@ export class CommentsService {
     private readonly commentRepository: Repository<Comment>,
   ) {}
 
-  async getCommentsByLesson(lessonsId: number): Promise<Comment[]> {
+  async getCommentsByLesson(
+    lessonsId: number,
+    lessonCreatorId: number,
+  ): Promise<Comment[]> {
     try {
       return await this.commentRepository.find({
-        where: { lesson: { id: lessonsId } },
+        where: { lesson: { id: lessonsId, creator: { id: lessonCreatorId } } },
       });
     } catch (err) {
       throw new BadRequestException(err);
@@ -111,8 +114,11 @@ export class CommentsService {
     }
   }
 
-  async deleteLessonsComments(lessonId: number) {
-    const comments = await this.getCommentsByLesson(lessonId);
+  async deleteLessonsComments(
+    lessonId: number,
+    lessonCreatorId: number,
+  ): Promise<Comment[]> {
+    const comments = await this.getCommentsByLesson(lessonId, lessonCreatorId);
 
     try {
       return await this.commentRepository.remove(comments);
