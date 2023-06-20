@@ -26,7 +26,7 @@ describe('UsersController (e2e)', () => {
         hashedPassword: 'test',
       })
       .then((res) => {
-        console.log(res.body);
+        // console.log(res.body);
         tokens = res.body;
       });
   });
@@ -35,19 +35,16 @@ describe('UsersController (e2e)', () => {
     return request(app.getHttpServer())
       .get('/users/me')
       .set('Authorization', `Bearer ${tokens.authToken}`)
-      .expect(HttpStatus.OK)
-      .then((res) => {
-        console.log(res.body);
-        console.log(res.headers);
-      });
+      .expect(HttpStatus.OK);
+    // .then((res) => {
+    // console.log(res.body);
+    // });
   });
 
   it('/users/{id} (GET)', async () => {
-    return request(app.getHttpServer())
-      .get('/users/1')
-      .expect(HttpStatus.OK)
-      .then((res) => {
-        console.log(res.body);
-      });
+    return request(app.getHttpServer()).get('/users/1').expect(HttpStatus.OK);
+    // .then((res) => {
+    //   console.log(res.body);
+    // });
   });
 });

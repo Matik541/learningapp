@@ -32,9 +32,9 @@ export class CommentsController {
   @ApiBearerAuth()
   @UseGuards(AuthorizationGuard)
   @Post('add/:lessonId')
-  @HttpCode(HttpStatus.OK)
+  @HttpCode(HttpStatus.CREATED)
   @ApiResponse({
-    status: HttpStatus.OK,
+    status: HttpStatus.CREATED,
     description: 'Return added comment.',
   })
   addComment(

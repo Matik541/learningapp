@@ -15,9 +15,13 @@ export class CommentsService {
   ) {}
 
   async getCommentsByLesson(lessonsId: number): Promise<Comment[]> {
-    return await this.commentRepository.find({
-      where: { lesson: { id: lessonsId } },
-    });
+    try {
+      return await this.commentRepository.find({
+        where: { lesson: { id: lessonsId } },
+      });
+    } catch (err) {
+      throw new BadRequestException(err);
+    }
   }
 
   async addComment(
@@ -109,7 +113,11 @@ export class CommentsService {
 
   async deleteLessonsComments(lessonId: number) {
     const comments = await this.getCommentsByLesson(lessonId);
-    console.log(comments);
-    return await this.commentRepository.remove(comments);
+
+    try {
+      return await this.commentRepository.remove(comments);
+    } catch (err) {
+      throw new BadRequestException(err);
+    }
   }
 }

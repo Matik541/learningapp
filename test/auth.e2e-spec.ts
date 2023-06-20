@@ -29,7 +29,7 @@ describe('AuthController (e2e)', () => {
       })
       .expect(HttpStatus.CREATED)
       .then((res) => {
-        console.log(res.body);
+        // console.log(res.body);
         tokens = res.body;
       });
   });
@@ -43,7 +43,7 @@ describe('AuthController (e2e)', () => {
       })
       .expect(HttpStatus.OK)
       .then((res) => {
-        console.log(res.body);
+        // console.log(res.body);
         tokens = res.body;
       });
   });
@@ -54,7 +54,7 @@ describe('AuthController (e2e)', () => {
       .set('Authorization', `Bearer ${tokens.refreshToken}`)
       .expect(HttpStatus.OK)
       .then((res) => {
-        console.log('tokens:' + res.body);
+        // console.log('tokens:' + res.body);
         tokens = res.body;
       });
   });
@@ -63,9 +63,9 @@ describe('AuthController (e2e)', () => {
     return request(app.getHttpServer())
       .post('/auth/logout')
       .set('Authorization', `Bearer ${tokens.authToken}`)
-      .expect(HttpStatus.OK)
-      .then((res) => {
-        console.log(res.body);
-      });
+      .expect(HttpStatus.OK);
+    // .then((res) => {
+    //   console.log(res.body);
+    // });
   });
 });

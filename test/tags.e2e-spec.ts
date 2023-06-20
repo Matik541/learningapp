@@ -26,18 +26,16 @@ describe('UsersController (e2e)', () => {
         hashedPassword: 'test',
       })
       .then((res) => {
-        console.log(res.body);
+        // console.log(res.body);
         tokens = res.body;
       });
   });
 
   it('/tags (GET)', async () => {
-    return request(app.getHttpServer())
-      .get('/tags')
-      .expect(HttpStatus.OK)
-      .then((res) => {
-        console.log(res.body);
-      });
+    return request(app.getHttpServer()).get('/tags').expect(HttpStatus.OK);
+    // .then((res) => {
+    //   console.log(res.body);
+    // });
   });
 
   it('/tags/add (POST)', async () => {
@@ -45,10 +43,10 @@ describe('UsersController (e2e)', () => {
       .post('/tags/add')
       .set('Authorization', `Bearer ${tokens.authToken}`)
       .send({ tagName: 'english' })
-      .expect(HttpStatus.CREATED)
-      .then((res) => {
-        console.log(res.body);
-      });
+      .expect(HttpStatus.CREATED);
+    // .then((res) => {
+    //   console.log(res.body);
+    // });
   });
 
   it('/tags/{id} (PUT)', async () => {
@@ -56,19 +54,19 @@ describe('UsersController (e2e)', () => {
       .put('/tags/1')
       .set('Authorization', `Bearer ${tokens.authToken}`)
       .send({ tagName: 'test_name' })
-      .expect(HttpStatus.OK)
-      .then((res) => {
-        console.log(res.body);
-      });
+      .expect(HttpStatus.OK);
+    // .then((res) => {
+    //   console.log(res.body);
+    // });
   });
 
   it('/tags/delete/{id} (DELETE)', async () => {
     return request(app.getHttpServer())
       .delete('/tags/1')
       .set('Authorization', `Bearer ${tokens.authToken}`)
-      .expect(HttpStatus.OK)
-      .then((res) => {
-        console.log(res.body);
-      });
+      .expect(HttpStatus.OK);
+    // .then((res) => {
+    //   console.log(res.body);
+    // });
   });
 });
