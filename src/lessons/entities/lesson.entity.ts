@@ -12,7 +12,7 @@ import {
 import { User } from '../../users/entities/user.entity';
 import { Tag } from '../../tags/entities/tag.entity';
 import { Flashcard } from './flashcard.entity';
-import { Comment } from './comment.entity';
+import { Comment } from '../../comments/entities/comment.entity';
 import { LessonCompleted } from './lessonCompleted.entity';
 
 @Entity()

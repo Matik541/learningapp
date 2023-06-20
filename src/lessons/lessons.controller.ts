@@ -26,13 +26,10 @@ import { OptionalAuthGuard } from '../auth/guards/optionalAuth.guard';
 import { AddLessonDto } from './dto/addLesson.dto';
 import { GetAllLessonsQueryParametersDto } from './dto/getAllLessonsQueryParameters.dto';
 import { UpdateLessonDto } from './dto/updateLesson.dto';
-import { AddCommentDto } from './dto/comment/addComment.dto';
-import { UpdateCommentDto } from './dto/comment/updateComment.dto';
 import { LessonCompletedDto } from './dto/lessonCompleted.dto';
 
 // entity
 import { Lesson } from './entities/lesson.entity';
-import { Comment } from './entities/comment.entity';
 import { LessonCompleted } from './entities/lessonCompleted.entity';
 
 // service
@@ -92,26 +89,6 @@ export class LessonsController {
 
   @ApiBearerAuth()
   @UseGuards(AuthorizationGuard)
-  @Post('comment/add/:lessonId')
-  @HttpCode(HttpStatus.OK)
-  @ApiResponse({
-    status: HttpStatus.OK,
-    description: 'Return added tag. Get tag name.',
-  })
-  addComment(
-    @LoginedUserDecorator('sub') commentCreatorId: number,
-    @Param('lessonId') lessonId: string,
-    @Body() addCommentDto: AddCommentDto,
-  ): Promise<Comment> {
-    return this.lessonsService.addComment(
-      commentCreatorId,
-      +lessonId,
-      addCommentDto,
-    );
-  }
-
-  @ApiBearerAuth()
-  @UseGuards(AuthorizationGuard)
   @Put(':id')
   @HttpCode(HttpStatus.OK)
   @ApiResponse({
@@ -127,26 +104,6 @@ export class LessonsController {
       creatorId,
       +lessonId,
       updateLessonDto,
-    );
-  }
-
-  @ApiBearerAuth()
-  @UseGuards(AuthorizationGuard)
-  @Put('comment/:id')
-  @HttpCode(HttpStatus.OK)
-  @ApiResponse({
-    status: HttpStatus.OK,
-    description: 'Update and return comment data by id.',
-  })
-  updateComment(
-    @LoginedUserDecorator('sub') creatorId: number,
-    @Param('id') commentId: string,
-    @Body() updateCommentDto: UpdateCommentDto,
-  ): Promise<Comment> {
-    return this.lessonsService.updateComment(
-      creatorId,
-      +commentId,
-      updateCommentDto,
     );
   }
 
@@ -179,20 +136,5 @@ export class LessonsController {
     @Body() dto: LessonCompletedDto,
   ): Promise<LessonCompleted> {
     return this.lessonsService.lessonCompleted(userId, +lessonId, dto);
-  }
-
-  @ApiBearerAuth()
-  @UseGuards(AuthorizationGuard)
-  @Delete('comment/:id')
-  @HttpCode(HttpStatus.OK)
-  @ApiResponse({
-    status: HttpStatus.OK,
-    description: 'Delete and return comment data by id.',
-  })
-  deleteComment(
-    @LoginedUserDecorator('sub') creatorId: number,
-    @Param('id') commentId: string,
-  ): Promise<Comment> {
-    return this.lessonsService.deleteComment(creatorId, +commentId);
   }
 }

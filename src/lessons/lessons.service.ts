@@ -6,15 +6,12 @@ import { IsNull, Repository, SelectQueryBuilder } from 'typeorm';
 import { AddLessonDto } from './dto/addLesson.dto';
 import { UpdateLessonDto } from './dto/updateLesson.dto';
 import { AddFlashcardDto } from './dto/flashcard/addFlashcard.dto';
-import { AddCommentDto } from './dto/comment/addComment.dto';
-import { UpdateCommentDto } from './dto/comment/updateComment.dto';
 import { LessonCompletedDto } from './dto/lessonCompleted.dto';
 import { GetAllLessonsQueryParametersDto } from './dto/getAllLessonsQueryParameters.dto';
 
 // entity
 import { Lesson } from './entities/lesson.entity';
 import { Flashcard } from './entities/flashcard.entity';
-import { Comment } from './entities/comment.entity';
 import { LessonCompleted } from './entities/lessonCompleted.entity';
 
 @Injectable()
@@ -23,7 +20,6 @@ export class LessonsService {
     @InjectRepository(Lesson) private lessonsRepository: Repository<Lesson>,
     @InjectRepository(Flashcard)
     private flashcardRepository: Repository<Flashcard>,
-    @InjectRepository(Comment) private commentRepository: Repository<Comment>,
     @InjectRepository(LessonCompleted)
     private lessonCompletedRepository: Repository<LessonCompleted>,
   ) {}
@@ -156,26 +152,6 @@ export class LessonsService {
     }
   }
 
-  async addComment(
-    commentCreatorId: number,
-    lessonId: number,
-    dto: AddCommentDto,
-  ): Promise<Comment> {
-    // create comment object
-    const comment = this.commentRepository.create({
-      creator: { id: commentCreatorId },
-      lesson: { id: lessonId },
-      ...dto,
-    });
-
-    try {
-      // save comment in db
-      return await this.commentRepository.save(comment);
-    } catch (err) {
-      throw new BadRequestException(err);
-    }
-  }
-
   /**
    * We get the lesson by id, check if logger user is the author, change the data in the lesson object,
    * and save the updated lesson.
@@ -216,43 +192,6 @@ export class LessonsService {
     return lesson;
   }
 
-  async updateComment(
-    creatorId: number,
-    commentId: number,
-    dto: UpdateCommentDto,
-  ): Promise<Comment> {
-    // get comment by id
-    let comment = await this.commentRepository.findOneOrFail({
-      select: {
-        id: true,
-        comment: true,
-        creator: {
-          id: true,
-          userName: true,
-        },
-      },
-      where: { id: commentId },
-      relations: {
-        creator: true,
-      },
-    });
-
-    // check is comment author
-    if (comment.creator.id !== creatorId) {
-      throw new BadRequestException('You are not allowed to update.');
-    }
-
-    // change data in comment object
-    comment = Object.assign(comment, dto);
-
-    // save updated comment
-    try {
-      return await this.commentRepository.save(comment);
-    } catch (err) {
-      throw new BadRequestException(err);
-    }
-  }
-
   /**
    * It deletes a lesson from the database.
    * @param {number} creatorId - number - the id of the logged user
@@ -271,9 +210,6 @@ export class LessonsService {
     // delete lesson flashcards
     await this.flashcardRepository.delete({ lesson: lesson });
 
-    // delete lesson comments
-    await this.commentRepository.delete({ lesson: lesson });
-
     // delete users score
     await this.lessonCompletedRepository.delete({ lesson: lesson });
 
@@ -281,36 +217,6 @@ export class LessonsService {
     await this.lessonsRepository.remove(lesson);
 
     return lesson;
-  }
-
-  async deleteComment(creatorId: number, commentId: number): Promise<Comment> {
-    // get comment by id
-    const comment = await this.commentRepository.findOneOrFail({
-      select: {
-        id: true,
-        comment: true,
-        creator: {
-          id: true,
-          userName: true,
-        },
-      },
-      where: { id: commentId },
-      relations: {
-        creator: true,
-      },
-    });
-
-    // check is comment author
-    if (comment.creator.id !== creatorId) {
-      throw new BadRequestException('You are not allowed to update.');
-    }
-
-    try {
-      // remove comment from db
-      return await this.commentRepository.remove(comment);
-    } catch (err) {
-      throw new BadRequestException(err);
-    }
   }
 
   /**
@@ -333,7 +239,7 @@ export class LessonsService {
     });
 
     try {
-      // save user score comment
+      // save user score
       return await this.lessonCompletedRepository.save(lessonCompleted);
     } catch (err) {
       throw new BadRequestException(err);

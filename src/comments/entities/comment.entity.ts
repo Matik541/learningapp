@@ -8,7 +8,7 @@ import {
 
 // entities
 import { User } from '../../users/entities/user.entity';
-import { Lesson } from './lesson.entity';
+import { Lesson } from '../../lessons/entities/lesson.entity';
 
 @Entity()
 export class Comment {

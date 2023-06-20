@@ -2,7 +2,7 @@ import { Column, Entity, OneToMany, PrimaryGeneratedColumn } from 'typeorm';
 
 // entities
 import { Lesson } from '../../lessons/entities/lesson.entity';
-import { Comment } from '../../lessons/entities/comment.entity';
+import { Comment } from '../../comments/entities/comment.entity';
 import { LessonCompleted } from '../../lessons/entities/lessonCompleted.entity';
 
 @Entity()
