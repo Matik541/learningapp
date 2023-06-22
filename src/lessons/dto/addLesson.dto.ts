@@ -3,7 +3,7 @@ import { IsArray, IsNotEmpty, IsString } from 'class-validator';
 
 // dto
 import { AddTagToLesson } from '../../tags/dto/addTagToLesson.dto';
-import { AddFlashcardDto } from './flashcard/addFlashcard.dto';
+import { AddFlashcardDto } from '../../flashcards/dto/addFlashcard.dto';
 
 export class AddLessonDto {
   @ApiProperty({

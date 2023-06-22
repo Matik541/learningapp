@@ -1,25 +1,21 @@
 import { BadRequestException, Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
-import { IsNull, Repository, SelectQueryBuilder } from 'typeorm';
+import { Repository, SelectQueryBuilder } from 'typeorm';
 
 // dto
 import { AddLessonDto } from './dto/addLesson.dto';
 import { UpdateLessonDto } from './dto/updateLesson.dto';
-import { AddFlashcardDto } from './dto/flashcard/addFlashcard.dto';
 import { LessonCompletedDto } from './dto/lessonCompleted.dto';
 import { GetAllLessonsQueryParametersDto } from './dto/getAllLessonsQueryParameters.dto';
 
 // entity
 import { Lesson } from './entities/lesson.entity';
-import { Flashcard } from './entities/flashcard.entity';
 import { LessonCompleted } from './entities/lessonCompleted.entity';
 
 @Injectable()
 export class LessonsService {
   constructor(
     @InjectRepository(Lesson) private lessonsRepository: Repository<Lesson>,
-    @InjectRepository(Flashcard)
-    private flashcardRepository: Repository<Flashcard>,
     @InjectRepository(LessonCompleted)
     private lessonCompletedRepository: Repository<LessonCompleted>,
   ) {}
@@ -136,7 +132,7 @@ export class LessonsService {
    */
   async addLesson(lessonCreatorId: number, dto: AddLessonDto): Promise<Lesson> {
     // get flashcards
-    dto.flashcards = await this.addFlashcards(dto.flashcards);
+    // dto.flashcards = await this.addFlashcards(dto.flashcards);
 
     // create lesson object
     const lesson = this.lessonsRepository.create({
@@ -169,7 +165,7 @@ export class LessonsService {
     // get lesson by id
     let lesson = await this.getLessonById(lessonId);
 
-    dto.flashcards = await this.updateLessonFlashcards(dto.flashcards);
+    // dto.flashcards = await this.updateLessonFlashcards(dto.flashcards);
 
     // check is lesson author
     if (lesson.creator.id !== creatorId) {
@@ -187,7 +183,7 @@ export class LessonsService {
     }
 
     // clear useless flashcards
-    await this.removeFlashcardsWithoutLesson();
+    // await this.removeFlashcardsWithoutLesson();
 
     return lesson;
   }
@@ -203,12 +199,8 @@ export class LessonsService {
     const lesson = await this.getLessonById(lessonId);
 
     // check is lesson author
-    if (lesson.creator.id !== creatorId) {
+    if (lesson.creator.id !== creatorId)
       throw new BadRequestException('You are not allowed to update.');
-    }
-
-    // delete lesson flashcards
-    await this.flashcardRepository.delete({ lesson: lesson });
 
     // delete users score
     await this.lessonCompletedRepository.delete({ lesson: lesson });
@@ -247,39 +239,6 @@ export class LessonsService {
   }
 
   /**
-   * It takes an array of flashcards data from dto, creates a flashcard objects, saves them in the
-   * database and returns their objects.
-   * @param {AddFlashcardDto[]} flashcardsData - AddFlashcard[]
-   * @returns An array of flashcards objects
-   */
-  private async addFlashcards(
-    flashcardsData: AddFlashcardDto[],
-  ): Promise<Flashcard[]> {
-    const flashcards = [];
-
-    let flashcard: Flashcard;
-    for (let i = 0; i < flashcardsData.length; i++) {
-      flashcard = await this.addFlashcard(flashcardsData[i]);
-
-      flashcards.push(flashcard);
-    }
-
-    return flashcards;
-  }
-
-  private async addFlashcard(flashcardData: AddFlashcardDto) {
-    // create flashcards object
-    const flashcard = this.flashcardRepository.create(flashcardData);
-
-    try {
-      // save them in the database
-      return await this.flashcardRepository.save(flashcard);
-    } catch (err) {
-      throw new BadRequestException(err);
-    }
-  }
-
-  /**
    * It takes a query builder lessons and a user id, and if the user id is not null or undefined, it adds a
    * score column to the query builder and joins the score table to the lessons table
    * @param lessons - SelectQueryBuilder<Lesson> - the query builder object
@@ -304,68 +263,5 @@ export class LessonsService {
     }
 
     return lessons;
-  }
-
-  /**
-   * It takes an array of flashcards data, for each flashcard it calls the updateFlashcard function
-   * and returns array of updated flashcards.
-   * @param {Flashcard[]} flashcardsData - Flashcard[].
-   * @returns An array of updated flashcards objects.
-   */
-  private async updateLessonFlashcards(
-    flashcardsData: Flashcard[],
-  ): Promise<Flashcard[]> {
-    const flashcards = [];
-
-    // update flashcards
-    if (typeof flashcardsData !== 'undefined') {
-      for (let i = 0; i < flashcardsData.length; i++) {
-        // get flashcard from db
-        const originalFlashcard = await this.flashcardRepository.findOneBy({
-          id: flashcardsData[i].id,
-        });
-
-        if (originalFlashcard !== null) {
-          flashcards.push(
-            await this.updateFlashcard(originalFlashcard, flashcardsData[i]),
-          );
-        } else {
-          flashcards.push(await this.addFlashcard(flashcardsData[i]));
-        }
-      }
-    }
-
-    return flashcards;
-  }
-
-  /**
-   * It takes a flashcard object as an argument, finds the flashcard in the database by id, updates the
-   * flashcard data, and saves the updated flashcard in the database.
-   * @param {Flashcard} flashcardData - Flashcard - this is the data that we're going to update the.
-   * flashcard with.
-   * @returns Flashcard.
-   */
-  private async updateFlashcard(
-    originalFlashcard: Flashcard,
-    flashcardData: Flashcard,
-  ): Promise<Flashcard> {
-    // update flashcard data
-    originalFlashcard = { ...flashcardData };
-
-    try {
-      // save updated flashcard in the db
-      return await this.flashcardRepository.save(originalFlashcard);
-    } catch (err) {
-      throw new BadRequestException(err);
-    }
-  }
-
-  private async removeFlashcardsWithoutLesson() {
-    try {
-      // delete flashcards with lesson
-      await this.flashcardRepository.delete({ lesson: IsNull() });
-    } catch (err) {
-      throw new BadRequestException(err);
-    }
   }
 }

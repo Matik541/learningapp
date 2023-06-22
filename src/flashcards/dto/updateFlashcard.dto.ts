@@ -1,17 +1,7 @@
 import { ApiProperty } from '@nestjs/swagger';
-import { IsNotEmpty, IsNumber, IsString } from 'class-validator';
+import { IsNotEmpty, IsString } from 'class-validator';
 
-export class UpdateFlashcard {
-  @ApiProperty({
-    description: 'Flashcard id',
-    type: Number,
-    nullable: false,
-    required: true,
-  })
-  @IsNumber()
-  @IsNotEmpty()
-  id: number;
-
+export class UpdateFlashcardDto {
   @ApiProperty({
     type: String,
     nullable: false,
