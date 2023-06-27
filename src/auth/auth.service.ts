@@ -47,7 +47,7 @@ export class AuthService {
 
       return tokens;
     } catch (err) {
-      throw new BadRequestException('Email is already in use.');
+      throw new BadRequestException(err);
     }
   }
 
@@ -145,7 +145,7 @@ export class AuthService {
    * @param {string} userName - user's name
    * @returns A promise of Tokens type
    */
-  async getTokens(id: number, userName: string): Promise<Tokens> {
+  private async getTokens(id: number, userName: string): Promise<Tokens> {
     const userData = {
       sub: id,
       username: userName,
@@ -187,7 +187,7 @@ export class AuthService {
    * @param {string} refreshToken - string - the refresh token that was sent to the client
    * @returns The user with the new refresh token.
    */
-  async updateRefreshTokenAsHash(id: number, refreshToken: string) {
+  private async updateRefreshTokenAsHash(id: number, refreshToken: string) {
     // hash token
     const hashedToken = await bcrypt.hash(refreshToken, 5);
 
