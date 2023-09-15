@@ -1,14 +1,14 @@
 import { ApiProperty } from '@nestjs/swagger';
-import { IsOptional, IsString } from 'class-validator';
+import { IsNotEmpty, IsString } from 'class-validator';
 
 export class UpdateTagDto {
   @ApiProperty({
     description: 'Lesson tag name',
     type: String,
     nullable: false,
-    required: false,
+    required: true,
   })
   @IsString()
-  @IsOptional()
+  @IsNotEmpty()
   tagName?: string;
 }

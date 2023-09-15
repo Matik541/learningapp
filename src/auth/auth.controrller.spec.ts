@@ -81,6 +81,8 @@ describe('AuthController', () => {
     it('should return tokens', async () => {
       // expect that authController return tokens
       const tokens = await authController.signIn(singInData);
+
+      // TODO: change toEqual
       expect(tokens).toHaveProperty('authToken');
       expect(tokens).toHaveProperty('refreshToken');
     });
