@@ -10,6 +10,7 @@ export class User {
   @PrimaryGeneratedColumn()
   id: number;
 
+  // TODO: rename
   @Column()
   userName: string;
 

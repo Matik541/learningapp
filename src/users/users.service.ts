@@ -4,7 +4,6 @@ import { Repository } from 'typeorm';
 
 // entities
 import { User } from './entities/user.entity';
-import { Lesson } from '../lessons/entities/lesson.entity';
 
 @Injectable()
 export class UsersService {
@@ -23,13 +22,5 @@ export class UsersService {
       where: { id: userId },
       relations: { createdLessons: true },
     });
-  }
-
-  async updateUser(userId: number, createdLessons: Lesson[]) {
-    let user = await this.getUserById(userId);
-
-    user = { createdLessons, ...user };
-
-    this.userRepository.save(user);
   }
 }
