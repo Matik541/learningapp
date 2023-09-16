@@ -14,6 +14,7 @@ export class CommentsService {
     private readonly commentRepository: Repository<Comment>,
   ) {}
 
+  // TODO: remove method
   async getCommentsByLesson(
     lessonsId: number,
     lessonCreatorId: number,
@@ -26,6 +27,8 @@ export class CommentsService {
       throw new BadRequestException(err);
     }
   }
+
+  // TODO: add methods documentation
 
   async addComment(
     commentCreatorId: number,
@@ -114,6 +117,7 @@ export class CommentsService {
     }
   }
 
+  // TODO: remove method
   async deleteLessonsComments(
     lessonId: number,
     lessonCreatorId: number,

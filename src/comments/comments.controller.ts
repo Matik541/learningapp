@@ -29,8 +29,6 @@ import { UpdateCommentDto } from './dto/updateComment.dto';
 export class CommentsController {
   constructor(private readonly commentsService: CommentsService) {}
 
-  @ApiBearerAuth()
-  @UseGuards(AuthorizationGuard)
   @Post('add/:lessonId')
   @HttpCode(HttpStatus.CREATED)
   @ApiResponse({
@@ -49,8 +47,6 @@ export class CommentsController {
     );
   }
 
-  @ApiBearerAuth()
-  @UseGuards(AuthorizationGuard)
   @Put(':id')
   @HttpCode(HttpStatus.OK)
   @ApiResponse({
@@ -69,8 +65,6 @@ export class CommentsController {
     );
   }
 
-  @ApiBearerAuth()
-  @UseGuards(AuthorizationGuard)
   @Delete(':id')
   @HttpCode(HttpStatus.OK)
   @ApiResponse({
@@ -82,20 +76,5 @@ export class CommentsController {
     @Param('id') commentId: string,
   ): Promise<Comment> {
     return this.commentsService.deleteComment(creatorId, +commentId);
-  }
-
-  @ApiBearerAuth()
-  @UseGuards(AuthorizationGuard)
-  @Post('remove/all/:lessonId')
-  @HttpCode(HttpStatus.OK)
-  @ApiResponse({
-    status: HttpStatus.OK,
-    description: 'Delete lessons comments.',
-  })
-  deleteLessonsComments(
-    @LoginedUserDecorator('sub') creatorId: number,
-    @Param('lessonId') lessonId: string,
-  ): Promise<Comment[]> {
-    return this.commentsService.deleteLessonsComments(+lessonId, creatorId);
   }
 }
