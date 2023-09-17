@@ -3,7 +3,6 @@ import { IsNotEmpty, IsString } from 'class-validator';
 
 export class AddCommentDto {
   @ApiProperty({
-    description: 'Comment text',
     type: String,
     nullable: false,
     required: true,

@@ -14,20 +14,6 @@ export class CommentsService {
     private readonly commentRepository: Repository<Comment>,
   ) {}
 
-  // TODO: remove method
-  async getCommentsByLesson(
-    lessonsId: number,
-    lessonCreatorId: number,
-  ): Promise<Comment[]> {
-    try {
-      return await this.commentRepository.find({
-        where: { lesson: { id: lessonsId, creator: { id: lessonCreatorId } } },
-      });
-    } catch (err) {
-      throw new BadRequestException(err);
-    }
-  }
-
   // TODO: add methods documentation
 
   async addComment(
@@ -76,8 +62,13 @@ export class CommentsService {
       throw new BadRequestException('You are not allowed to update.');
     }
 
-    // change data in comment object
-    comment = Object.assign(comment, dto);
+    // update data in comment object
+    comment = {
+      id: comment.id,
+      creator: comment.creator,
+      lesson: comment.lesson,
+      comment: dto.comment,
+    };
 
     // save updated comment
     try {
@@ -109,15 +100,14 @@ export class CommentsService {
       throw new BadRequestException('You are not allowed to update.');
     }
 
+    // remove comment from db
     try {
-      // remove comment from db
       return await this.commentRepository.remove(comment);
     } catch (err) {
       throw new BadRequestException(err);
     }
   }
 
-  // TODO: remove method
   async deleteLessonsComments(
     lessonId: number,
     lessonCreatorId: number,
@@ -126,6 +116,19 @@ export class CommentsService {
 
     try {
       return await this.commentRepository.remove(comments);
+    } catch (err) {
+      throw new BadRequestException(err);
+    }
+  }
+
+  private async getCommentsByLesson(
+    lessonsId: number,
+    lessonCreatorId: number,
+  ): Promise<Comment[]> {
+    try {
+      return await this.commentRepository.find({
+        where: { lesson: { id: lessonsId, creator: { id: lessonCreatorId } } },
+      });
     } catch (err) {
       throw new BadRequestException(err);
     }
