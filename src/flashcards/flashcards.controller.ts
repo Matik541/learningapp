@@ -89,22 +89,4 @@ export class FlashcardsController {
       +flashcardId,
     );
   }
-
-  @ApiBearerAuth()
-  @UseGuards(AuthorizationGuard)
-  @Post('remove/all/:lessonId')
-  @HttpCode(HttpStatus.OK)
-  @ApiResponse({
-    status: HttpStatus.OK,
-    description: 'Remove all flashcards from lesson.',
-  })
-  removeLessonsFlashcards(
-    @LoginedUserDecorator('sub') lessonCreatorId: number,
-    @Param('lessonId') lessonId: string,
-  ): Promise<Flashcard[]> {
-    return this.flashcardsService.removeLessonsFlashcards(
-      lessonCreatorId,
-      +lessonId,
-    );
-  }
 }
