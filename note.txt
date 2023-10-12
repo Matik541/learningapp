@@ -1,0 +1,21 @@
+light
+$text: #030d08;
+$background: #f7fdfa;
+$primary: #9eeac9;
+$secondary: #ccf5e2;
+$accent: #e1147a;
+
+dark
+$text: #f7fdfa;
+$background: #030d08;
+$primary: #9eeac9;
+$secondary: #192e24;
+$accent: #ef1582;
+
+font: exo
+
+- write
+- match
+- true/false
+- multiple choice
+

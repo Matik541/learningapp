@@ -1,0 +1,126 @@
+@use "@angular/material" as mat;
+
+@include mat.core();
+
+@import url('https://fonts.googleapis.com/css2?family=Exo:ital,wght@0,100;0,400;0,800;1,400;1,800&display=swap');
+
+
+$contrast: (
+  900: #e6e7e7,
+  800: #cdcfce,
+  700: #9a9e9c,
+  600: #686e6b,
+  500: #363e3a,
+  400: #030d08,
+  300: #030b07,
+  200: #020805,
+  100: #020604,
+  50: #010302,
+);
+
+$contrast-reverse: (
+  900: #010302,
+  800: #020604,
+  700: #020805,
+  600: #030b07,
+  500: #030d08,
+  400: #363e3a,
+  300: #686e6b,
+  200: #9a9e9c,
+  100: #cdcfce,
+  50: #e6e7e7,
+);
+
+$background: (
+  900: #2D302F,
+  800: #5A615E,
+  700: #88928C,
+  600: #B5C2BB,
+  500: #E2F3EA,
+  400: #E8F6EE,
+  300: #EEF8F3,
+  200: #F4FBF7,
+  100: #F9FDFB,
+  50:  #FCFEFD,
+
+  contrast: $contrast-reverse
+);
+
+$primary: (
+  900: #202f28,
+  800: #3f5e51,
+  700: #5f8c79,
+  600: #7ebba1,
+  500: #9eeac9,
+  400: #b2eed4,
+  300: #c5f3df,
+  200: #d8f7ea,
+  100: #ecfbf4,
+  50: #f6fdfa,
+
+  contrast: $contrast
+);
+$secondary: (
+  900: #29312d,
+  800: #52625a,
+  700: #7a9388,
+  600: #a3c4b5,
+  500: #ccf5e2,
+  400: #d6f7e8,
+  300: #e1f9ee,
+  200: #ebfbf4,
+  100: #f5fdf9,
+  50: #fafefc,
+
+  contrast: $contrast
+);
+$accent: (
+  900: #2d0418,
+  800: #5a0831,
+  700: #870c49,
+  600: #b41062,
+  500: #e1147a,
+  400: #e74395,
+  300: #ed72af,
+  200: #f3a1ca,
+  100: #f9d0e5,
+  50: #fce8f2, 
+  
+  contrast: $contrast,
+);
+
+$QuizUp-primary: mat.define-palette($primary);
+$QuizUp-accent: mat.define-palette($secondary);
+$QuizUp-warn: mat.define-palette($accent);
+
+$QuizUp-background: mat.define-palette($background);
+
+$QuizUp-theme: mat.define-light-theme(
+  (
+    color: (
+      primary: $QuizUp-primary,
+      accent: $QuizUp-accent,
+      warn: $QuizUp-warn,
+    ),
+    background-color: $QuizUp-background,
+  )
+);
+
+@include mat.all-component-themes($QuizUp-theme);
+
+html,
+body {
+  height: 100%;
+}
+body {
+  margin: 0;
+  font-family: Exo, sans-serif;
+}
+
+nav {
+  background-color: mat.get-color-from-palette($QuizUp-background, 300);
+}
+
+.full-width {
+  width: 100%;
+}

@@ -1,0 +1,23 @@
+<div class="search-bar">
+  <mat-form-field class="full-width" appearance="outline" subscriptSizing="dynamic">
+    <mat-label>Search</mat-label>
+    <input
+      type="text"
+      placeholder="Pick to choose"
+      formControlName="myControl"
+      aria-label="Search"
+      matInput
+      [formControl]="myControl"
+      [matAutocomplete]="auto"
+    />
+    
+    <mat-autocomplete #auto="matAutocomplete">
+      <mat-option
+        *ngFor="let option of filteredOptions | async"
+        [value]="option"
+      >
+        {{ option }}
+      </mat-option>
+    </mat-autocomplete>
+  </mat-form-field>
+</div>
