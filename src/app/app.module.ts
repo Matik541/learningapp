@@ -6,6 +6,7 @@ import { AppComponent } from './app.component';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { HttpClientModule } from '@angular/common/http';
+import { CommonModule } from '@angular/common';
 
 import { MatButtonModule } from '@angular/material/button'
 import { MatIconModule } from '@angular/material/icon';
@@ -13,6 +14,7 @@ import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatInputModule } from '@angular/material/input';
 import { MatAutocompleteModule } from '@angular/material/autocomplete';
 import { MatSnackBarModule } from '@angular/material/snack-bar';
+import { MatTabsModule } from '@angular/material/tabs';
 
 import { NavigationComponent } from './components/navigation/navigation.component';
 import { SearchBarComponent } from './components/navigation/search-bar/search-bar.component';
@@ -40,13 +42,15 @@ import { LessonComponent } from './components/lesson/lesson.component'
     FormsModule,
     ReactiveFormsModule,
     HttpClientModule,
+    CommonModule,
 
     MatButtonModule,
     MatIconModule,
     MatFormFieldModule,
     MatInputModule,
     MatAutocompleteModule,
-    MatSnackBarModule
+    MatSnackBarModule,
+    MatTabsModule
   ],
   providers: [],
   bootstrap: [AppComponent]

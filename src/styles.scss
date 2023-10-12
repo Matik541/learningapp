@@ -47,6 +47,20 @@ $background: (
 );
 
 $primary: (
+  900: #022713,
+  800: #044D26,
+  700: #057439,
+  600: #079B4C,
+  500: #08C15F,
+  400: #21CE72,
+  300: #39DA85,
+  200: #51E798,
+  100: #6AF3AA,
+  50:  #76F9B4,
+
+  contrast: $contrast
+);
+$secondary: (
   900: #202f28,
   800: #3f5e51,
   700: #5f8c79,
@@ -57,20 +71,6 @@ $primary: (
   200: #d8f7ea,
   100: #ecfbf4,
   50: #f6fdfa,
-
-  contrast: $contrast
-);
-$secondary: (
-  900: #29312d,
-  800: #52625a,
-  700: #7a9388,
-  600: #a3c4b5,
-  500: #ccf5e2,
-  400: #d6f7e8,
-  300: #e1f9ee,
-  200: #ebfbf4,
-  100: #f5fdf9,
-  50: #fafefc,
 
   contrast: $contrast
 );

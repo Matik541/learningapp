@@ -1,3 +1,32 @@
 <div>
-    {{ id }}
+  <mat-tab-group dynamicHeight="true" selectedIndex="{{category}}" (selectedIndexChange)="updateUrl($event)">
+    <mat-tab>
+      <ng-template mat-tab-label>
+        <mat-icon class="tab-icon material-icons-outlined">style</mat-icon>
+        Flashcards
+      </ng-template>
+      <lesson-flashcards [flashcards]="lesson?.flashcards"/>
+    </mat-tab>
+    <mat-tab>
+      <ng-template mat-tab-label>
+        <mat-icon class="tab-icon material-icons-outlined">school</mat-icon>
+        Practise
+      </ng-template>
+      <lesson-practise />
+    </mat-tab>
+    <mat-tab>
+      <ng-template mat-tab-label>
+        <mat-icon class="tab-icon material-icons-outlined">quiz</mat-icon>
+        Quiz
+      </ng-template>
+      <lesson-quiz />
+    </mat-tab>
+    <mat-tab>
+      <ng-template mat-tab-label>
+        <mat-icon class="tab-icon material-icons-outlined">comment</mat-icon>
+        Comments
+      </ng-template>
+      <lesson-comments />
+    </mat-tab>
+  </mat-tab-group>
 </div>

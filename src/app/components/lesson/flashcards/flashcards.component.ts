@@ -1,10 +1,14 @@
-import { Component } from '@angular/core';
+import { Flashcard } from './../../../enums/enums';
+import { Component, Input } from '@angular/core';
+import { Lesson } from 'src/app/enums/enums';
 
 @Component({
-  selector: 'app-flashcards',
+  selector: 'lesson-flashcards',
   templateUrl: './flashcards.component.html',
   styleUrls: ['./flashcards.component.scss']
 })
 export class FlashcardsComponent {
+  @Input() flashcards: Flashcard[] | undefined = [{question: 'a', answer: 'b'}, {question: 'c', answer: 'd'}];
 
+  constructor() {}
 }
