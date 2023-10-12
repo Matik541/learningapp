@@ -1,8 +1,0 @@
-<!-- <mat-label>Answer</mat-label>
-  <input matInput [(ngModel)]="answer" [ngModelOptions]="{standalone: true}" autocomplete="off" (change)="onChange()"
-    id="answer" autofocus> -->
-<div class="group question">
-  <button mat-stroked-button *ngFor="let answer of answers" value="{{ answer }}" (click)="onClick(answer, $event)">
-    <span>{{ answer }}</span>
-  </button>
-</div>
