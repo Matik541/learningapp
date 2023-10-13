@@ -1,0 +1,42 @@
+.card-stack {
+
+    .main-flashcard {
+        aspect-ratio: 3/1;
+
+        mat-card-content {
+            flex: 1;
+            align-items: center;
+        }
+
+        mat-card-actions {
+            display: grid;
+            grid-template-columns: 1fr auto 1fr;
+            gap: 1rem;
+            align-items: center;
+
+            .flip-flashcard {
+                padding: 0 1rem;
+            }
+        }
+    }
+
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+    padding: 2rem 10%;
+
+    @media screen and (min-width: 600px) {
+        padding: 2rem 25%;
+    }
+
+    mat-card-content {
+        display: flex;
+        flex-direction: row;
+        gap: 1rem;
+
+        span {
+            flex: 1;
+            text-align: center;
+        }
+    }
+}

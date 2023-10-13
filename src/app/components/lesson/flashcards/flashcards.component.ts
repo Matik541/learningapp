@@ -9,6 +9,18 @@ import { Lesson } from 'src/app/enums/enums';
 })
 export class FlashcardsComponent {
   @Input() flashcards: Flashcard[] | undefined = [{question: 'a', answer: 'b'}, {question: 'c', answer: 'd'}];
+  index: number = 0;
+
+  side: boolean = true;
 
   constructor() {}
+
+  next(): void {
+    if (this.flashcards == undefined) return;
+    this.index = (this.index + 1) % this.flashcards.length;
+  }
+  prev(): void {
+    if (this.flashcards == undefined) return;
+    this.index = (this.index - 1 + this.flashcards.length) % this.flashcards.length;
+  }
 }

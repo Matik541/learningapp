@@ -117,7 +117,7 @@ body {
   font-family: Exo, sans-serif;
 }
 
-nav {
+nav, mat-card.filled {
   background-color: mat.get-color-from-palette($QuizUp-background, 300);
 }
 
