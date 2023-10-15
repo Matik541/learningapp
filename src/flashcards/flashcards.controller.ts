@@ -40,7 +40,7 @@ export class FlashcardsController {
     @LoginedUserDecorator('sub') lessonCreatorId: number,
     @Param('lessonId') lessonId: string,
     @Body() addFlashcardsDto: AddFlashcardDto[],
-  ) {
+  ): Promise<Flashcard[]> {
     return this.flashcardsService.addFlashcardsToLesson(
       lessonCreatorId,
       +lessonId,
@@ -48,6 +48,7 @@ export class FlashcardsController {
     );
   }
 
+  // TODO: Remove lesson id
   @ApiBearerAuth()
   @UseGuards(AuthorizationGuard)
   @Put(':lessonId/:id')
@@ -70,6 +71,7 @@ export class FlashcardsController {
     );
   }
 
+  // TODO: Remove lesson id
   @ApiBearerAuth()
   @UseGuards(AuthorizationGuard)
   @Delete(':lessonId/:id')

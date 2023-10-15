@@ -23,18 +23,18 @@ export class FlashcardsService {
     lessonCreatorId: number,
     lessonId: number,
     flashcardsData: AddFlashcardDto[],
-  ) {
+  ): Promise<Flashcard[]> {
     const lesson = await this.lessonsService.getLessonById(lessonId);
 
     if (lesson.creator.id !== lessonCreatorId)
       throw new BadRequestException('Invalid user');
 
-    const flashcards = flashcardsData.map((card) => {
-      return {
+    const flashcards: Flashcard[] = flashcardsData.map((card) => {
+      return this.flashcardRepository.create({
         question: card.question,
         answer: card.answer,
         lesson: { id: lessonId },
-      };
+      });
     });
 
     try {
