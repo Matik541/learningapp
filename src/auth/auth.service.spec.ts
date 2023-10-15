@@ -12,6 +12,7 @@ let id = 0;
 describe('AuthService', () => {
   let service: AuthService;
 
+  // TODO: move to file
   const mockUserRepository = {
     findOneOrFail: jest.fn().mockImplementation(() => user),
     create: jest.fn().mockImplementation((dto) => dto),

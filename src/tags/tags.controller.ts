@@ -9,8 +9,11 @@ import {
   Put,
   Delete,
   Param,
+  ParseIntPipe,
 } from '@nestjs/common';
 import { ApiBearerAuth, ApiTags, ApiResponse } from '@nestjs/swagger';
+
+// services
 import { TagsService } from './tags.service';
 
 // entities
@@ -59,10 +62,10 @@ export class TagsController {
     description: 'Update and return tag data.',
   })
   updateTag(
-    @Param('id') tagId: string,
+    @Param('id', ParseIntPipe) tagId: number,
     @Body() updateTagDto: UpdateTagDto,
   ): Promise<Tag> {
-    return this.tagsService.updateTag(+tagId, updateTagDto);
+    return this.tagsService.updateTag(tagId, updateTagDto);
   }
 
   @ApiBearerAuth()
@@ -73,7 +76,7 @@ export class TagsController {
     status: HttpStatus.OK,
     description: 'Delete and return comment tag by id.',
   })
-  deleteTag(@Param('id') tagId: string): Promise<Tag> {
-    return this.tagsService.deleteTag(+tagId);
+  deleteTag(@Param('id', ParseIntPipe) tagId: number): Promise<Tag> {
+    return this.tagsService.deleteTag(tagId);
   }
 }

@@ -36,12 +36,12 @@ import { LessonCompleted } from './entities/lessonCompleted.entity';
 import { LessonsService } from './lessons.service';
 
 @ApiBearerAuth()
-@UseGuards(OptionalAuthGuard)
 @ApiTags('lessons')
 @Controller('lessons')
 export class LessonsController {
   constructor(private readonly lessonsService: LessonsService) {}
 
+  @UseGuards(OptionalAuthGuard)
   @Get()
   @HttpCode(HttpStatus.OK)
   @UsePipes(new ValidationPipe({ transform: true }))
@@ -57,7 +57,6 @@ export class LessonsController {
     return this.lessonsService.getAllLessons(userId, query);
   }
 
-  @ApiBearerAuth()
   @UseGuards(OptionalAuthGuard)
   @Get(':id')
   @HttpCode(HttpStatus.OK)
@@ -72,7 +71,6 @@ export class LessonsController {
     return this.lessonsService.getLessonById(+id, userId);
   }
 
-  @ApiBearerAuth()
   @UseGuards(AuthorizationGuard)
   @Post('add')
   @HttpCode(HttpStatus.CREATED)
@@ -87,7 +85,6 @@ export class LessonsController {
     return this.lessonsService.addLesson(lessonCreatorId, addLessonDto);
   }
 
-  @ApiBearerAuth()
   @UseGuards(AuthorizationGuard)
   @Put(':id')
   @HttpCode(HttpStatus.OK)
@@ -107,7 +104,6 @@ export class LessonsController {
     );
   }
 
-  @ApiBearerAuth()
   @UseGuards(AuthorizationGuard)
   @Delete(':id')
   @HttpCode(HttpStatus.OK)
@@ -122,7 +118,6 @@ export class LessonsController {
     return this.lessonsService.deleteLesson(creatorId, +lessonId);
   }
 
-  @ApiBearerAuth()
   @UseGuards(AuthorizationGuard)
   @Post('completed/:id')
   @HttpCode(HttpStatus.OK)

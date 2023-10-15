@@ -5,20 +5,26 @@ import {
   HttpCode,
   HttpStatus,
   Param,
+  ParseIntPipe,
   Post,
   Put,
   UseGuards,
 } from '@nestjs/common';
 import { ApiBearerAuth, ApiResponse, ApiTags } from '@nestjs/swagger';
 
+// services
 import { CommentsService } from './comments.service';
 
+// guards
 import { AuthorizationGuard } from '../auth/guards/auth.guard';
 
+// decorators
 import { LoginedUserDecorator } from '../auth/decorators/loginedUser.decorator';
 
+// entities
 import { Comment } from './entities/comment.entity';
 
+// dtos
 import { AddCommentDto } from './dto/addComment.dto';
 import { UpdateCommentDto } from './dto/updateComment.dto';
 
@@ -37,12 +43,12 @@ export class CommentsController {
   })
   addComment(
     @LoginedUserDecorator('sub') commentCreatorId: number,
-    @Param('lessonId') lessonId: string,
+    @Param('lessonId', ParseIntPipe) lessonId: number,
     @Body() addCommentDto: AddCommentDto,
   ): Promise<Comment> {
     return this.commentsService.addComment(
       commentCreatorId,
-      +lessonId,
+      lessonId,
       addCommentDto,
     );
   }
@@ -55,12 +61,12 @@ export class CommentsController {
   })
   updateComment(
     @LoginedUserDecorator('sub') creatorId: number,
-    @Param('id') commentId: string,
+    @Param('id', ParseIntPipe) commentId: number,
     @Body() updateCommentDto: UpdateCommentDto,
   ): Promise<Comment> {
     return this.commentsService.updateComment(
       creatorId,
-      +commentId,
+      commentId,
       updateCommentDto,
     );
   }
@@ -73,8 +79,8 @@ export class CommentsController {
   })
   deleteComment(
     @LoginedUserDecorator('sub') creatorId: number,
-    @Param('id') commentId: string,
+    @Param('id', ParseIntPipe) commentId: number,
   ): Promise<Comment> {
-    return this.commentsService.deleteComment(creatorId, +commentId);
+    return this.commentsService.deleteComment(creatorId, commentId);
   }
 }

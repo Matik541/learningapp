@@ -8,28 +8,34 @@ import {
   UseGuards,
   Param,
   Body,
+  ParseIntPipe,
 } from '@nestjs/common';
 import { ApiBearerAuth, ApiBody, ApiResponse, ApiTags } from '@nestjs/swagger';
 
+// services
 import { FlashcardsService } from './flashcards.service';
 
+// guards
 import { AuthorizationGuard } from '../auth/guards/auth.guard';
 
+// entities
 import { Flashcard } from './entities/flashcard.entity';
 
+// decorators
 import { LoginedUserDecorator } from '../auth/decorators/loginedUser.decorator';
 
+// dtos
 import { AddFlashcardDto } from './dto/addFlashcard.dto';
 import { UpdateFlashcardDto } from './dto/updateFlashcard.dto';
 
+@ApiBearerAuth()
+@UseGuards(AuthorizationGuard)
 @ApiTags('flashcards')
 @Controller('flashcards')
 export class FlashcardsController {
   constructor(private readonly flashcardsService: FlashcardsService) {}
 
-  @ApiBearerAuth()
   @ApiBody({ type: [AddFlashcardDto] })
-  @UseGuards(AuthorizationGuard)
   @Post(':lessonId')
   @HttpCode(HttpStatus.CREATED)
   @ApiResponse({
@@ -38,19 +44,16 @@ export class FlashcardsController {
   })
   addFlashcardsToLesson(
     @LoginedUserDecorator('sub') lessonCreatorId: number,
-    @Param('lessonId') lessonId: string,
+    @Param('lessonId', ParseIntPipe) lessonId: number,
     @Body() addFlashcardsDto: AddFlashcardDto[],
   ): Promise<Flashcard[]> {
     return this.flashcardsService.addFlashcardsToLesson(
       lessonCreatorId,
-      +lessonId,
+      lessonId,
       addFlashcardsDto,
     );
   }
 
-  // TODO: Remove lesson id
-  @ApiBearerAuth()
-  @UseGuards(AuthorizationGuard)
   @Put(':lessonId/:id')
   @HttpCode(HttpStatus.OK)
   @ApiResponse({
@@ -59,21 +62,18 @@ export class FlashcardsController {
   })
   updateFlashcard(
     @LoginedUserDecorator('sub') lessonCreatorId: number,
-    @Param('lessonId') lessonId: string,
-    @Param('id') flashcardId: string,
+    @Param('lessonId', ParseIntPipe) lessonId: number,
+    @Param('id', ParseIntPipe) flashcardId: number,
     @Body() updateFlashcardsDto: UpdateFlashcardDto,
   ): Promise<Flashcard> {
     return this.flashcardsService.updateFlashcard(
       lessonCreatorId,
-      +lessonId,
-      +flashcardId,
+      lessonId,
+      flashcardId,
       updateFlashcardsDto,
     );
   }
 
-  // TODO: Remove lesson id
-  @ApiBearerAuth()
-  @UseGuards(AuthorizationGuard)
   @Delete(':lessonId/:id')
   @HttpCode(HttpStatus.OK)
   @ApiResponse({
@@ -82,13 +82,13 @@ export class FlashcardsController {
   })
   removeFlashcard(
     @LoginedUserDecorator('sub') lessonCreatorId: number,
-    @Param('lessonId') lessonId: string,
-    @Param('id') flashcardId: string,
+    @Param('lessonId', ParseIntPipe) lessonId: number,
+    @Param('id', ParseIntPipe) flashcardId: number,
   ): Promise<Flashcard> {
     return this.flashcardsService.removeFlashcard(
       lessonCreatorId,
-      +lessonId,
-      +flashcardId,
+      lessonId,
+      flashcardId,
     );
   }
 }

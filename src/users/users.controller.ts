@@ -4,6 +4,7 @@ import {
   HttpCode,
   HttpStatus,
   Param,
+  ParseIntPipe,
   UseGuards,
 } from '@nestjs/common';
 import { ApiBearerAuth, ApiResponse, ApiTags } from '@nestjs/swagger';
@@ -43,7 +44,7 @@ export class UsersController {
     status: HttpStatus.OK,
     description: 'Return user data by id.',
   })
-  getUserById(@Param('id') id: string): Promise<User> {
-    return this.usersService.getUserById(+id);
+  getUserById(@Param('id', ParseIntPipe) id: number): Promise<User> {
+    return this.usersService.getUserById(id);
   }
 }

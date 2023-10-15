@@ -30,7 +30,7 @@ import { Tokens } from './type/tokens.type';
 export class AuthController {
   constructor(private authService: AuthService) {}
 
-  //   register
+  // register
   @Post('register')
   @HttpCode(HttpStatus.CREATED)
   @ApiResponse({
@@ -42,7 +42,7 @@ export class AuthController {
     return await this.authService.signUp(signUpDto);
   }
 
-  //   login
+  // login
   @Post('login')
   @HttpCode(HttpStatus.OK)
   @ApiResponse({
