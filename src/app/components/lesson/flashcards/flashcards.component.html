@@ -12,21 +12,21 @@
     <mat-card-actions>
       <button
         class="change-flashcard"
-        mat-button
+        mat-stroked-button
         (click)="index = index - 1"
         [disabled]="index == 0"
       >
         <mat-icon>arrow_back</mat-icon>
         Previous
       </button>
-      <button class="flip-flashcard" mat-button (click)="side = !side">
+      <button class="flip-flashcard" mat-stroked-button (click)="side = !side">
         <mat-icon *ngIf="side">flip_to_front</mat-icon>
         <mat-icon *ngIf="!side">flip_to_back</mat-icon>
         Flip
       </button>
       <button
         class="change-flashcard"
-        mat-button
+        mat-stroked-button
         (click)="index = index + 1"
         [disabled]="index == flashcards.length - 1"
       >

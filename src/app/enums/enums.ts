@@ -40,3 +40,9 @@ export type Bar = {
   mode: 'indeterminate' | 'query' | 'determinate' | 'buffer'
   value: number
 }
+
+export enum Methods { 
+  BOOLEAN = 0,
+  MATCH = 1,
+  WRITE = 2
+}

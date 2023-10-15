@@ -17,6 +17,9 @@ import { MatSnackBarModule } from '@angular/material/snack-bar';
 import { MatTabsModule } from '@angular/material/tabs';
 import { MatCardModule } from '@angular/material/card';
 import { MatDividerModule } from '@angular/material/divider';
+import { MatButtonToggleModule } from '@angular/material/button-toggle';
+import { MatCheckboxModule } from '@angular/material/checkbox';
+import { MatTooltipModule } from '@angular/material/tooltip';
 
 import { NavigationComponent } from './components/navigation/navigation.component';
 import { SearchBarComponent } from './components/navigation/search-bar/search-bar.component';
@@ -63,6 +66,9 @@ import { WriteComponent } from './components/lesson/methods/write/write.componen
     MatTabsModule,
     MatCardModule,
     MatDividerModule,
+    MatButtonToggleModule,
+    MatCheckboxModule,
+    MatTooltipModule
   ],
   providers: [],
   bootstrap: [AppComponent]

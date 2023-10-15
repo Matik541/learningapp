@@ -1,0 +1,22 @@
+mat-card {
+    mat-card-content {
+        display: flex;
+        flex-direction: row;
+        gap: 1rem;
+        padding: 1rem;
+
+        span {
+            flex: 1;
+            text-align: center;
+        }
+    }
+
+    mat-card-actions {
+        display: flex;
+        gap: 1rem;
+
+        button {
+            flex: 1;
+        }
+    }
+}

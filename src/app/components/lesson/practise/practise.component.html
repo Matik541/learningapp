@@ -1,1 +1,43 @@
-<p>practise works!</p>
+<div class="practice">
+  <methods-boolean
+    [flashcard]="lesson.flashcards[1]"
+    (answer)="changeAnswer(1, $event)"
+    *ngIf="lesson"
+  ></methods-boolean>
+
+  <button
+    mat-raised-button
+    color="primary"
+    disabled="{{ simpleMode }}"
+    class="change-flashcard"
+    (click)="confirmAnswer()"
+  >
+    Confirm
+  </button>
+
+  <section>
+    <mat-checkbox
+      [(ngModel)]="simpleMode"
+      color="primary"
+      matTooltip="Skips confirm button and go to next flashcard automatically"
+      matTooltipPosition="right"
+    >
+      Simple answer mode
+      <mat-icon class="material-symbols-outlined" inline="true">
+        help
+      </mat-icon>
+    </mat-checkbox>
+
+    <mat-divider />
+    <label>Methods:</label>
+    <div>
+      <mat-checkbox *ngFor="let method of methods; index as i" 
+        [(ngModel)]="methods[i].value"
+        (click)="updateMethods()"
+        color="primary"
+      >
+        {{ methods[i].name }}
+      </mat-checkbox>
+    </div>
+  </section>
+</div>

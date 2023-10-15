@@ -13,7 +13,7 @@ export class LessonComponent {
   private id: number = 0
   private _categories = ['flashcards', 'practise', 'quiz', 'comments']
   category: number = 0
-  lesson: Lesson | null = null;
+  lesson: Lesson | undefined;
 
   constructor(
     private activeRoute: ActivatedRoute,

@@ -2,8 +2,7 @@
 
 @include mat.core();
 
-@import url('https://fonts.googleapis.com/css2?family=Exo:ital,wght@0,100;0,400;0,800;1,400;1,800&display=swap');
-
+@import url("https://fonts.googleapis.com/css2?family=Exo:ital,wght@0,100;0,400;0,800;1,400;1,800&display=swap");
 
 $contrast: (
   900: #e6e7e7,
@@ -15,7 +14,7 @@ $contrast: (
   300: #030b07,
   200: #020805,
   100: #020604,
-  50: #010302,
+  50: #010302
 );
 
 $contrast-reverse: (
@@ -28,35 +27,35 @@ $contrast-reverse: (
   300: #686e6b,
   200: #9a9e9c,
   100: #cdcfce,
-  50: #e6e7e7,
+  50: #e6e7e7
 );
 
 $background: (
-  900: #2D302F,
-  800: #5A615E,
-  700: #88928C,
-  600: #B5C2BB,
-  500: #E2F3EA,
-  400: #E8F6EE,
-  300: #EEF8F3,
-  200: #F4FBF7,
-  100: #F9FDFB,
-  50:  #FCFEFD,
+  900: #2d302f,
+  800: #5a615e,
+  700: #88928c,
+  600: #b5c2bb,
+  500: #e2f3ea,
+  400: #e8f6ee,
+  300: #eef8f3,
+  200: #f4fbf7,
+  100: #f9fdfb,
+  50: #fcfefd,
 
   contrast: $contrast-reverse
 );
 
 $primary: (
   900: #022713,
-  800: #044D26,
+  800: #044d26,
   700: #057439,
-  600: #079B4C,
-  500: #08C15F,
-  400: #21CE72,
-  300: #39DA85,
-  200: #51E798,
-  100: #6AF3AA,
-  50:  #76F9B4,
+  600: #079b4c,
+  500: #08c15f,
+  400: #21ce72,
+  300: #39da85,
+  200: #51e798,
+  100: #6af3aa,
+  50: #76f9b4,
 
   contrast: $contrast
 );
@@ -84,9 +83,9 @@ $accent: (
   300: #ed72af,
   200: #f3a1ca,
   100: #f9d0e5,
-  50: #fce8f2, 
-  
-  contrast: $contrast,
+  50: #fce8f2,
+
+  contrast: $contrast
 );
 
 $QuizUp-primary: mat.define-palette($primary);
@@ -100,9 +99,9 @@ $QuizUp-theme: mat.define-light-theme(
     color: (
       primary: $QuizUp-primary,
       accent: $QuizUp-accent,
-      warn: $QuizUp-warn,
+      warn: $QuizUp-warn
     ),
-    background-color: $QuizUp-background,
+    background-color: $QuizUp-background
   )
 );
 
@@ -117,10 +116,15 @@ body {
   font-family: Exo, sans-serif;
 }
 
-nav, mat-card.filled {
+nav,
+mat-card.filled {
   background-color: mat.get-color-from-palette($QuizUp-background, 300);
 }
 
 .full-width {
   width: 100%;
+}
+.mat-mdc-buttonl.active .mat-mdc-button-persistent-ripple::before,
+.mat-mdc-outlined-button.active .mat-mdc-button-persistent-ripple::before {
+  opacity: 0.12 !important;
 }
