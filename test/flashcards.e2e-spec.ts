@@ -109,14 +109,4 @@ describe('UsersController (e2e)', () => {
     //     console.log(res.body);
     //   });
   });
-
-  it('/flashcards/remove/all/{lessonId} (POST)', async () => {
-    return request(app.getHttpServer())
-      .post('/flashcards/remove/all/1')
-      .set('Authorization', `Bearer ${tokens.authToken}`)
-      .expect(HttpStatus.OK);
-    //   .then((res) => {
-    //     console.log(res.body);
-    //   });
-  });
 });

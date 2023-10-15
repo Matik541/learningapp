@@ -104,14 +104,4 @@ describe('UsersController (e2e)', () => {
     //     console.log(res.body);
     //   });
   });
-
-  it('/comments/remove/all/{lessonId} (POST)', async () => {
-    return request(app.getHttpServer())
-      .post('/comments/remove/all/1')
-      .set('Authorization', `Bearer ${tokens.authToken}`)
-      .expect(HttpStatus.OK);
-    //   .then((res) => {
-    //     console.log(res.body);
-    //   });
-  });
 });
