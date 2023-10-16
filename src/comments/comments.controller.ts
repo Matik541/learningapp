@@ -39,7 +39,8 @@ export class CommentsController {
   @HttpCode(HttpStatus.CREATED)
   @ApiResponse({
     status: HttpStatus.CREATED,
-    description: 'Return added comment.',
+    type: Comment,
+    description: 'Add new comment. Then return it.',
   })
   addComment(
     @LoginedUserDecorator('sub') commentCreatorId: number,
@@ -57,7 +58,8 @@ export class CommentsController {
   @HttpCode(HttpStatus.OK)
   @ApiResponse({
     status: HttpStatus.OK,
-    description: 'Update and return comment data by id.',
+    type: Comment,
+    description: 'Find comment by id. Then update data and return it.',
   })
   updateComment(
     @LoginedUserDecorator('sub') creatorId: number,
@@ -75,7 +77,9 @@ export class CommentsController {
   @HttpCode(HttpStatus.OK)
   @ApiResponse({
     status: HttpStatus.OK,
-    description: 'Delete and return comment data by id.',
+    type: Comment,
+    description:
+      'Find comment by id. Delete it and return data of deleted comment.',
   })
   deleteComment(
     @LoginedUserDecorator('sub') creatorId: number,
