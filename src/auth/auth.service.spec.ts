@@ -5,7 +5,7 @@ import { ConfigService } from '@nestjs/config';
 
 import { AuthService } from './auth.service';
 import { User } from '../users/entities/user.entity';
-import { Tokens } from './type/tokens.type';
+import { Tokens } from './type/tokens.dto';
 
 let id = 0;
 

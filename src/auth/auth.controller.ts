@@ -14,6 +14,7 @@ import { AuthService } from './auth.service';
 // dto
 import { SignUpDto } from './dto/signup.dto';
 import { SignInDto } from './dto/signin.dto';
+import { TokensDto } from './dto/tokens.dto';
 
 // decorator
 import { LoginedUserDecorator } from './decorators/loginedUser.decorator';
@@ -22,65 +23,62 @@ import { LoginedUserDecorator } from './decorators/loginedUser.decorator';
 import { AuthorizationGuard } from './guards/auth.guard';
 import { RefreshGuard } from './guards/refresh.guard';
 
-// type
-import { Tokens } from './type/tokens.type';
-
 @ApiTags('auth')
 @Controller('auth')
 export class AuthController {
   constructor(private authService: AuthService) {}
 
-  // register
   @Post('register')
   @HttpCode(HttpStatus.CREATED)
   @ApiResponse({
     status: HttpStatus.CREATED,
+    type: TokensDto,
     description:
-      'Return access and refresh tokens. Create a new user and save them in the database.',
+      'Create a new user and save them in the database. <br> Return access and refresh tokens. <br> Auth token responsible for access to routes. Expire in 5 min. <br> Refresh token responsible for getting the new token. Expire in 1 day.',
   })
-  async signUp(@Body() signUpDto: SignUpDto): Promise<Tokens> {
-    return await this.authService.signUp(signUpDto);
+  signUp(@Body() signUpDto: SignUpDto): Promise<TokensDto> {
+    return this.authService.signUp(signUpDto);
   }
 
-  // login
   @Post('login')
   @HttpCode(HttpStatus.OK)
   @ApiResponse({
     status: HttpStatus.OK,
+    type: TokensDto,
     description:
-      'Return access and refresh tokens. Save refresh token in database.',
+      'Save refresh token in database. <br> Return access and refresh tokens. <br> Auth token responsible for access to routes. Expire in 5 min. <br> Refresh token responsible for getting the new token. Expire in 1 day.',
   })
-  async signIn(@Body() signInDto: SignInDto): Promise<Tokens> {
-    return await this.authService.signIn(signInDto);
+  signIn(@Body() signInDto: SignInDto): Promise<TokensDto> {
+    return this.authService.signIn(signInDto);
   }
 
-  // logout
   @ApiBearerAuth()
   @UseGuards(AuthorizationGuard)
   @Post('logout')
   @HttpCode(HttpStatus.OK)
   @ApiResponse({
     status: HttpStatus.OK,
-    description: 'Return nothing. Remove refresh token from db.',
+    description:
+      'Remove user refresh token from db, what disable opportunity to refresh tokens.',
   })
-  async logout(@LoginedUserDecorator('sub') id: number): Promise<void> {
-    return await this.authService.logout(id);
+  logout(@LoginedUserDecorator('sub') id: number): Promise<void> {
+    return this.authService.logout(id);
   }
 
-  // refresh token
   @ApiBearerAuth()
   @UseGuards(RefreshGuard)
   @Post('refreshtoken')
   @HttpCode(HttpStatus.OK)
   @ApiResponse({
     status: HttpStatus.OK,
+    type: TokensDto,
     description:
-      'Return new access and refresh tokens. And update the refresh token in the database.',
+      'Return new tokens. And update users refresh token in the database. <br> Auth token responsible for access to routes. Expire in 5 min. <br> Refresh token responsible for getting the new token. Expire in 1 day.',
   })
-  async refreshToken(
+  refreshToken(
     @LoginedUserDecorator('sub') id: number,
     @LoginedUserDecorator('refreshT') refreshToken: string,
-  ): Promise<Tokens> {
-    return await this.authService.refreshToken(id, refreshToken);
+  ): Promise<TokensDto> {
+    return this.authService.refreshToken(id, refreshToken);
   }
 }

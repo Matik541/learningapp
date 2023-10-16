@@ -7,7 +7,7 @@ import { User } from '../../users/entities/user.entity';
 import { SignUpDto } from '../dto/signup.dto';
 import { SignInDto } from '../dto/signin.dto';
 
-import { Tokens } from '../type/tokens.type';
+import { TokensDto } from '../dto/tokens.dto';
 
 const jwtService: JwtService = new JwtService();
 
@@ -21,7 +21,7 @@ const users: User[] = [];
  * @param {string} userName - user's name
  * @returns A promise of Tokens type
  */
-const getTokens = async (id: number, userName: string): Promise<Tokens> => {
+const getTokens = async (id: number, userName: string): Promise<TokensDto> => {
   const userData = {
     sub: id,
     username: userName,
@@ -79,7 +79,7 @@ const updateRefreshTokenAsHash = async (id: number, refreshToken: string) => {
 export const mockAuthService = {
   signUp: jest
     .fn()
-    .mockImplementation(async (signUpDto: SignUpDto): Promise<Tokens> => {
+    .mockImplementation(async (signUpDto: SignUpDto): Promise<TokensDto> => {
       if (users.findIndex((u) => u.email === signUpDto.email) == -1) {
         const user = new User();
         user.id = 1;
@@ -103,7 +103,7 @@ export const mockAuthService = {
 
   signIn: jest
     .fn()
-    .mockImplementation(async (signInDto: SignInDto): Promise<Tokens> => {
+    .mockImplementation(async (signInDto: SignInDto): Promise<TokensDto> => {
       try {
         // find user in mock repository
         const user = users.find((u) => {
@@ -144,7 +144,7 @@ export const mockAuthService = {
   refreshToken: jest
     .fn()
     .mockImplementation(
-      async (id: number, refreshToken: string): Promise<Tokens> => {
+      async (id: number, refreshToken: string): Promise<TokensDto> => {
         // find user by id
         const user = users.find((u) => {
           if (u.id === id) return u;

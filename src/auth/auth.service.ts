@@ -12,12 +12,10 @@ import { ConfigService } from '@nestjs/config';
 // dto
 import { SignUpDto } from './dto/signup.dto';
 import { SignInDto } from './dto/signin.dto';
+import { TokensDto } from './dto/tokens.dto';
 
 // entities
 import { User } from '../users/entities/user.entity';
-
-// types
-import { Tokens } from './type/tokens.type';
 
 @Injectable()
 export class AuthService {
@@ -32,7 +30,7 @@ export class AuthService {
    * @param {SignUpDto} signUpDto
    * @returns promise of Tokens type
    */
-  async signUp(signUpDto: SignUpDto): Promise<Tokens> {
+  async signUp(signUpDto: SignUpDto): Promise<TokensDto> {
     // create user
     const user = this.userRepository.create(signUpDto);
 
@@ -57,7 +55,7 @@ export class AuthService {
    * @param {SignInDto} signInDto - SignInDto
    * @returns Tokens
    */
-  async signIn(signInDto: SignInDto): Promise<Tokens> {
+  async signIn(signInDto: SignInDto): Promise<TokensDto> {
     try {
       // find the user by email
       const user = await this.userRepository.findOneOrFail({
@@ -109,7 +107,7 @@ export class AuthService {
    * @param {string} refreshToken - string - the refresh token that was sent from the client
    * @returns Tokens
    */
-  async refreshToken(id: number, refreshToken: string): Promise<Tokens> {
+  async refreshToken(id: number, refreshToken: string): Promise<TokensDto> {
     // find user by id
     const user = await this.userRepository.findOneOrFail({ where: { id } });
 
@@ -145,7 +143,7 @@ export class AuthService {
    * @param {string} userName - user's name
    * @returns A promise of Tokens type
    */
-  private async getTokens(id: number, userName: string): Promise<Tokens> {
+  private async getTokens(id: number, userName: string): Promise<TokensDto> {
     const userData = {
       sub: id,
       username: userName,
@@ -187,7 +185,10 @@ export class AuthService {
    * @param {string} refreshToken - string - the refresh token that was sent to the client
    * @returns The user with the new refresh token.
    */
-  private async updateRefreshTokenAsHash(id: number, refreshToken: string) {
+  private async updateRefreshTokenAsHash(
+    id: number,
+    refreshToken: string,
+  ): Promise<void> {
     // hash token
     const hashedToken = await bcrypt.hash(refreshToken, 5);
 
@@ -199,7 +200,7 @@ export class AuthService {
       user.hashedRefreshToken = hashedToken;
 
       // save user with new refresh token
-      return await this.userRepository.save(user);
+      await this.userRepository.save(user);
     } catch (err) {
       throw new BadRequestException(err);
     }

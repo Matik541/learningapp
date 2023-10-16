@@ -3,10 +3,10 @@ import { INestApplication, ValidationPipe, HttpStatus } from '@nestjs/common';
 import * as request from 'supertest';
 
 import { AppModule } from '../src/app.module';
-import { Tokens } from '../src/auth/type/tokens.type';
+import { TokensDto } from '../src/auth/dto/tokens.dto';
 
 describe('UsersController (e2e)', () => {
-  let tokens: Tokens;
+  let tokens: TokensDto;
   let app: INestApplication;
 
   beforeAll(async () => {

@@ -8,7 +8,7 @@ import { AuthService } from './auth.service';
 import { mockAuthService } from './mock/auth.service';
 import { SignUpDto } from './dto/signup.dto';
 import { SignInDto } from './dto/signin.dto';
-import { Tokens } from './type/tokens.type';
+import { Tokens } from './type/tokens.dto';
 
 describe('AuthController', () => {
   let authController: AuthController;
