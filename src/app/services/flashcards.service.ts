@@ -32,12 +32,12 @@ export class FlashcardsService {
     )
   }
 
-  getFlashcard(id: number): Observable<Flashcard | null> {
+  addFlashcard(id: number): Observable<Flashcard> {
     return this.http.get<Flashcard>(`${API_URL}/flashcards/${id}`).pipe(
-      tap((data) => data),
+      tap((data) => of(data)),
       catchError((err) => {
         this.error(err)
-        return of(null)
+        return of()
       }),
     )
   }
@@ -45,16 +45,16 @@ export class FlashcardsService {
   updateFlashcard(
     lessonID: number,
     flashcardId: number,
-  ): Observable<Flashcard | null> {
+  ): Observable<Flashcard> {
     return this.http
       .put<Flashcard>(`${API_URL}/flashcards/${lessonID}/${flashcardId}`, {
         headers: { Authorization: `Bearer ${this.usersService.accessToken()}` },
       })
       .pipe(
-        tap((data) => data),
+        tap((data) => of(data)),
         catchError((err) => {
           this.error(err)
-          return of(null)
+          return of()
         }),
       )
   }
@@ -62,30 +62,30 @@ export class FlashcardsService {
   deleteFlashcard(
     lessonId: number,
     flashcardId: number,
-  ): Observable<Flashcard | null> {
+  ): Observable<Flashcard> {
     return this.http
       .delete<Flashcard>(`${API_URL}/flashcards/${lessonId}/${flashcardId}`, {
         headers: { Authorization: `Bearer ${this.usersService.accessToken()}` },
       })
       .pipe(
-        tap((data) => data),
+        tap((data) => of(data)),
         catchError((err) => {
           this.error(err)
-          return of(null)
+          return of()
         }),
       )
   }
 
-  removeAllFlashcards(lessonId: number): Observable<Flashcard | null> {
+  removeAllFlashcards(lessonId: number): Observable<Flashcard> {
     return this.http
       .delete<Flashcard>(`${API_URL}/flashcards/remove/all/${lessonId}`, {
         headers: { Authorization: `Bearer ${this.usersService.accessToken()}` },
       })
       .pipe(
-        tap((data) => data),
+        tap((data) => of(data)),
         catchError((err) => {
           this.error(err)
-          return of(null)
+          return of()
         }),
       )
   }

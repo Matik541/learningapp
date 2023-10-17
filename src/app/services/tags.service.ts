@@ -42,7 +42,7 @@ export class TagsService {
     )
   }
 
-  addTag(tagName: string): Observable<Tag | null> {
+  addTag(tagName: string): Observable<Tag> {
     return this.http
       .post<Tag>(
         `${API_URL}/tags/add`,
@@ -54,15 +54,15 @@ export class TagsService {
         },
       )
       .pipe(
-        tap((data) => data),
+        tap((data) => of(data)),
         catchError((err) => {
           this.error(err)
-          return of(null)
+          return of()
         }),
       )
   }
 
-  updateTag(id: number, tagName: string): Observable<Tag | null> {
+  updateTag(id: number, tagName: string): Observable<Tag> {
     return this.http
       .put<Tag>(
         `${API_URL}/tags/${id}`,
@@ -74,26 +74,26 @@ export class TagsService {
         },
       )
       .pipe(
-        tap((data) => data),
+        tap((data) => of(data)),
         catchError((err) => {
           this.error(err)
-          return of(null)
+          return of()
         }),
       )
   }
 
-  deleteTag(id: number): Observable<Tag | null> {
+  deleteTag(id: number): Observable<Tag> {
     return this.http
-      .delete<Tag | null>(`${API_URL}/tags/${id}`, {
+      .delete<Tag>(`${API_URL}/tags/${id}`, {
         headers: {
           Authorization: `Bearer ${this.usersService.accessToken()}`,
         },
       })
       .pipe(
-        tap((data) => data),
+        tap((data) => of(data)),
         catchError((err) => {
           this.error(err)
-          return of(null)
+          return of()
         }),
       )
   }

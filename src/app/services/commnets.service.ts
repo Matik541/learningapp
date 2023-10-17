@@ -2,7 +2,7 @@ import { Observable, catchError, of, tap } from 'rxjs'
 import { HttpClient } from '@angular/common/http'
 import { Injectable } from '@angular/core'
 import { MatSnackBar } from '@angular/material/snack-bar'
-import { Lesson, Tag } from '../enums/enums'
+import { Comment } from 'src/app/enums/enums'
 import { API_URL } from 'src/environments/environment'
 import { UsersService } from './users.service'
 
@@ -35,7 +35,7 @@ export class CommnetsService {
 
   getComments(): Observable<Comment[]> {
     return this.http.get<Comment[]>(`${API_URL}/comments`).pipe(
-      tap((data) => data),
+      tap((data) => of(data)),
       catchError((err) => {
         this.error(err)
         return []
@@ -43,7 +43,7 @@ export class CommnetsService {
     )
   }
 
-  addComment(comment: string): Observable<Comment | null> {
+  addComment(comment: string): Observable<Comment> {
     return this.http
       .post<Comment>(
         `${API_URL}/comments/add`,
@@ -55,15 +55,15 @@ export class CommnetsService {
         },
       )
       .pipe(
-        tap((data) => data),
+        tap((data) => of(data)),
         catchError((err) => {
           this.error(err)
-          return of(null)
+          return of()
         }),
       )
   }
 
-  updateComment(id: number, comment: string): Observable<Comment | null> {
+  updateComment(id: number, comment: string): Observable<Comment> {
     return this.http
       .put<Comment>(
         `${API_URL}/comments/${id}`,
@@ -75,24 +75,24 @@ export class CommnetsService {
         },
       )
       .pipe(
-        tap((data) => data),
+        tap((data) => of(data)),
         catchError((err) => {
           this.error(err)
-          return of(null)
+          return of()
         }),
       )
   }
 
-  deleteComment(id: number): Observable<Comment | null> {
+  deleteComment(id: number): Observable<Comment> {
     return this.http
-      .delete<Comment | null>(`${API_URL}/comments/${id}`, {
+      .delete<Comment>(`${API_URL}/comments/${id}`, {
         headers: { Authorization: `Bearer ${this.usersService.accessToken()}` },
       })
       .pipe(
-        tap((data) => data),
+        tap((data) => of(data)),
         catchError((err) => {
           this.error(err)
-          return of(null)
+          return of()
         }),
       )
   }

@@ -11,6 +11,8 @@ import jwt_decode from 'jwt-decode'
 //   "refreshToken": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOjEsInVzZXJuYW1lIjoic3RyaW5nIiwiaWF0IjoxNjk3MTIzMjY4LCJleHAiOjE2OTc3MjgwNjh9.Pt0115c4n6zPJYDqFbHYdWgg_tBJbwCXQNmvqptRakU"
 // }
 
+type Tokens = { authToken: string; refreshToken: string }
+
 @Injectable({
   providedIn: 'root',
 })
@@ -33,17 +35,18 @@ export class UsersService {
   private hashPassword(password: string) {
     return jwt_decode(password)
   }
-  private loggedIn(tokens: { authToken: string; refreshToken: string }): void {
+  private loggedIn(tokens: Tokens): User {
     let decode = jwt_decode(tokens.authToken) as {
       username: string
       sub: number
     }
+    this.strokeTokens(tokens)
+
     this.logged = {
       userName: decode?.username,
       id: decode?.sub,
     }
-
-    this.strokeTokens(tokens)
+    return this.logged
   }
   private loggedOut(): void {
     this.logged = null
@@ -51,61 +54,79 @@ export class UsersService {
   }
   private error(err: any) {
     console.error(err)
-    this.snackBar('Error: something went wrong, check console for more info', 'Close')
+    this.snackBar(
+      'Error: something went wrong, check console for more info',
+      'Close',
+    )
   }
 
-  authRegister(userName: string, email: string, password: string): void {
-    this.http.post(`${API_URL}/auth/register`, {
-      userName,
-      email,
-      password: this.hashPassword(password),
-    })
+  authRegister(
+    userName: string,
+    email: string,
+    password: string,
+  ): Observable<User> {
+    return this.http
+      .post(`${API_URL}/auth/register`, {
+        userName,
+        email,
+        password: this.hashPassword(password),
+      })
       .pipe(
-        tap(() => this.snackBar('Account created', 'Close')),
-        catchError((err) => {
-          this.error(err);
-          return of(null)
+        tap((tokens) => {
+          this.snackBar('Account created', 'Close')
+          return this.loggedIn(tokens as Tokens)
         }),
-      )
+        catchError((err) => {
+          this.error(err)
+          return of()
+        }),
+      ) as Observable<User>
   }
 
   authLogin(email: string, password: string): Observable<User> {
-    return this.http.post<{ authToken: string; refreshToken: string }>(`${API_URL}/auth/login`, {
-      email,
-      password: this.hashPassword(password),
-    })
+    return this.http
+      .post(
+        `${API_URL}/auth/login`,
+        {
+          email,
+          password: this.hashPassword(password),
+        },
+      )
       .pipe(
-        tap((tokens) => this.loggedIn(tokens)),
-        map(() => {
+        tap((tokens) => {
           this.snackBar('Logged in', 'Close')
-          return this.logged
+          return this.loggedIn(tokens as Tokens)
         }),
         catchError((err) => {
-          this.error(err);
-          return of(null)
+          this.error(err)
+          return of()
         }),
-      )
+      ) as Observable<User>
   }
   authLogout(): Observable<boolean> {
-    return this.http.post<User>(`${API_URL}/auth/logout`, null).pipe(
-      map(() => {
+    return this.http.post<boolean>(`${API_URL}/auth/logout`, null).pipe(
+      tap(() => {
         this.snackBar('Logged out', 'Close')
-        return true 
+        return true
       }),
       catchError((err) => {
-        this.error(err);
+        this.error(err)
         return of(false)
       }),
     )
   }
 
   authRefreshToken(): void {
-    this.http.post<{ authToken: string; refreshToken: string }>(`${API_URL}/auth/refreshtoken`, null)
+    this.http
+      .post<Tokens>(
+        `${API_URL}/auth/refreshtoken`,
+        {}
+      )
       .pipe(
         tap((tokens) => this.loggedIn(tokens)),
         catchError((err) => {
-          this.error(err);
-          return of(null)
+          this.error(err)
+          return of()
         }),
       )
   }

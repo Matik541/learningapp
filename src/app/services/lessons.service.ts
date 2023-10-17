@@ -33,7 +33,7 @@ export class LessonsService {
 
   getLessons(): Observable<Lesson[]> {
     return this.http.get<Lesson[]>(`${API_URL}/lessons`).pipe(
-      tap((data) => data),
+      tap((data) => of(data)),
       catchError((err) => {
         this.error(err)
         return []
@@ -41,54 +41,54 @@ export class LessonsService {
     )
   }
 
-  getLesson(id: number): Observable<Lesson | null> {
+  getLesson(id: number): Observable<Lesson> {
     return this.http.get<Lesson>(`${API_URL}/lessons/${id}`).pipe(
-      tap((data) => data),
+      tap((data) => of(data)),
       catchError((err) => {
         this.error(err)
-        return of(null)
-      }),
+        return of()
+      })
     )
   }
 
-  updateLesson(id: number, lesson: Lesson): Observable<Lesson | null> {
+  updateLesson(id: number, lesson: Lesson): Observable<Lesson> {
     return this.http
       .put<Lesson>(`${API_URL}/lessons/${id}`, lesson, {
         headers: { Authorization: `Bearer ${this.usersService.accessToken()}` },
       })
       .pipe(
-        tap((data) => data),
+        tap((data) => of(data)),
         catchError((err) => {
           this.error(err)
-          return of(null)
+          return of()
         }),
       )
   }
 
-  deleteLesson(id: number): Observable<Lesson | null> {
+  deleteLesson(id: number): Observable<Lesson> {
     return this.http
-      .delete<Lesson | null>(`${API_URL}/lessons/${id}`, {
+      .delete<Lesson>(`${API_URL}/lessons/${id}`, {
         headers: { Authorization: `Bearer ${this.usersService.accessToken()}` },
       })
       .pipe(
-        tap((data) => data),
+        tap((data) => of(data)),
         catchError((err) => {
           this.error(err)
-          return of(null)
+          return of()
         }),
       )
   }
 
-  addLesson(lesson: Lesson): Observable<Lesson | null> {
+  addLesson(lesson: Lesson): Observable<Lesson> {
     return this.http
       .post<Lesson>(`${API_URL}/lessons`, lesson, {
         headers: { Authorization: `Bearer ${this.usersService.accessToken()}` },
       })
       .pipe(
-        tap((data) => data),
+        tap((data) => of(data)),
         catchError((err) => {
           this.error(err)
-          return of(null)
+          return of()
         }),
       )
   }
@@ -104,9 +104,8 @@ export class LessonsService {
         }),
         catchError((err) => {
           this.error(err)
-          return of(null)
+          return of()
         }),
       )
   }
-
 }
