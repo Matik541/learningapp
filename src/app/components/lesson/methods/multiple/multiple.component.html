@@ -1,0 +1,17 @@
+<mat-card appearance="outlined" class="filled main-flashcard" *ngIf="flashcard">
+  <mat-card-content>
+    <span>{{ flashcard.question }}</span>
+  </mat-card-content>
+  <mat-divider />
+  <mat-card-actions>
+    <button
+      *ngFor="let answers of options"
+      class="change-flashcard"
+      mat-stroked-button
+      [ngClass]="answerValue == answers ? 'active' : ''"
+      (click)="onAnswerChange(answers)"
+    >
+      {{ answers }}
+    </button>
+  </mat-card-actions>
+</mat-card>

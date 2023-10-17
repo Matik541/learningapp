@@ -1,4 +1,4 @@
-import { Flashcard } from 'src/app/enums/enums';
+import { PractiseFlashcard } from 'src/app/enums/enums';
 import { Component, EventEmitter, Input, Output } from '@angular/core';
 
 @Component({
@@ -7,15 +7,16 @@ import { Component, EventEmitter, Input, Output } from '@angular/core';
   styleUrls: ['./boolean.component.scss']
 })
 export class BooleanComponent{
-  @Input() flashcard: Flashcard | undefined;
+  @Input() flashcard: PractiseFlashcard | undefined;
   
-  @Output() answer = new EventEmitter<string>();
+  @Output() answer = new EventEmitter<string | null>();
 
-  answerValue: boolean | undefined;
+  answerValue: boolean | null = null;
 
   constructor() { }
 
-  onAnswerChange() {
-    this.answer.emit(this.flashcard?.answer);
+  onAnswerChange(answer: boolean) {
+    this.answerValue = answer;
+    this.answer.emit(answer ? this.flashcard?.answer : null);
   }
 }

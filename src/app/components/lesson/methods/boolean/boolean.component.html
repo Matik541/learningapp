@@ -6,7 +6,7 @@
   </mat-card-content>
   <mat-divider />
   <mat-card-actions>
-    <button class="change-flashcard" mat-stroked-button [ngClass]="answerValue == true ? 'active' : ''" (click)="answerValue = true">True</button>
-    <button class="change-flashcard" mat-stroked-button [ngClass]="answerValue == false ? 'active' : ''" (click)="answerValue = false">False</button>
+    <button class="change-flashcard" mat-stroked-button [ngClass]="answerValue == true ? 'active' : ''" (click)="onAnswerChange(true)">True</button>
+    <button class="change-flashcard" mat-stroked-button [ngClass]="answerValue == false ? 'active' : ''" (click)="onAnswerChange(false)">False</button>
   </mat-card-actions>
 </mat-card>

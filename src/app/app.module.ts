@@ -20,6 +20,7 @@ import { MatDividerModule } from '@angular/material/divider';
 import { MatButtonToggleModule } from '@angular/material/button-toggle';
 import { MatCheckboxModule } from '@angular/material/checkbox';
 import { MatTooltipModule } from '@angular/material/tooltip';
+import { MatProgressBarModule } from '@angular/material/progress-bar';
 
 import { NavigationComponent } from './components/navigation/navigation.component';
 import { SearchBarComponent } from './components/navigation/search-bar/search-bar.component';
@@ -30,7 +31,8 @@ import { PractiseComponent } from './components/lesson/practise/practise.compone
 import { LessonComponent } from './components/lesson/lesson.component';
 import { MatchComponent } from './components/lesson/methods/match/match.component';
 import { BooleanComponent } from './components/lesson/methods/boolean/boolean.component';
-import { WriteComponent } from './components/lesson/methods/write/write.component'
+import { WriteComponent } from './components/lesson/methods/write/write.component';
+import { MultipleComponent } from './components/lesson/methods/multiple/multiple.component'
 
 @NgModule({
   declarations: [
@@ -44,7 +46,8 @@ import { WriteComponent } from './components/lesson/methods/write/write.componen
     LessonComponent,
     MatchComponent,
     BooleanComponent,
-    WriteComponent
+    WriteComponent,
+    MultipleComponent
   ],
   imports: [
     BrowserModule,
@@ -68,7 +71,8 @@ import { WriteComponent } from './components/lesson/methods/write/write.componen
     MatDividerModule,
     MatButtonToggleModule,
     MatCheckboxModule,
-    MatTooltipModule
+    MatTooltipModule,
+    MatProgressBarModule,
   ],
   providers: [],
   bootstrap: [AppComponent]

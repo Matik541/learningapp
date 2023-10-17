@@ -17,10 +17,12 @@ export class FlashcardsComponent {
 
   next(): void {
     if (this.flashcards == undefined) return;
+    this.side = true;
     this.index = (this.index + 1) % this.flashcards.length;
   }
   prev(): void {
     if (this.flashcards == undefined) return;
+    this.side = true;
     this.index = (this.index - 1 + this.flashcards.length) % this.flashcards.length;
   }
 }

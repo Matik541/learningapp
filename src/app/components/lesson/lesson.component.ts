@@ -13,7 +13,7 @@ export class LessonComponent {
   private id: number = 0
   private _categories = ['flashcards', 'practise', 'quiz', 'comments']
   category: number = 0
-  lesson: Lesson | undefined;
+  lesson: Lesson = {} as Lesson
 
   constructor(
     private activeRoute: ActivatedRoute,
@@ -35,12 +35,15 @@ export class LessonComponent {
     )
       this.router.navigate([`/lesson/${this.id}/flashcards`])
 
-    this.category = this._categories.indexOf(this.activeRoute.snapshot.params['category']);
+    this.category = this._categories.indexOf(
+      this.activeRoute.snapshot.params['category'],
+    )
+  }
 
-    this.lessonsService.getLesson(this.id).subscribe((lesson) => {
-      if (lesson == null) this.router.navigate(['/'])
-      this.lesson = lesson as Lesson
-    })
+  ngOnInit() {
+    this.lessonsService
+      .getLesson(this.id)
+      .subscribe((lesson) => (this.lesson = lesson))
   }
 
   updateUrl(goto: number): void {

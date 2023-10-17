@@ -1,9 +1,29 @@
 <div class="practice">
-  <methods-boolean
-    [flashcard]="lesson.flashcards[1]"
-    (answer)="changeAnswer(1, $event)"
-    *ngIf="lesson"
-  ></methods-boolean>
+  <div *ngIf="round.flashcards[round.current] && display">
+    <methods-boolean
+      *ngIf="round.flashcards[round.current].method === methods[0].id"
+      [flashcard]="round.flashcards[round.current]"
+      (answer)="changeAnswer($event)"
+    ></methods-boolean>
+    
+    <methods-multiple
+      *ngIf="round.flashcards[round.current].method === methods[1].id"
+      [flashcard]="round.flashcards[round.current]"
+      (answer)="changeAnswer($event)"
+    ></methods-multiple>
+    
+    <!-- <methods-match
+      *ngIf="round.flashcards[round.current].method === methods[2].id"
+      [flashcard]="round.flashcards[round.current]"
+      (answer)="changeAnswer($event)"
+    ></methods-match> -->
+
+    <!-- <methods-write
+      *ngIf="round.flashcards[round.current].method === methods[3].id"
+      [flashcard]="round.flashcards[round.current]"
+      (answer)="changeAnswer($event)"
+    ></methods-write> -->
+  </div>
 
   <button
     mat-raised-button
@@ -31,7 +51,8 @@
     <mat-divider />
     <label>Methods:</label>
     <div>
-      <mat-checkbox *ngFor="let method of methods; index as i" 
+      <mat-checkbox
+        *ngFor="let method of methods; index as i"
         [(ngModel)]="methods[i].value"
         (click)="updateMethods()"
         color="primary"

@@ -41,8 +41,18 @@ export type Bar = {
   value: number
 }
 
-export enum Methods { 
+export type PractiseFlashcard = {
+  method: Methods
+  variant: ('question' | 'answer')[]
+  question: string
+  options?: string[]
+  answers?: string[]
+  answer?: string
+}
+
+export enum Methods {
   BOOLEAN = 0,
-  MATCH = 1,
-  WRITE = 2
+  MULTIPLE = 1,
+  MATCH = 2,
+  WRITE = 3,
 }
