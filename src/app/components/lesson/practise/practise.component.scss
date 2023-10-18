@@ -8,6 +8,13 @@
         padding: 2rem 25%;
     }
 
+    div.cards {
+        display: flex;
+        flex-direction: column;
+        gap: 1rem;
+        min-height: 30vh;
+    }
+
     section {
         display: flex;
         flex-direction: column;

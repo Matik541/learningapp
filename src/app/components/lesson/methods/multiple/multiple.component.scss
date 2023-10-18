@@ -1,14 +1,14 @@
 mat-card {
     mat-card-content {
         padding: 1rem;
-            text-align: center;
+        text-align: center;
     }
 
     mat-card-actions {
         display: grid;
         grid-template-columns: 1fr 1fr;
         gap: 1rem;
-        row-gap: .5rem;
+        row-gap: 0.5rem;
 
         button {
             flex: 1;

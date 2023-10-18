@@ -1,52 +1,71 @@
 <div class="practice">
-  <div *ngIf="round.flashcards[round.current] && display">
+  <div *ngIf="round.flashcards[round.current] && display" class="cards">
     <methods-boolean
       *ngIf="round.flashcards[round.current].method === methods[0].id"
       [flashcard]="round.flashcards[round.current]"
       (answer)="changeAnswer($event)"
     ></methods-boolean>
-    
+
     <methods-multiple
       *ngIf="round.flashcards[round.current].method === methods[1].id"
       [flashcard]="round.flashcards[round.current]"
       (answer)="changeAnswer($event)"
     ></methods-multiple>
-    
+
+    <!-- TODO: match -->
     <!-- <methods-match
       *ngIf="round.flashcards[round.current].method === methods[2].id"
       [flashcard]="round.flashcards[round.current]"
       (answer)="changeAnswer($event)"
     ></methods-match> -->
 
-    <!-- <methods-write
+    <methods-write
       *ngIf="round.flashcards[round.current].method === methods[3].id"
       [flashcard]="round.flashcards[round.current]"
       (answer)="changeAnswer($event)"
-    ></methods-write> -->
+    ></methods-write>
+
+    <button
+      mat-raised-button
+      color="primary"
+      disabled="{{ simpleMode }}"
+      class="change-flashcard"
+      (click)="confirmAnswer()"
+    >
+      Confirm
+    </button>
+  </div>
+  <div *ngIf="!round.flashcards[round.current] || !display" class="cards">
+    <mat-card>
+      <mat-card-content> Content is loading... </mat-card-content>
+    </mat-card>
+
+    <button
+      mat-raised-button
+      color="primary"
+      disabled="true"
+      class="change-flashcard"
+    >
+      Confirm
+    </button>
   </div>
 
-  <button
-    mat-raised-button
-    color="primary"
-    disabled="{{ simpleMode }}"
-    class="change-flashcard"
-    (click)="confirmAnswer()"
-  >
-    Confirm
-  </button>
-
   <section>
-    <mat-checkbox
+    <div
+    style="width: fit-content;"
+    >
+      <mat-slide-toggle
       [(ngModel)]="simpleMode"
       color="primary"
-      matTooltip="Skips confirm button and go to next flashcard automatically"
+      matTooltip="Skips confirm button"
       matTooltipPosition="right"
     >
       Simple answer mode
       <mat-icon class="material-symbols-outlined" inline="true">
         help
       </mat-icon>
-    </mat-checkbox>
+    </mat-slide-toggle>
+    </div>  
 
     <mat-divider />
     <label>Methods:</label>
@@ -56,6 +75,7 @@
         [(ngModel)]="methods[i].value"
         (click)="updateMethods()"
         color="primary"
+        disabled="{{ methods[i].disabled }}"
       >
         {{ methods[i].name }}
       </mat-checkbox>

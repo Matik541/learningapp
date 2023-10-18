@@ -5,6 +5,7 @@ import { MatSnackBar } from '@angular/material/snack-bar'
 import { Lesson } from 'src/app/enums/enums'
 import { Methods } from 'src/app/enums/enums'
 import { ProgressBarService } from 'src/app/services/progress-bar.service'
+import leven from 'leven'
 @Component({
   selector: 'lesson-practise',
   templateUrl: './practise.component.html',
@@ -23,12 +24,13 @@ export class PractiseComponent {
     flashcards: [],
   }
 
-  simpleMode: boolean = false
+  simpleMode: boolean = true
   display: boolean = true
 
   methods: {
     name: string
     value: boolean
+    disabled: boolean
     id: Methods
   }[] = []
 
@@ -44,15 +46,27 @@ export class PractiseComponent {
     this.methods[Methods.BOOLEAN] = {
       name: 'True/False',
       value: false,
+      disabled: false,
       id: Methods.BOOLEAN,
     }
     this.methods[Methods.MULTIPLE] = {
       name: 'Multiple Choice',
-      value: true,
+      value: false,
+      disabled: false,
       id: Methods.MULTIPLE,
     }
-    // this.methods[Methods.MATCH] = { name: 'Match', value: false, id: Methods.MATCH }
-    // this.methods[Methods.WRITE] = { name: 'Write', value: false, id: Methods.WRITE }
+    this.methods[Methods.MATCH] = {
+      name: 'Match',
+      value: false,
+      disabled: true,
+      id: Methods.MATCH,
+    }
+    this.methods[Methods.WRITE] = {
+      name: 'Write',
+      value: true,
+      disabled: false,
+      id: Methods.WRITE,
+    }
 
     if (this.lesson.flashcards) this.generateRound()
     else this.out = setInterval(() => this.generateRound(), 50)
@@ -150,23 +164,38 @@ export class PractiseComponent {
 
   changeAnswer(answer: string | null): void {
     this.newAnswer = answer
-
-    if (this.simpleMode) this.confirmAnswer();
+    if (this.simpleMode) this.confirmAnswer()
   }
 
   confirmAnswer() {
     let score: number = 0
     let resolveing = this.round.flashcards[this.round.current]
 
+    console.log(this.newAnswer)
+
     switch (resolveing.method) {
       case Methods.BOOLEAN:
+        let avableFlashcards = [...this.lesson.flashcards]
+
+        console.log(resolveing, this.newAnswer)
+
+        let flashcardExists = avableFlashcards.some((flashcard) => {
+          if (
+            (flashcard[resolveing.variant[0]] === resolveing.answer &&
+              flashcard[resolveing.variant[1]] === resolveing.question) ||
+            (flashcard[resolveing.variant[1]] === resolveing.answer &&
+              flashcard[resolveing.variant[0]] === resolveing.question)
+          ) {
+            return true
+          }
+          return false
+        })
+
         if (
-          (resolveing.variant[0] === 'question' &&
-            resolveing.answer === this.newAnswer) ||
-          (resolveing.variant[0] === 'answer' && this.newAnswer === null)
-        ) {
+          (flashcardExists && (this.newAnswer === resolveing.answer) || this.newAnswer === resolveing.question) ||
+          (!flashcardExists && this.newAnswer === null) 
+        )
           score = 1
-        }
         break
       case Methods.MULTIPLE:
         if (this.newAnswer)
@@ -175,25 +204,53 @@ export class PractiseComponent {
       case Methods.MATCH:
         break
       case Methods.WRITE:
-        break
+        if (resolveing.answers?.includes(this.newAnswer ?? '')) {
+          score = 1
+          break
+        }
+
+        if (!this.newAnswer) {
+          score = 0
+          break
+        }
+
+        let input = this.newAnswer as string
+        let similarityScores: number[] | undefined = resolveing.answers?.map(
+          (value) => {
+            return (
+              1 -
+              leven(this.normalizeString(input), this.normalizeString(value)) /
+                Math.max(input.length, value.length)
+            )
+          },
+        )
+
+        score = Math.max(...(similarityScores ?? [0]))
     }
 
     console.log(score, this.answers)
 
-    if (this.answers[this.round.current]) this.answers[this.round.current] = score
+    if (this.answers[this.round.current])
+      this.answers[this.round.current] = score
     else this.answers.push(score)
 
     this.display = false
     this.round.current++
-    setTimeout(() => (this.display = true), 50)
+    setTimeout(() => {
+      this.display = true
+    }, 50)
 
     let navBar = this.progressBarService.getBar('test')
-    if (navBar)
-      navBar.current = 30;
+    if (navBar) {
+      navBar.max = this.round.size
+      navBar.current = this.round.current
+    }
 
     if (this.round.current >= this.round.size) {
       this.snackBar.open(
-        `You scored ${this.answers.filter((answer) => answer === 1).length} out of ${this.round.size}`,
+        `You scored ${
+          this.answers.filter((answer) => answer === 1).length
+        } out of ${this.round.size}`,
         'Close',
         {
           duration: 2000,
@@ -204,12 +261,24 @@ export class PractiseComponent {
   }
 
   updateMethods() {
+    this.display = false
+    let navBar = this.progressBarService.getBar('test')
+    if (navBar) navBar.current = 0
+
     if (this.methods.every((method) => method.value === false)) {
       this.snackBar.open('You must select at least one method', 'Close', {
         duration: 2000,
       })
       this.methods[Methods.BOOLEAN].value = true
     }
+    setTimeout(() => (this.display = true), 50)
     this.generateRound()
+  }
+
+  private normalizeString(input: string): string {
+    return input
+      .normalize('NFD')
+      .replace(/[\u0300-\u036f]/g, '')
+      .toLowerCase()
   }
 }

@@ -1,1 +1,13 @@
-<p>write works!</p>
+<mat-card appearance="outlined" class="filled main-flashcard" *ngIf="flashcard">
+    <mat-card-content>
+      <span>{{ flashcard.question }}</span>
+    </mat-card-content>
+    <mat-divider />
+    <mat-card-actions>
+        <mat-form-field appearance="outline" class="full-width" subscriptSizing="dynamic">
+            <mat-label>Answer</mat-label>
+            <input matInput [(ngModel)]="answerValue" (change)="onAnswerChange(answerValue)" autofocus #answer/>
+        </mat-form-field>
+    </mat-card-actions>
+  </mat-card>
+  

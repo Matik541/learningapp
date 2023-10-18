@@ -123,8 +123,12 @@ mat-card.filled {
 
 .full-width {
   width: 100%;
+  flex: 1;
 }
 .mat-mdc-buttonl.active .mat-mdc-button-persistent-ripple::before,
 .mat-mdc-outlined-button.active .mat-mdc-button-persistent-ripple::before {
   opacity: 0.12 !important;
+}
+.mat-mdc-tab-group.mat-mdc-tab-group-stretch-tabs.even-tabs>.mat-mdc-tab-header .mat-mdc-tab {
+  flex-basis: 0;
 }
