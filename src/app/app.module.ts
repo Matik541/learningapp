@@ -22,6 +22,7 @@ import { MatCheckboxModule } from '@angular/material/checkbox'
 import { MatTooltipModule } from '@angular/material/tooltip'
 import { MatProgressBarModule } from '@angular/material/progress-bar'
 import { MatSlideToggleModule } from '@angular/material/slide-toggle'
+import {MatListModule} from '@angular/material/list';
 
 import { NavigationComponent } from './components/navigation/navigation.component'
 import { SearchBarComponent } from './components/navigation/search-bar/search-bar.component'
@@ -75,6 +76,7 @@ import { MultipleComponent } from './components/lesson/methods/multiple/multiple
     MatTooltipModule,
     MatProgressBarModule,
     MatSlideToggleModule,
+    MatListModule,
   ],
   providers: [],
   bootstrap: [AppComponent],

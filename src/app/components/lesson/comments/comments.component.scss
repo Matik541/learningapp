@@ -1,0 +1,10 @@
+.comments {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+  padding: 2rem 10%;
+
+  mat-card mat-card-content {
+    display: flex;
+  }
+}

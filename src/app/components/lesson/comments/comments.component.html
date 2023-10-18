@@ -1,1 +1,18 @@
-<p>comments works!</p>
+<div class="comments">
+  <div class="">
+    <mat-form-field appearance="outline">
+      <mat-label>Comment</mat-label>
+      <input matInput placeholder="Leave a comment" />
+    </mat-form-field>
+    <button mat-fab color="primary">
+      <mat-icon class="material-icons-outlined">send</mat-icon>
+    </button>
+  </div>
+
+  <mat-list>
+    <mat-list-item *ngFor="let comment of comments">
+      <span matListItemTitle>{{ comment.comment }}</span>
+			<span>{{ comment.creator }}</span>
+    </mat-list-item>
+  </mat-list>
+</div>

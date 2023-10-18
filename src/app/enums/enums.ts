@@ -22,7 +22,7 @@ export type Comment = {
 
 export type User = null | {
   userName: string
-  id: number
+  id: number  
 }
 export type Lesson = {
   id: number

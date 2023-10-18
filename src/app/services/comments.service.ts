@@ -4,13 +4,12 @@ import { Injectable } from '@angular/core'
 import { MatSnackBar } from '@angular/material/snack-bar'
 import { Comment } from 'src/app/enums/enums'
 import { API_URL } from 'src/environments/environment'
-import { UsersService } from './users.service'
-
+import { UsersService } from 'src/app/services/users.service'
 
 @Injectable({
   providedIn: 'root'
 })
-export class CommnetsService {
+export class CommentsService {
   constructor(
     private http: HttpClient,
     private _snackBar: MatSnackBar,
@@ -33,15 +32,15 @@ export class CommnetsService {
     )
   }
 
-  getComments(): Observable<Comment[]> {
-    return this.http.get<Comment[]>(`${API_URL}/comments`).pipe(
-      tap((data) => of(data)),
-      catchError((err) => {
-        this.error(err)
-        return []
-      }),
-    )
-  }
+  // getComments(): Observable<Comment[]> {
+  //   return this.http.get<Comment[]>(`${API_URL}/comments`).pipe(
+  //     tap((data) => of(data)),
+  //     catchError((err) => {
+  //       this.error(err)
+  //       return []
+  //     }),
+  //   )
+  // }
 
   addComment(comment: string): Observable<Comment> {
     return this.http
