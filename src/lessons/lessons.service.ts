@@ -28,6 +28,8 @@ export class LessonsService {
     'lessons.iconPath',
     'creator.id',
     'creator.userName',
+    'comment.creator.id',
+    'comment.creator.userName',
   ];
 
   async getAllLessons(
@@ -84,7 +86,8 @@ export class LessonsService {
       .leftJoin('lessons.creator', 'creator')
       .leftJoinAndSelect('lessons.tags', 'tags')
       .leftJoinAndSelect('lessons.flashcards', 'flashcards')
-      .leftJoinAndSelect('lessons.comments', 'comments');
+      .leftJoinAndSelect('lessons.comments', 'comments')
+      .leftJoin('comments.creator', 'comment.creator');
 
     try {
       return await lessons.getMany();
