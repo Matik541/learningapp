@@ -118,6 +118,7 @@ export class LessonsService {
       .leftJoinAndSelect('lessons.tags', 'tags')
       .leftJoinAndSelect('lessons.flashcards', 'flashcards')
       .leftJoinAndSelect('lessons.comments', 'comments')
+      .leftJoin('comments.creator', 'comment.creator')
       .where('lessons.id = :lesson_id', { lesson_id: lessonId });
 
     try {
