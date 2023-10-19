@@ -4,6 +4,16 @@
   gap: 1rem;
   padding: 2rem 10%;
 
+  @media screen and (min-width: 600px) {
+    padding: 2rem 25%;
+  }
+
+  .add-comment {
+    display: flex;
+    flex-direction: row;
+    gap: 1rem;
+  }
+
   mat-card mat-card-content {
     display: flex;
   }

@@ -1,18 +1,30 @@
 <div class="comments">
-  <div class="">
-    <mat-form-field appearance="outline">
+  <div class="add-comment">
+    <mat-form-field appearance="outline" class="full-width">
       <mat-label>Comment</mat-label>
-      <input matInput placeholder="Leave a comment" />
+      <input [(ngModel)]="comment" matInput placeholder="Leave a comment" />
     </mat-form-field>
-    <button mat-fab color="primary">
+    <button mat-fab color="primary" (click)="send()">
       <mat-icon class="material-icons-outlined">send</mat-icon>
     </button>
   </div>
+  <mat-divider/>
 
   <mat-list>
-    <mat-list-item *ngFor="let comment of comments">
+    <mat-list-item
+      *ngFor="let comment of comments | slice : lowBound : highBound"
+    >
       <span matListItemTitle>{{ comment.comment }}</span>
-			<span>{{ comment.creator }}</span>
+      <!-- <span>{{ comment.creator }}</span> -->
     </mat-list-item>
   </mat-list>
+  <mat-divider/>
+  <mat-paginator
+    [length]="comments?.length"
+    pageSize="25"
+    (page)="getPaginatorData($event)"
+    [pageSizeOptions]="[10, 25, 50]"
+    showFirstLastButtons="true"
+  >
+  </mat-paginator>
 </div>
