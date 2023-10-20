@@ -32,6 +32,7 @@ export class UsersController {
   @HttpCode(HttpStatus.OK)
   @ApiResponse({
     status: HttpStatus.OK,
+    type: User,
     description: 'Return data of logged user.',
   })
   getMe(@LoginedUserDecorator('sub') userId: number): Promise<User> {
@@ -42,6 +43,7 @@ export class UsersController {
   @HttpCode(HttpStatus.OK)
   @ApiResponse({
     status: HttpStatus.OK,
+    type: User,
     description: 'Return user data by id.',
   })
   getUserById(@Param('id', ParseIntPipe) id: number): Promise<User> {
