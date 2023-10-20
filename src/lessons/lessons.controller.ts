@@ -47,13 +47,14 @@ export class LessonsController {
   @UsePipes(new ValidationPipe({ transform: true }))
   @ApiResponse({
     status: HttpStatus.OK,
+    type: [Lesson],
     description:
-      'Return all lessons data. Filter them by tags. Query parameters is tags ids',
+      'Return all lessons data. <br> Filter them by searchQuery and tags. <br> If user logged return scores.',
   })
   getAllLessons(
     @Query() query: GetAllLessonsQueryParametersDto,
     @LoginedUserDecorator() userId: number = null,
-  ) {
+  ): Promise<Lesson[]> {
     return this.lessonsService.getAllLessons(userId, query);
   }
 
@@ -62,7 +63,8 @@ export class LessonsController {
   @HttpCode(HttpStatus.OK)
   @ApiResponse({
     status: HttpStatus.OK,
-    description: 'Return lesson data by id.',
+    type: Lesson,
+    description: 'Return lesson data by id. <br> If user logged return scores.',
   })
   getLessonById(
     @Param('id') id: string,
@@ -76,7 +78,8 @@ export class LessonsController {
   @HttpCode(HttpStatus.CREATED)
   @ApiResponse({
     status: HttpStatus.CREATED,
-    description: 'Return added lesson data. Get jwt token and payload.',
+    type: Lesson,
+    description: 'Add lesson and return data.',
   })
   addLesson(
     @LoginedUserDecorator('sub') lessonCreatorId: number,
@@ -90,6 +93,7 @@ export class LessonsController {
   @HttpCode(HttpStatus.OK)
   @ApiResponse({
     status: HttpStatus.OK,
+    type: Lesson,
     description: 'Update and return lesson data by id.',
   })
   updateLesson(
@@ -109,6 +113,7 @@ export class LessonsController {
   @HttpCode(HttpStatus.OK)
   @ApiResponse({
     status: HttpStatus.OK,
+    type: Lesson,
     description: 'Delete and return lesson data by id.',
   })
   deleteLesson(
@@ -123,6 +128,7 @@ export class LessonsController {
   @HttpCode(HttpStatus.OK)
   @ApiResponse({
     status: HttpStatus.OK,
+    type: LessonCompleted,
     description: 'Save user score.',
   })
   lessonCompleted(
