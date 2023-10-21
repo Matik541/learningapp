@@ -35,7 +35,8 @@ export class TagsController {
   @HttpCode(HttpStatus.OK)
   @ApiResponse({
     status: HttpStatus.OK,
-    description: 'Return all tags',
+    type: [Tag],
+    description: 'Return all tags.',
   })
   getLessonTags(): Promise<Tag[]> {
     return this.tagsService.getTags();
@@ -47,7 +48,8 @@ export class TagsController {
   @HttpCode(HttpStatus.CREATED)
   @ApiResponse({
     status: HttpStatus.CREATED,
-    description: 'Return added tag. Get tag name.',
+    type: Tag,
+    description: 'Add and return new tag.',
   })
   addTag(@Body() addTagDto: AddTagDto): Promise<Tag> {
     return this.tagsService.addTag(addTagDto);
@@ -59,6 +61,7 @@ export class TagsController {
   @HttpCode(HttpStatus.OK)
   @ApiResponse({
     status: HttpStatus.OK,
+    type: Tag,
     description: 'Update and return tag data.',
   })
   updateTag(
@@ -74,6 +77,7 @@ export class TagsController {
   @HttpCode(HttpStatus.OK)
   @ApiResponse({
     status: HttpStatus.OK,
+    type: Tag,
     description: 'Delete and return comment tag by id.',
   })
   deleteTag(@Param('id', ParseIntPipe) tagId: number): Promise<Tag> {
