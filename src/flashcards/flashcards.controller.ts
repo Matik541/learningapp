@@ -35,11 +35,12 @@ import { UpdateFlashcardDto } from './dto/updateFlashcard.dto';
 export class FlashcardsController {
   constructor(private readonly flashcardsService: FlashcardsService) {}
 
-  @ApiBody({ type: [AddFlashcardDto] })
   @Post(':lessonId')
   @HttpCode(HttpStatus.CREATED)
+  @ApiBody({ type: [AddFlashcardDto] })
   @ApiResponse({
     status: HttpStatus.CREATED,
+    type: [Flashcard],
     description: 'Add a flashcards to lesson.',
   })
   addFlashcardsToLesson(
@@ -58,6 +59,7 @@ export class FlashcardsController {
   @HttpCode(HttpStatus.OK)
   @ApiResponse({
     status: HttpStatus.OK,
+    type: Flashcard,
     description: 'Update flashcards in lesson.',
   })
   updateFlashcard(
@@ -78,6 +80,7 @@ export class FlashcardsController {
   @HttpCode(HttpStatus.OK)
   @ApiResponse({
     status: HttpStatus.OK,
+    type: Flashcard,
     description: 'Delete flashcard by id.',
   })
   removeFlashcard(
