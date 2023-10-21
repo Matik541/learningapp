@@ -60,7 +60,7 @@ export class FlashcardsController {
   @ApiResponse({
     status: HttpStatus.OK,
     type: Flashcard,
-    description: 'Update flashcards in lesson.',
+    description: 'Update flashcard by id.',
   })
   updateFlashcard(
     @LoginedUserDecorator('sub') lessonCreatorId: number,
