@@ -21,6 +21,10 @@ import { User } from './entities/user.entity';
 // service
 import { UsersService } from './users.service';
 
+// dto
+import { GetMeDto } from './dto/getMe.dto';
+import { GetUserDto } from './dto/getUser.dto';
+
 @ApiTags('users')
 @Controller('users')
 export class UsersController {
@@ -32,18 +36,18 @@ export class UsersController {
   @HttpCode(HttpStatus.OK)
   @ApiResponse({
     status: HttpStatus.OK,
-    type: User,
+    type: GetMeDto,
     description: 'Return data of logged user.',
   })
   getMe(@LoginedUserDecorator('sub') userId: number): Promise<User> {
-    return this.usersService.getUserById(userId);
+    return this.usersService.getMe(userId);
   }
 
   @Get(':id')
   @HttpCode(HttpStatus.OK)
   @ApiResponse({
     status: HttpStatus.OK,
-    type: User,
+    type: GetUserDto,
     description: 'Return user data by id.',
   })
   getUserById(@Param('id', ParseIntPipe) id: number): Promise<User> {
