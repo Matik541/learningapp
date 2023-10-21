@@ -19,6 +19,7 @@ export class Comment {
 
   @ApiProperty({
     type: () => User,
+    example: { id: 0 },
   })
   @ManyToOne(() => User, (user) => user.comments)
   @JoinTable()
@@ -26,6 +27,7 @@ export class Comment {
 
   @ApiProperty({
     type: () => Lesson,
+    example: { id: 0 },
   })
   @ManyToOne(() => Lesson, (lesson) => lesson.comments)
   lesson: Lesson;
