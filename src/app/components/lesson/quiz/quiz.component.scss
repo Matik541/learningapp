@@ -1,18 +1,22 @@
-.quiz-tab {
+.tab-content {
     position: relative;
     max-height: 80vh;
     display: flex;
     flex-direction: column;
     gap: 1rem;
-    padding: 2rem calc(5% - 1rem);
+    padding: 2rem 5%;
+    
+    overflow-y: auto;
+    overflow-x: visible;
 
     @media screen and (min-width: 600px) {
-        padding: 2rem calc(15% - 1rem);
+        padding: 2rem 15%;
     }
 
     @media screen and (min-width: 1000px) {
-        padding: 2rem calc(25% - 1rem);
+        padding: 2rem 25%;
     }
+    
 
     .config {
         display: flex;
@@ -23,8 +27,6 @@
 
     .quiz {
         flex: 1;
-        overflow-y: auto;
-        overflow-x: visible;
         div {
             display: flex;
             flex-direction: column;

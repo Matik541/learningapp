@@ -1,10 +1,19 @@
-.practice {
+.tab-content {
+    position: relative;
+    max-height: 80vh;
     display: flex;
     flex-direction: column;
     gap: 1rem;
-    padding: 2rem 10%;
+    padding: 2rem 5%;
+    
+    overflow-y: auto;
+    overflow-x: visible;
 
     @media screen and (min-width: 600px) {
+        padding: 2rem 15%;
+    }
+
+    @media screen and (min-width: 1000px) {
         padding: 2rem 25%;
     }
 
