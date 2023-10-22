@@ -26,13 +26,11 @@ export class WriteComponent implements AfterViewInit {
   constructor() {}
 
   onAnswerChange(answer: string) {
-    console.log('xdxd', answer)
     this.answerValue = answer
     this.answer.emit(answer)
   }
 
   ngAfterViewInit() {
-    console.log('this.input', this.input)
     setTimeout(() => {
       if (this.input) {
         this.input.nativeElement.focus()
