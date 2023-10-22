@@ -1,26 +1,21 @@
 <div>
-  <nav
-  [class.mat-elevation-z2]="true"  
-  >
+  <nav [class.mat-elevation-z2]="true">
     <h2>
       <a routerLink="/home">QuizUp</a>
     </h2>
     <button mat-raised-button color="accent" (click)="create()">
-        <mat-icon fontIcon="add"></mat-icon>
-        Create
+      <mat-icon fontIcon="add"></mat-icon>
+      Create
     </button>
     <app-search-bar></app-search-bar>
     <div class="user">
-      <button mat-mini-fab color="accent" >
+      <button mat-mini-fab color="accent">
         <mat-icon fontIcon="notifications"></mat-icon>
-      </button> 
+      </button>
       <span class="username">Username</span>
       <mat-icon fontIcon="expand_more"></mat-icon>
     </div>
   </nav>
+  <mat-progress-bar [mode]="progressBar.mode" [value]="progressBar.percentage">
+  </mat-progress-bar>
 </div>
-<mat-progress-bar
-  [mode]="progressBar.mode"
-  [value]="progressBar.percentage"
->
-</mat-progress-bar>

@@ -13,8 +13,8 @@ export class NavigationComponent {
   constructor(
     public progressBarService: ProgressBarService
   ) { 
-    this.progressBar = this.progressBarService.createBar('test', 100);
-    this.progressBar.current = 50;
+    this.progressBar = this.progressBarService.createBar('navigation', 100);
+    this.progressBar.current = 0;
   }
 
   create() {

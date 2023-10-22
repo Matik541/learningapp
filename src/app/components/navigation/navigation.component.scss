@@ -1,15 +1,18 @@
 nav {
+    box-sizing: border-box;
+    z-index: 1000;
     display: flex;
     gap: 2rem;
     align-items: center;
     justify-content: space-between;
-    
+
+    width: 100%;
     height: 4rem;
     padding: 0 2rem;
-}
-.user {
-    display: flex;
-    gap: 1rem;
-    align-items: center;
-    font-size: 1.25rem;
+    .user {
+        display: flex;
+        gap: 1rem;
+        align-items: center;
+        font-size: 1.25rem;
+    }
 }
