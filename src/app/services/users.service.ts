@@ -1,7 +1,7 @@
 import { HttpClient } from '@angular/common/http'
 import { Injectable } from '@angular/core'
 import { MatSnackBar } from '@angular/material/snack-bar'
-import { User } from 'src/app/enums/enums'
+import { User, UserMe } from 'src/app/enums/enums'
 import { API_URL } from 'src/environments/environment'
 import { Observable, catchError, map, of, tap } from 'rxjs'
 import jwt_decode from 'jwt-decode'
@@ -131,12 +131,12 @@ export class UsersService {
       )
   }
 
-  usersMe(): Observable<User> {
-    return this.http.get<User>(`${API_URL}/users/me`)
+  usersMe(): Observable<UserMe> {
+    return this.http.get<UserMe>(`${API_URL}/users/me`)
   }
 
-  users(id: number): Observable<User> {
-    return this.http.get<User>(`${API_URL}/users/${id}`)
+  users(id: number): Observable<UserMe> {
+    return this.http.get<UserMe>(`${API_URL}/users/${id}`)
   }
 
   // TODO: better storage system for tokens

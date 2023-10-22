@@ -22,7 +22,7 @@ export type Comment = {
 
 export type User = null | {
   userName: string
-  id: number  
+  id: number
 }
 export type Lesson = {
   id: number
@@ -48,6 +48,18 @@ export type PractiseFlashcard = {
   options?: string[]
   answers?: string[]
   answer?: string
+}
+
+export type UserMe = {
+  id: number
+  userName: string
+  email: string
+  createdLessons: {
+    id: number
+    title: string
+    description: string
+    iconPath: string
+  }
 }
 
 export enum Methods {

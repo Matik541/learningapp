@@ -42,13 +42,24 @@ export class LessonsService {
   }
 
   getLesson(id: number): Observable<Lesson> {
-    return this.http.get<Lesson>(`${API_URL}/lessons/${id}`).pipe(
-      tap((data) => of(data)),
-      catchError((err) => {
-        this.error(err)
-        return of()
-      })
-    )
+    return this.http
+      .get<Lesson>(
+        `${API_URL}/lessons/${id}`,
+        this.usersService.user
+          ? {
+              headers: {
+                Authorization: `Bearer ${this.usersService.accessToken()}`,
+              },
+            }
+          : {},
+      )
+      .pipe(
+        tap((data) => of(data)),
+        catchError((err) => {
+          this.error(err)
+          return of()
+        }),
+      )
   }
 
   updateLesson(id: number, lesson: Lesson): Observable<Lesson> {
