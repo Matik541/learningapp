@@ -1,1 +1,79 @@
-<p>quiz works!</p>
+<div class="quiz-tab">
+  <div class="config" *ngIf="!started">
+    <mat-form-field appearance="outline">
+      <mat-label>Total quiz size</mat-label>
+      <mat-select [(ngModel)]="quiz.size">
+        <mat-option
+          *ngFor="let size of sizes"
+          [value]="size"
+          [disabled]="(lesson?.flashcards?.length ?? 10) < size"
+        >
+          {{ size }} / section ({{ size * avableMethods.length }})
+        </mat-option>
+      </mat-select>
+    </mat-form-field>
+
+    <button mat-flat-button color="primary" (click)="generateQuiz()">
+      Start Quiz
+    </button>
+  </div>
+
+  <div class="quiz" *ngIf="!!started">
+    <div *ngIf="avableMethods.includes(methods[0].method)">
+      <h3 mat-subheader>
+        {{ methods[0].name }}
+      </h3>
+      <methods-boolean
+        *ngFor="let flashcard of quiz.methods[0][1]; index as i"
+        [flashcard]="flashcard"
+        (answer)="changeAnswer(0, i, $event)"
+      ></methods-boolean>
+      <mat-divider />
+    </div>
+
+    <div *ngIf="avableMethods.includes(methods[1].method)">
+      <h3 mat-subheader>
+        {{ methods[1].name }}
+      </h3>
+      <methods-multiple
+        *ngFor="let flashcard of quiz.methods[1][1]; index as i"
+        [flashcard]="flashcard"
+        (answer)="changeAnswer(1, i, $event)"
+      ></methods-multiple>
+      <mat-divider />
+    </div>
+
+    <!-- TODO: match -->
+
+    <div *ngIf="avableMethods.includes(methods[2].method)">
+      <!-- 
+    <h3 mat-subheader>
+      {{ methods[0].name }}
+    </h3>
+    <methods-match
+      *ngIf="methods.match"
+      *ngFor="let flashcard; in: flashcards; index as i"
+      [flashcard]="flashcard"
+      (answer)="changeAnswer(2, i, $event)"
+    ></methods-match>
+      <mat-divider />
+    --></div>
+
+    <div *ngIf="avableMethods.includes(methods[3].method)">
+      <h3 mat-subheader>
+        {{ methods[0].name }}
+      </h3>
+      <methods-write
+        *ngFor="let flashcard of quiz.methods[3][1]; index as i"
+        [flashcard]="flashcard"
+        (answer)="changeAnswer(3, i, $event)"
+      ></methods-write>
+      <mat-divider />
+    </div>
+
+    <div class="actions">
+      <button mat-flat-button color="primary" (click)="submitQuiz()">
+        Submit
+      </button>
+  </div>
+</div>
