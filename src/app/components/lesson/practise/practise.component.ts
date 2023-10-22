@@ -35,7 +35,6 @@ export class PractiseComponent {
   }[] = []
 
   private variant: ('question' | 'answer')[] = ['question', 'answer']
-  private out: any
   private answers: number[] = []
   private newAnswer: string | null = null
 
@@ -45,13 +44,13 @@ export class PractiseComponent {
   ) {
     this.methods[Methods.BOOLEAN] = {
       name: 'True/False',
-      value: false,
+      value: true,
       disabled: false,
       id: Methods.BOOLEAN,
     }
     this.methods[Methods.MULTIPLE] = {
       name: 'Multiple Choice',
-      value: false,
+      value: true,
       disabled: false,
       id: Methods.MULTIPLE,
     }
@@ -68,14 +67,13 @@ export class PractiseComponent {
       id: Methods.WRITE,
     }
 
-    if (this.lesson.flashcards) this.generateRound()
-    else this.out = setInterval(() => this.generateRound(), 50)
+    setTimeout(() => {
+      this.generateRound()
+    }, 100)
   }
 
   async generateRound() {
     if (!this.lesson.flashcards) return
-
-    if (this.out) clearInterval(this.out)
 
     if (this.round.size != this.lesson.flashcards.length)
       this.round.size = this.lesson.flashcards.length
@@ -262,7 +260,7 @@ export class PractiseComponent {
 
   updateMethods() {
     this.display = false
-    let navBar = this.progressBarService.getBar('test')
+    let navBar = this.progressBarService.getBar('navigation')
     if (navBar) navBar.current = 0
 
     if (this.methods.every((method) => method.value === false)) {
