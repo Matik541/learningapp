@@ -25,6 +25,7 @@ import { MatSlideToggleModule } from '@angular/material/slide-toggle'
 import { MatListModule } from '@angular/material/list'
 import { MatPaginatorModule } from '@angular/material/paginator'
 import { MatSelectModule } from '@angular/material/select'
+import { MatDialogModule } from '@angular/material/dialog'
 
 import { NavigationComponent } from './components/navigation/navigation.component'
 import { SearchBarComponent } from './components/navigation/search-bar/search-bar.component'
@@ -36,7 +37,8 @@ import { LessonComponent } from './components/lesson/lesson.component'
 import { MatchComponent } from './components/lesson/methods/match/match.component'
 import { BooleanComponent } from './components/lesson/methods/boolean/boolean.component'
 import { WriteComponent } from './components/lesson/methods/write/write.component'
-import { MultipleComponent } from './components/lesson/methods/multiple/multiple.component'
+import { MultipleComponent } from './components/lesson/methods/multiple/multiple.component';
+import { ResultComponent } from './components/lesson/quiz/result/result.component'
 
 @NgModule({
   declarations: [
@@ -52,6 +54,7 @@ import { MultipleComponent } from './components/lesson/methods/multiple/multiple
     BooleanComponent,
     WriteComponent,
     MultipleComponent,
+    ResultComponent,
   ],
   imports: [
     BrowserModule,
@@ -81,6 +84,7 @@ import { MultipleComponent } from './components/lesson/methods/multiple/multiple
     MatListModule,
     MatPaginatorModule,
     MatSelectModule,
+    MatDialogModule,
   ],
   providers: [],
   bootstrap: [AppComponent],

@@ -238,7 +238,7 @@ export class PractiseComponent {
       this.display = true
     }, 50)
 
-    let navBar = this.progressBarService.getBar('test')
+    let navBar = this.progressBarService.getBar('navigation')
     if (navBar) {
       navBar.max = this.round.size
       navBar.current = this.round.current
@@ -247,7 +247,7 @@ export class PractiseComponent {
     if (this.round.current >= this.round.size) {
       this.snackBar.open(
         `You scored ${
-          this.answers.filter((answer) => answer === 1).length
+          this.answers.filter((answer) => answer >= 0.7).length
         } out of ${this.round.size}`,
         'Close',
         {
