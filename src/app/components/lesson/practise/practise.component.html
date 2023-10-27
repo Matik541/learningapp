@@ -1,13 +1,13 @@
 <div class="tab-content">
   <div *ngIf="round.flashcards[round.current] && display" class="cards">
     <methods-boolean
-      *ngIf="round.flashcards[round.current].method === methods[0].id"
+      *ngIf="round.flashcards[round.current].method === 'boolean'"
       [flashcard]="round.flashcards[round.current]"
       (answer)="changeAnswer($event)"
     ></methods-boolean>
 
     <methods-multiple
-      *ngIf="round.flashcards[round.current].method === methods[1].id"
+      *ngIf="round.flashcards[round.current].method === 'multiple'"
       [flashcard]="round.flashcards[round.current]"
       (answer)="changeAnswer($event)"
     ></methods-multiple>
@@ -20,7 +20,7 @@
     ></methods-match> -->
 
     <methods-write
-      *ngIf="round.flashcards[round.current].method === methods[3].id"
+      *ngIf="round.flashcards[round.current].method === 'write'"
       [flashcard]="round.flashcards[round.current]"
       (answer)="changeAnswer($event)"
     ></methods-write>
@@ -71,13 +71,13 @@
     <label>Methods:</label>
     <div>
       <mat-checkbox
-        *ngFor="let method of methods; index as i"
-        [(ngModel)]="methods[i].value"
+        *ngFor="let method of methods;"
+        [(ngModel)]="methodsData[method].value"
         (click)="updateMethods()"
         color="primary"
-        disabled="{{ methods[i].disabled }}"
+        disabled="{{ methodsData[method].disabled }}"
       >
-        {{ methods[i].name }}
+        {{ methodsData[method].name }}
       </mat-checkbox>
     </div>
   </section>

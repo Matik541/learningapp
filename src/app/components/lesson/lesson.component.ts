@@ -1,3 +1,4 @@
+import { QuizService } from 'src/app/services/quiz.service';
 import { UsersService } from './../../services/users.service'
 import { Component } from '@angular/core'
 import { ActivatedRoute, Router } from '@angular/router'
@@ -16,6 +17,7 @@ export class LessonComponent {
   lesson: Lesson = {} as Lesson
 
   constructor(
+    public quizService: QuizService,
     private activeRoute: ActivatedRoute,
     private router: Router,
     private usersService: UsersService,

@@ -1,13 +1,13 @@
 <div>
   <mat-tab-group selectedIndex="{{category}}" (selectedIndexChange)="updateUrl($event)" preserveContent="true" dynamicHeight="true" class="even-tabs">
-    <mat-tab>
+    <mat-tab [disabled]="quizService.start">
       <ng-template mat-tab-label>
         <mat-icon class="tab-icon material-icons-outlined">style</mat-icon>
         Flashcards
       </ng-template>
       <lesson-flashcards [flashcards]="lesson.flashcards"/>
     </mat-tab>
-    <mat-tab>
+    <mat-tab [disabled]="quizService.start">
       <ng-template mat-tab-label>
         <mat-icon class="tab-icon material-icons-outlined">school</mat-icon>
         Practise
@@ -21,7 +21,7 @@
       </ng-template>
       <lesson-quiz [lesson]="lesson"/>
     </mat-tab>
-    <mat-tab>
+    <mat-tab [disabled]="quizService.start">
       <ng-template mat-tab-label>
         <mat-icon class="tab-icon material-icons-outlined">comment</mat-icon>
         Comments

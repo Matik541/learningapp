@@ -1,5 +1,5 @@
 <div class="tab-content">
-  <div class="config" *ngIf="!started">
+  <div class="config" *ngIf="!quizService.start">
     <mat-form-field appearance="outline">
       <mat-label>Total quiz size</mat-label>
       <mat-select [(ngModel)]="quiz.size">
@@ -13,15 +13,20 @@
       </mat-select>
     </mat-form-field>
 
-    <button mat-flat-button color="primary" (click)="generateQuiz()">
+    <button
+      mat-flat-button
+      color="primary"
+      (click)="generateQuiz()"
+      matTooltip="Once started: \nNo tab switching, configuration changes, or quiz regeneration until you finish or fail."
+    >
       Start Quiz
     </button>
   </div>
 
-  <div class="quiz" *ngIf="!!started">
-    <div *ngIf="avableMethods.includes(methods[0].method)">
+  <div class="quiz" *ngIf="quizService.start">
+    <div *ngIf="avableMethods.includes(methods[0])">
       <h3 mat-subheader>
-        {{ methods[0].name }}
+        {{ methods[0] }}
       </h3>
       <methods-boolean
         *ngFor="let flashcard of quiz.methods[0][1]; index as i"
@@ -31,9 +36,9 @@
       <mat-divider />
     </div>
 
-    <div *ngIf="avableMethods.includes(methods[1].method)">
+    <div *ngIf="avableMethods.includes(methods[1])">
       <h3 mat-subheader>
-        {{ methods[1].name }}
+        {{ methods[1] }}
       </h3>
       <methods-multiple
         *ngFor="let flashcard of quiz.methods[1][1]; index as i"
@@ -45,7 +50,7 @@
 
     <!-- TODO: match -->
 
-    <div *ngIf="avableMethods.includes(methods[2].method)">
+    <div *ngIf="avableMethods.includes(methods[2])">
       <!-- 
     <h3 mat-subheader>
       {{ methods[0].name }}
@@ -59,9 +64,9 @@
       <mat-divider />
     --></div>
 
-    <div *ngIf="avableMethods.includes(methods[3].method)">
+    <div *ngIf="avableMethods.includes(methods[3])">
       <h3 mat-subheader>
-        {{ methods[0].name }}
+        {{ methods[0] }}
       </h3>
       <methods-write
         *ngFor="let flashcard of quiz.methods[3][1]; index as i"
@@ -75,5 +80,6 @@
       <button mat-flat-button color="primary" (click)="submitQuiz()">
         Submit
       </button>
+    </div>
   </div>
 </div>

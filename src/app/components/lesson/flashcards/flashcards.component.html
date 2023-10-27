@@ -5,8 +5,8 @@
     *ngIf="flashcards"
   >
     <mat-card-content>
-      <span *ngIf="side">{{ flashcards[index].question }}</span>
-      <span *ngIf="!side">{{ flashcards[index].answer }}</span>
+      <span *ngIf="side && flashcards[index]">{{ flashcards[index].question }}</span>
+      <span *ngIf="!side && flashcards[index]">{{ flashcards[index].answer }}</span>
     </mat-card-content>
     <mat-divider />
     <mat-card-actions>

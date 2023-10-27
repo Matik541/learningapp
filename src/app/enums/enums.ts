@@ -63,8 +63,8 @@ export type UserMe = {
 }
 
 export enum Methods {
-  BOOLEAN = 0,
-  MULTIPLE = 1,
-  MATCH = 2,
-  WRITE = 3,
+  BOOLEAN = 'boolean',
+  MULTIPLE = 'multiple',
+  MATCH = 'match',
+  WRITE = 'write',
 }

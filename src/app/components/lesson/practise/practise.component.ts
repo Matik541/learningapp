@@ -27,13 +27,39 @@ export class PractiseComponent {
   simpleMode: boolean = true
   display: boolean = true
 
-  methods: {
-    name: string
-    value: boolean
-    disabled: boolean
-    id: Methods
-  }[] = []
-
+  methodsData = {
+    'boolean': {
+      name: 'True/False',
+      value: true,
+      disabled: false,
+      id: 0,
+    },
+    'multiple': {
+      name: 'Multiple Choice',
+      value: true,
+      disabled: false,
+      id: 1,
+    },
+    'match': {
+      name: 'Match',
+      value: false,
+      disabled: true,
+      id: 2,
+    },
+    'write': {
+      name: 'Write',
+      value: true,
+      disabled: false,
+      id: 3,
+    }
+  }
+  methods: Methods[] = [
+    Methods.BOOLEAN,
+    Methods.MULTIPLE,
+    Methods.MATCH,
+    Methods.WRITE,  
+    
+  ]
   private variant: ('question' | 'answer')[] = ['question', 'answer']
   private answers: number[] = []
   private newAnswer: string | null = null
@@ -42,30 +68,7 @@ export class PractiseComponent {
     private snackBar: MatSnackBar,
     private progressBarService: ProgressBarService,
   ) {
-    this.methods[Methods.BOOLEAN] = {
-      name: 'True/False',
-      value: true,
-      disabled: false,
-      id: Methods.BOOLEAN,
-    }
-    this.methods[Methods.MULTIPLE] = {
-      name: 'Multiple Choice',
-      value: true,
-      disabled: false,
-      id: Methods.MULTIPLE,
-    }
-    this.methods[Methods.MATCH] = {
-      name: 'Match',
-      value: false,
-      disabled: true,
-      id: Methods.MATCH,
-    }
-    this.methods[Methods.WRITE] = {
-      name: 'Write',
-      value: true,
-      disabled: false,
-      id: Methods.WRITE,
-    }
+    
 
     setTimeout(() => {
       this.generateRound()
@@ -86,9 +89,14 @@ export class PractiseComponent {
       this.variant.sort(() => Math.random() - 0.5)
       let flashcard: PractiseFlashcard = {} as PractiseFlashcard
 
-      let method = [...this.methods]
-        .filter((method) => method.value)
-        .sort(() => Math.random() - 0.5)[0].id
+      let methods: Methods[] = [];
+      for (let method of this.methods)
+        if (this.methodsData[method]?.value) {
+          methods.push(method)
+          break
+        }
+
+      let method = methods.sort(() => Math.random() - 0.5)[0]
 
       switch (method) {
         case Methods.BOOLEAN:
@@ -190,8 +198,9 @@ export class PractiseComponent {
         })
 
         if (
-          (flashcardExists && (this.newAnswer === resolveing.answer) || this.newAnswer === resolveing.question) ||
-          (!flashcardExists && this.newAnswer === null) 
+          (flashcardExists && this.newAnswer === resolveing.answer) ||
+          this.newAnswer === resolveing.question ||
+          (!flashcardExists && this.newAnswer === null)
         )
           score = 1
         break
@@ -263,12 +272,20 @@ export class PractiseComponent {
     let navBar = this.progressBarService.getBar('navigation')
     if (navBar) navBar.current = 0
 
-    if (this.methods.every((method) => method.value === false)) {
-      this.snackBar.open('You must select at least one method', 'Close', {
+    if (
+      !Object.values(this.methodsData).some((method) => method.value)
+    ) {
+      this.snackBar.open('Please select at least one method', 'Close', {
         duration: 2000,
       })
-      this.methods[Methods.BOOLEAN].value = true
+      this.methodsData['boolean'].value = true
+      return
     }
+
+    setTimeout(() => {
+      this.display = true
+    }, 50)
+    
     setTimeout(() => (this.display = true), 50)
     this.generateRound()
   }

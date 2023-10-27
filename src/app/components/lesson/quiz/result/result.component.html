@@ -1,1 +1,22 @@
-<p>result works!</p>
+<mat-card>
+  <mat-card-header>
+    <h4>
+        Result
+    </h4>
+  </mat-card-header>
+  <mat-card-content>
+    <section class="correct">
+      <mat-progress-spinner
+        [value]="ProgressSpinner.percentage"
+        [mode]="ProgressSpinner.mode"
+      />
+    </section>
+    <section class="incorrect">
+      <mat-progress-spinner
+        color="warn"
+        [value]="100 - ProgressSpinner.percentage"
+        [mode]="ProgressSpinner.mode"
+      />
+    </section>
+  </mat-card-content>
+</mat-card>
