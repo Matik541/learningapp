@@ -15,7 +15,7 @@
       *ngFor="let comment of comments | slice : lowBound : highBound"
     >
       <span matListItemTitle>{{ comment.comment }}</span>
-      <span>{{ comment.creator?.userName ?? "Deleted user" }}</span>
+      <span matListItemLine>{{ comment.creator?.userName ?? "Deleted user" }}</span>
     </mat-list-item>
   </mat-list>
   <mat-divider/>

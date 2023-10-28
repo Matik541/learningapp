@@ -56,16 +56,6 @@ export class QuizComponent {
     private progressBarService: ProgressBarService,
     private lessonsService: LessonsService,
   ) {
-    let resultDialog = this.dialog.open(ResultComponent, {
-      data: {
-        scores: [0, 1, 1, 1, 0, 0, 0, 0, 0],
-        methods: this.avableMethods,
-        size: this.quiz.size,
-      },
-      width: '50vw',
-    })
-
-    resultDialog.afterClosed().subscribe((result) => console.log(result))
   }
 
   generateQuiz() {
@@ -287,16 +277,20 @@ export class QuizComponent {
       // }, 50);
     })
 
-    console.log(this.scores)
+    // calculate the score from 
+
+    if (this.lesson)
+      this.lessonsService.completeLesson(this.lesson.id, Math.round(this.scores.reduce((a, b) => a + b, 0) / this.scores.length * 10000) / 100)
 
     let resultDialog = this.dialog.open(ResultComponent, {
       data: {
         scores: this.scores,
+        size: this.quiz.size,
+        methods: this.quiz.methods.filter(method => method[1].length > 0),
       },
-      width: '50vw',
     })
 
-    resultDialog.afterClosed().subscribe((result) => console.log(result))
+
   }
 
   private normalizeString(input: string): string {

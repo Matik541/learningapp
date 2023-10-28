@@ -1,22 +1,51 @@
 <mat-card>
   <mat-card-header>
-    <h4>
-        Result
-    </h4>
+    <h4>Result</h4>
   </mat-card-header>
   <mat-card-content>
-    <section class="correct">
-      <mat-progress-spinner
-        [value]="ProgressSpinner.percentage"
-        [mode]="ProgressSpinner.mode"
-      />
+    <section class="spinner">
+      <div class="spinner-stack">
+        <mat-progress-spinner color="warn" value="100" />
+        <mat-progress-spinner
+          [value]="progressSpinner.percentage"
+          [mode]="progressSpinner.mode"
+        />
+      </div>
+      <div class="results">
+        <div class="result correct">
+          <mat-icon color="primary" fontIcon="check" />
+          <span>{{ correct.length }}</span>
+        </div>
+        <div class="result incorrect">
+          <mat-icon color="warn" fontIcon="close" />
+          <span>{{ incorrect.length }}</span>
+        </div>
+      </div>
     </section>
-    <section class="incorrect">
-      <mat-progress-spinner
-        color="warn"
-        [value]="100 - ProgressSpinner.percentage"
-        [mode]="ProgressSpinner.mode"
-      />
+    <section>
+      <mat-list *ngFor="let method of data.methods; index as i">
+        <span mat-subheader>{{ method[0] }}</span>
+        <mat-list-item *ngFor="let card of method[1]; index as j">
+          <div class="cards">
+            <mat-icon
+            *ngIf="data.scores[i * data.size + j] >= 0.7"
+            color="primary"
+            fontIcon="check"
+          />
+          <mat-icon
+            *ngIf="data.scores[i * data.size + j] < 0.7"
+            color="warn"
+            fontIcon="close"
+          />
+            <span>{{ card.question }}</span>
+          </div>
+        </mat-list-item>
+      </mat-list>
+    </section>
+    <section>
+      
+      <h5>Your final scores are: {{ score }}%</h5>
+      
     </section>
   </mat-card-content>
 </mat-card>
