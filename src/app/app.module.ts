@@ -39,7 +39,10 @@ import { MatchComponent } from './components/lesson/methods/match/match.componen
 import { BooleanComponent } from './components/lesson/methods/boolean/boolean.component'
 import { WriteComponent } from './components/lesson/methods/write/write.component'
 import { MultipleComponent } from './components/lesson/methods/multiple/multiple.component'
-import { ResultComponent } from './components/lesson/quiz/result/result.component'
+import { ResultComponent } from './components/lesson/quiz/result/result.component';
+import { LoginComponent } from './components/auth/login/login.component';
+import { RegisterComponent } from './components/auth/register/register.component';
+import { AuthComponent } from './components/auth/auth.component'
 
 @NgModule({
   declarations: [
@@ -56,6 +59,9 @@ import { ResultComponent } from './components/lesson/quiz/result/result.componen
     WriteComponent,
     MultipleComponent,
     ResultComponent,
+    LoginComponent,
+    RegisterComponent,
+    AuthComponent,
   ],
   imports: [
     BrowserModule,

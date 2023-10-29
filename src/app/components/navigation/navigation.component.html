@@ -8,12 +8,14 @@
       Create
     </button>
     <app-search-bar></app-search-bar>
-    <div class="user">
-      <button mat-mini-fab color="accent">
-        <mat-icon fontIcon="notifications"></mat-icon>
+    <div class="user" *ngIf="usersServices.user">
+      <a [routerLink]="['profile/', usersServices.user.id ]" class="username">{{ usersServices.user.userName }}</a>
+      <button mat-icon-button>
+        <mat-icon fontIcon="expand_more"/>
       </button>
-      <span class="username">Username</span>
-      <mat-icon fontIcon="expand_more"></mat-icon>
+    </div>
+    <div class="user" *ngIf="!usersServices.user">
+      <button mat-raised-button color="accent" (click)="login()">Login</button>
     </div>
   </nav>
   <mat-progress-bar [mode]="progressBar.mode" [value]="progressBar.percentage">

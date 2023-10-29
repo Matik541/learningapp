@@ -1,0 +1,43 @@
+<form [formGroup]="formGroup" [class]="class">
+  <mat-form-field appearance="outline">
+    <input matInput placeholder="Username" name="username" required />
+  </mat-form-field>
+  <mat-form-field appearance="outline">
+    <input matInput placeholder="Email" name="eamil" required />
+  </mat-form-field>
+
+  <mat-form-field appearance="outline">
+    <input
+      matInput
+      placeholder="Password"
+      name="password"
+      required
+      [type]="hide ? 'password' : 'text'"
+    />
+    <button
+      mat-icon-button
+      matSuffix
+      (click)="hide = !hide"
+      [attr.aria-label]="'Hide password'"
+      [attr.aria-pressed]="hide"
+    >
+      <mat-icon>{{ hide ? "visibility_off" : "visibility" }}</mat-icon>
+    </button>
+  </mat-form-field>
+
+  <mat-form-field appearance="outline">
+    <input
+      [disabled]="!hide"
+      matInput
+      placeholder="Confirm Password"
+      name="confirmPassword"
+      required
+    />
+  </mat-form-field>
+
+  <button mat-raised-button color="primary">Register</button>
+
+  <mat-divider />
+
+  <span class="errors"></span>
+</form>
