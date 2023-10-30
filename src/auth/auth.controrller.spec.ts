@@ -8,7 +8,7 @@ import { AuthService } from './auth.service';
 import { mockAuthService } from './mock/auth.service';
 import { SignUpDto } from './dto/signup.dto';
 import { SignInDto } from './dto/signin.dto';
-import { Tokens } from './type/tokens.dto';
+import { TokensDto } from './dto/tokens.dto';
 
 describe('AuthController', () => {
   let authController: AuthController;
@@ -133,7 +133,7 @@ describe('AuthController', () => {
       hashedPassword: 'password',
     };
 
-    let tokens: Tokens;
+    let tokens: TokensDto;
 
     beforeAll(async () => {
       // login to get the refresh token

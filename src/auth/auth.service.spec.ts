@@ -5,7 +5,7 @@ import { ConfigService } from '@nestjs/config';
 
 import { AuthService } from './auth.service';
 import { User } from '../users/entities/user.entity';
-import { Tokens } from './type/tokens.dto';
+import { TokensDto } from './dto/tokens.dto';
 
 let id = 0;
 
@@ -28,7 +28,7 @@ describe('AuthService', () => {
     hashedPassword: 'test',
   };
 
-  let tokens: Tokens;
+  let tokens: TokensDto;
 
   beforeEach(async () => {
     const module: TestingModule = await Test.createTestingModule({

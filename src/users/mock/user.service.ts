@@ -7,6 +7,9 @@ user.userName = 'test user';
 const users: User[] = [user];
 
 export const mockUsersService = {
+  getMe: jest.fn().mockImplementation(async (userId: number): Promise<User> => {
+    return Promise.resolve(await mockUsersService.getUserById(userId));
+  }),
   getUserById: jest
     .fn()
     .mockImplementation(async (userId: number): Promise<User> => {

@@ -32,7 +32,7 @@ describe('CommentsController', () => {
 
   describe('add comment route', () => {
     it('should add a comment to lesson', async () => {
-      expect(await controller.addComment(1, '1', { comment: 'test' })).toEqual({
+      expect(await controller.addComment(1, 1, { comment: 'test' })).toEqual({
         id: expect.any(Number),
         creator: {
           id: 1,
@@ -57,7 +57,7 @@ describe('CommentsController', () => {
   describe('update comment route', () => {
     it('should update comment', async () => {
       expect(
-        await controller.updateComment(1, '1', { comment: 'updated comment' }),
+        await controller.updateComment(1, 1, { comment: 'updated comment' }),
       ).toEqual({
         id: 1,
         creator: {
@@ -81,7 +81,7 @@ describe('CommentsController', () => {
   });
 
   it('should delete comment', async () => {
-    expect(await controller.deleteComment(1, '1')).toEqual({
+    expect(await controller.deleteComment(1, 1)).toEqual({
       id: 1,
       creator: {
         id: 1,

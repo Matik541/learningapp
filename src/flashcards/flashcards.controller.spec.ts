@@ -32,7 +32,7 @@ describe('FlashcardsController', () => {
   describe('add flashcard route', () => {
     it('should add flashcard', async () => {
       expect(
-        await controller.addFlashcardsToLesson(1, '1', [
+        await controller.addFlashcardsToLesson(1, 1, [
           { question: 'flascard', answer: 'test' },
         ]),
       ).toEqual([

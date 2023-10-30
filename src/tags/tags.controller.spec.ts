@@ -57,12 +57,12 @@ describe('TagsController', () => {
 
   describe('update tags', () => {
     it('should update tag', async () => {
-      expect(
-        await controller.updateTag('1', { tagName: 'updated tag' }),
-      ).toEqual({
-        id: 1,
-        tagName: 'updated tag',
-      });
+      expect(await controller.updateTag(1, { tagName: 'updated tag' })).toEqual(
+        {
+          id: 1,
+          tagName: 'updated tag',
+        },
+      );
     });
 
     it('should fail validation', async () => {
@@ -76,7 +76,7 @@ describe('TagsController', () => {
   });
 
   it('should delete tag', async () => {
-    expect(await controller.deleteTag('1')).toEqual({
+    expect(await controller.deleteTag(1)).toEqual({
       id: 1,
       tagName: 'updated tag',
     });
