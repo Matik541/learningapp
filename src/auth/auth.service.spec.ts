@@ -6,27 +6,11 @@ import { ConfigService } from '@nestjs/config';
 import { AuthService } from './auth.service';
 import { User } from '../users/entities/user.entity';
 import { TokensDto } from './dto/tokens.dto';
-
-let id = 0;
+import { mockUserRepository } from './mock/user.repository';
+import { user } from './mock/user.object';
 
 describe('AuthService', () => {
   let service: AuthService;
-
-  // TODO: move to file
-  const mockUserRepository = {
-    findOneOrFail: jest.fn().mockImplementation(() => user),
-    create: jest.fn().mockImplementation((dto) => dto),
-    save: jest.fn().mockImplementation((dto) => {
-      id++;
-      return { id, ...dto };
-    }),
-  };
-
-  const user = {
-    userName: 'test',
-    email: 'test@gmail.com',
-    hashedPassword: 'test',
-  };
 
   let tokens: TokensDto;
 
