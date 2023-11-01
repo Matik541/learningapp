@@ -1,7 +1,7 @@
 import { HttpClient } from '@angular/common/http'
 import { Injectable } from '@angular/core'
 import { MatSnackBar } from '@angular/material/snack-bar'
-import { User, UserMe } from 'src/app/enums/enums'
+import { User, UserMe, CallError } from 'src/app/enums/enums'
 import { API_URL } from 'src/environments/environment'
 import { Observable, catchError, map, of, tap } from 'rxjs'
 import jwt_decode from 'jwt-decode'
@@ -55,7 +55,7 @@ export class UsersService {
   private error(err: any) {
     console.error(err)
     this.snackBar(
-      'Error: something went wrong, check console for more info',
+      'CallError: something went wrong, check console for more info',
       'Close',
     )
   }
@@ -64,7 +64,7 @@ export class UsersService {
     userName: string,
     email: string,
     password: string,
-  ): Observable<User> {
+  ): Observable<User | CallError> {
     return this.http
       .post(`${API_URL}/auth/register`, {
         userName,
@@ -76,14 +76,14 @@ export class UsersService {
           this.snackBar('Account created', 'Close')
           return this.loggedIn(tokens as Tokens)
         }),
-        catchError((err) => {
+        catchError((err: CallError) => {
           this.error(err)
-          return of()
+          return of(err)
         }),
-      ) as Observable<User>
+      ) as Observable<User | CallError>
   }
 
-  authLogin(email: string, password: string): Observable<User> {
+  authLogin(email: string, password: string): Observable<User | CallError> {
     return this.http
       .post(
         `${API_URL}/auth/login`,
@@ -97,11 +97,11 @@ export class UsersService {
           this.snackBar('Logged in', 'Close')
           return this.loggedIn(tokens as Tokens)
         }),
-        catchError((err) => {
+        catchError((err: CallError) => {
           this.error(err)
-          return of()
+          return of(err)
         }),
-      ) as Observable<User>
+      ) as Observable<User | CallError>
   }
   authLogout(): Observable<boolean> {
     return this.http.post<boolean>(`${API_URL}/auth/logout`, null).pipe(

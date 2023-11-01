@@ -1,3 +1,15 @@
+export class CallError {
+  statusCode: number = 0
+  message: string = ''
+  error: string = ''
+
+  constructor(err: any) {
+    this.statusCode = err?.status
+    this.message = err?.message
+    this.error = err?.error
+  }
+}
+
 export type Tag = {
   id: Number
   tagName: String

@@ -1,15 +1,29 @@
-<form [formGroup]="formGroup" [class]="class">
+<form [formGroup]="authForm" [class]="class" (submit)="register()">
   <mat-form-field appearance="outline">
-    <input matInput placeholder="Username" name="username" required />
+    <input matInput placeholder="Username" formControlName="userName" name="userName" required />
+    <mat-hint class="error" *ngIf="authForm.get('password')?.hasError('required')">
+      Username is required
+    </mat-hint>
   </mat-form-field>
   <mat-form-field appearance="outline">
-    <input matInput placeholder="Email" name="eamil" required />
+    <input matInput placeholder="Email" formControlName="email" name="eamil" required />
+    <mat-hint class="error" *ngIf="authForm.get('email')?.hasError('required')">
+      Email is required
+    </mat-hint>
+    <mat-hint class="error" *ngIf="authForm.get('email')?.hasError('email')">
+      Invalid email format
+    </mat-hint>
+    <mat-hint class="error" *ngIf="error">
+      <mat-icon fontIcon="bug"/>
+      {{ error.statusCode + ": " + error.message }}
+    </mat-hint>
   </mat-form-field>
 
   <mat-form-field appearance="outline">
     <input
       matInput
       placeholder="Password"
+      formControlName="password"
       name="password"
       required
       [type]="hide ? 'password' : 'text'"
@@ -23,21 +37,15 @@
     >
       <mat-icon>{{ hide ? "visibility_off" : "visibility" }}</mat-icon>
     </button>
-  </mat-form-field>
-
-  <mat-form-field appearance="outline">
-    <input
-      [disabled]="!hide"
-      matInput
-      placeholder="Confirm Password"
-      name="confirmPassword"
-      required
-    />
+    <mat-hint class="error" *ngIf="authForm.get('password')?.hasError('required')">
+      Password is required
+    </mat-hint>
+    <mat-hint class="error" *ngIf="authForm.get('password')?.hasError('minlength')">
+      Password must be at least 8 characters long
+    </mat-hint>
   </mat-form-field>
 
   <button mat-raised-button color="primary">Register</button>
 
   <mat-divider />
-
-  <span class="errors"></span>
 </form>
