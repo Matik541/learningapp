@@ -1,3 +1,15 @@
-mat-tab {
-    padding: 2rem;
+.dialog {
+    .close {
+        position: absolute;
+        bottom: calc(100% + 1rem);
+        right: 0;
+    }
+    .tab-body {
+        display: flex;
+        padding: 2rem;
+        aspect-ratio: 1/1;
+        & > * {
+            flex-grow: 1;
+        }
+    }
 }

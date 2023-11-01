@@ -1,5 +1,5 @@
 import { Component, Inject } from '@angular/core';
-import { MAT_DIALOG_DATA } from '@angular/material/dialog';
+import { MatDialogRef } from '@angular/material/dialog';
 
 @Component({
   selector: 'app-auth',
@@ -8,5 +8,7 @@ import { MAT_DIALOG_DATA } from '@angular/material/dialog';
 })
 export class AuthComponent {
 
-  constructor( ) { }
+  constructor( 
+    public dialogRef: MatDialogRef<AuthComponent>,
+  ) { }
 }

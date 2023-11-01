@@ -27,6 +27,7 @@ import { MatPaginatorModule } from '@angular/material/paginator'
 import { MatSelectModule } from '@angular/material/select'
 import { MatDialogModule } from '@angular/material/dialog'
 import { MatProgressSpinnerModule } from '@angular/material/progress-spinner'
+import { MatMenuModule } from '@angular/material/menu'
 
 import { NavigationComponent } from './components/navigation/navigation.component'
 import { SearchBarComponent } from './components/navigation/search-bar/search-bar.component'
@@ -39,10 +40,11 @@ import { MatchComponent } from './components/lesson/methods/match/match.componen
 import { BooleanComponent } from './components/lesson/methods/boolean/boolean.component'
 import { WriteComponent } from './components/lesson/methods/write/write.component'
 import { MultipleComponent } from './components/lesson/methods/multiple/multiple.component'
-import { ResultComponent } from './components/lesson/quiz/result/result.component';
-import { LoginComponent } from './components/auth/login/login.component';
-import { RegisterComponent } from './components/auth/register/register.component';
+import { ResultComponent } from './components/lesson/quiz/result/result.component'
+import { LoginComponent } from './components/auth/login/login.component'
+import { RegisterComponent } from './components/auth/register/register.component'
 import { AuthComponent } from './components/auth/auth.component'
+import { HomeComponent } from './components/home/home.component'
 
 @NgModule({
   declarations: [
@@ -62,6 +64,7 @@ import { AuthComponent } from './components/auth/auth.component'
     LoginComponent,
     RegisterComponent,
     AuthComponent,
+    HomeComponent,
   ],
   imports: [
     BrowserModule,
@@ -93,6 +96,7 @@ import { AuthComponent } from './components/auth/auth.component'
     MatSelectModule,
     MatDialogModule,
     MatProgressSpinnerModule,
+    MatMenuModule,
   ],
   providers: [],
   bootstrap: [AppComponent],

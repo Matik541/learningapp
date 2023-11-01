@@ -1,21 +1,45 @@
 <form [formGroup]="authForm" [class]="class" (submit)="register()">
   <mat-form-field appearance="outline">
-    <input matInput placeholder="Username" formControlName="userName" name="userName" required />
-    <mat-hint class="error" *ngIf="authForm.get('password')?.hasError('required')">
+    <input
+      matInput
+      placeholder="Username"
+      formControlName="userName"
+      name="userName"
+      required
+    />
+    <mat-hint align="end"
+      >{{ authForm.get("userName")?.value.length }}/20</mat-hint
+    >
+    <mat-hint
+      class="error"
+      *ngIf="authForm.get('userName')?.hasError('required')"
+    >
       Username is required
+    </mat-hint>
+    <mat-hint
+      class="error"
+      *ngIf="authForm.get('userName')?.hasError('maxLength')"
+    >
+      Username must be less than 20 characters
     </mat-hint>
   </mat-form-field>
   <mat-form-field appearance="outline">
-    <input matInput placeholder="Email" formControlName="email" name="eamil" required />
+    <input
+      matInput
+      placeholder="Email"
+      formControlName="email"
+      name="eamil"
+      required
+    />
     <mat-hint class="error" *ngIf="authForm.get('email')?.hasError('required')">
       Email is required
     </mat-hint>
     <mat-hint class="error" *ngIf="authForm.get('email')?.hasError('email')">
       Invalid email format
     </mat-hint>
-    <mat-hint class="error" *ngIf="error">
-      <mat-icon fontIcon="bug"/>
-      {{ error.statusCode + ": " + error.message }}
+    <mat-hint class="error" *ngIf="error && authForm.valid">
+      <mat-icon fontIcon="bug" />
+      email is already taken
     </mat-hint>
   </mat-form-field>
 
@@ -37,15 +61,25 @@
     >
       <mat-icon>{{ hide ? "visibility_off" : "visibility" }}</mat-icon>
     </button>
-    <mat-hint class="error" *ngIf="authForm.get('password')?.hasError('required')">
+    <mat-hint
+      class="error"
+      *ngIf="authForm.get('password')?.hasError('required')"
+    >
       Password is required
     </mat-hint>
-    <mat-hint class="error" *ngIf="authForm.get('password')?.hasError('minlength')">
+    <!-- <mat-hint
+      class="error"
+      *ngIf="authForm.get('password')?.hasError('pattern')">
+      Password must contain upper and lower case letters, numbers and special characters
+    </mat-hint> -->
+    <mat-hint
+      class="error"
+      *ngIf="authForm.get('password')?.hasError('minLength')">
       Password must be at least 8 characters long
     </mat-hint>
   </mat-form-field>
 
-  <button mat-raised-button color="primary">Register</button>
-
-  <mat-divider />
+  <div class="button">
+    <button mat-raised-button color="primary">Register</button>
+  </div>
 </form>

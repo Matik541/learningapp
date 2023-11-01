@@ -10,9 +10,19 @@
     <app-search-bar></app-search-bar>
     <div class="user" *ngIf="usersServices.user">
       <a [routerLink]="['profile/', usersServices.user.id ]" class="username">{{ usersServices.user.userName }}</a>
-      <button mat-icon-button>
+      <button mat-icon-button [matMenuTriggerFor]="menu" aria-label="User menu">
         <mat-icon fontIcon="expand_more"/>
       </button>
+      <mat-menu #menu="matMenu">
+        <button mat-menu-item disabled>
+          <mat-icon>light_mode</mat-icon>
+          <span>Theme</span>
+        </button>
+        <button mat-menu-item (click)="logout()">
+          <mat-icon>logout</mat-icon>
+          <span>Logout</span>
+        </button>
+      </mat-menu>
     </div>
     <div class="user" *ngIf="!usersServices.user">
       <button mat-raised-button color="accent" (click)="login()">Login</button>

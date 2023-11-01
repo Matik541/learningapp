@@ -1,1 +1,51 @@
-<p>login works!</p>
+<form [formGroup]="authForm" [class]="class" (submit)="login()">
+  <mat-form-field appearance="outline">
+    <input
+      matInput
+      placeholder="Email"
+      formControlName="email"
+      name="eamil"
+      required
+    />
+    <mat-hint class="error" *ngIf="authForm.get('email')?.hasError('required')">
+      Email is required
+    </mat-hint>
+    <mat-hint class="error" *ngIf="authForm.get('email')?.hasError('email')">
+      Invalid email format
+    </mat-hint>
+  </mat-form-field>
+
+  <mat-form-field appearance="outline">
+    <input
+      matInput
+      placeholder="Password"
+      formControlName="password"
+      name="password"
+      required
+      [type]="hide ? 'password' : 'text'"
+    />
+    <button
+      mat-icon-button
+      matSuffix
+      (click)="hide = !hide"
+      [attr.aria-label]="'Hide password'"
+      [attr.aria-pressed]="hide"
+    >
+      <mat-icon>{{ hide ? "visibility_off" : "visibility" }}</mat-icon>
+    </button>
+    <mat-hint
+      class="error"
+      *ngIf="authForm.get('password')?.hasError('required')"
+    >
+      Password is required
+    </mat-hint>
+  </mat-form-field>
+
+  <span *ngIf="error" style="padding-left: 1rem">
+    Invalid email or password
+  </span>
+
+  <div class="button">
+    <button mat-raised-button color="primary">Login</button>
+  </div>
+</form>

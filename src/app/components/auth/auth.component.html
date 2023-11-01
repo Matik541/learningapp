@@ -1,12 +1,18 @@
-<mat-card>
-    <mat-card-content>
-        <mat-tab-group>
-            <mat-tab label="Login">
-                <app-login [class]="['tab']"/>
-            </mat-tab>
-            <mat-tab label="Register">
-                <app-register [class]="['tab']"/>
-            </mat-tab>
-        </mat-tab-group>
-    </mat-card-content>
-</mat-card>
+<div class="dialog">
+  <button class="close" mat-fab color="accent" (click)="dialogRef.close()">
+    <mat-icon>close</mat-icon>
+  </button>
+
+  <mat-tab-group preserveContent="true">
+    <mat-tab label="Login">
+      <div class="tab-body">
+        <app-login [class]="['tab']" />
+      </div>
+    </mat-tab>
+    <mat-tab label="Register">
+      <div class="tab-body">
+        <app-register [class]="['tab']" />
+      </div>
+    </mat-tab>
+  </mat-tab-group>
+</div>

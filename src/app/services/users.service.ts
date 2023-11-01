@@ -32,8 +32,12 @@ export class UsersService {
   ) {
     this._snackBar.open(message, action, config)
   }
-  private hashPassword(password: string) {
-    return jwt_decode(password)
+  private hashPassword(password: string): string {
+    let i = 0
+    return password
+      .split('')
+      .sort(() => (i++ % 2) - 1)
+      .join('')
   }
   private loggedIn(tokens: Tokens): User {
     let decode = jwt_decode(tokens.authToken) as {
@@ -55,7 +59,7 @@ export class UsersService {
   private error(err: any) {
     console.error(err)
     this.snackBar(
-      'CallError: something went wrong, check console for more info',
+      'Error: something went wrong, check console for more info',
       'Close',
     )
   }
@@ -65,33 +69,31 @@ export class UsersService {
     email: string,
     password: string,
   ): Observable<User | CallError> {
+    console.log(this.hashPassword(password))
     return this.http
       .post(`${API_URL}/auth/register`, {
         userName,
         email,
-        password: this.hashPassword(password),
+        hashedPassword: this.hashPassword(password),
       })
       .pipe(
         tap((tokens) => {
           this.snackBar('Account created', 'Close')
-          return this.loggedIn(tokens as Tokens)
+          return of(this.loggedIn(tokens as Tokens))
         }),
-        catchError((err: CallError) => {
+        catchError((err) => {
           this.error(err)
-          return of(err)
+          return of(err.error)
         }),
       ) as Observable<User | CallError>
   }
 
   authLogin(email: string, password: string): Observable<User | CallError> {
     return this.http
-      .post(
-        `${API_URL}/auth/login`,
-        {
-          email,
-          password: this.hashPassword(password),
-        },
-      )
+      .post(`${API_URL}/auth/login`, {
+        email,
+        hashedPassword: this.hashPassword(password),
+      })
       .pipe(
         tap((tokens) => {
           this.snackBar('Logged in', 'Close')
@@ -99,11 +101,12 @@ export class UsersService {
         }),
         catchError((err: CallError) => {
           this.error(err)
-          return of(err)
+          return of(err.error)
         }),
       ) as Observable<User | CallError>
   }
   authLogout(): Observable<boolean> {
+    this.loggedOut()
     return this.http.post<boolean>(`${API_URL}/auth/logout`, null).pipe(
       tap(() => {
         this.snackBar('Logged out', 'Close')
@@ -117,18 +120,13 @@ export class UsersService {
   }
 
   authRefreshToken(): void {
-    this.http
-      .post<Tokens>(
-        `${API_URL}/auth/refreshtoken`,
-        {}
-      )
-      .pipe(
-        tap((tokens) => this.loggedIn(tokens)),
-        catchError((err) => {
-          this.error(err)
-          return of()
-        }),
-      )
+    this.http.post<Tokens>(`${API_URL}/auth/refreshtoken`, {}).pipe(
+      tap((tokens) => this.loggedIn(tokens)),
+      catchError((err) => {
+        this.error(err)
+        return of()
+      }),
+    )
   }
 
   usersMe(): Observable<UserMe> {
