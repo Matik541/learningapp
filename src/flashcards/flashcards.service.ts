@@ -18,29 +18,12 @@ export class FlashcardsService {
   constructor(
     @InjectRepository(Flashcard)
     private readonly flashcardRepository: Repository<Flashcard>,
+
+    // TODO: change on event
     private readonly lessonsService: LessonsService,
   ) {}
 
-  @OnEvent('add.flashcards')
-  async addFlashcardsToLessonEvent(
-    lessonId: number,
-    flashcardsData: AddFlashcardDto[],
-  ): Promise<Flashcard[]> {
-    const flashcards: Flashcard[] = flashcardsData.map((card) => {
-      return this.flashcardRepository.create({
-        question: card.question,
-        answer: card.answer,
-        lesson: { id: lessonId },
-      });
-    });
-
-    try {
-      return await this.flashcardRepository.save(flashcards);
-    } catch (err) {
-      throw new BadRequestException(err);
-    }
-  }
-
+  @OnEvent('flashcards.add')
   async addFlashcardsToLesson(
     lessonCreatorId: number,
     lessonId: number,
@@ -115,15 +98,10 @@ export class FlashcardsService {
     }
   }
 
-  async removeLessonsFlashcards(
-    lessonCreatorId: number,
+  @OnEvent('flashcards.delete_all')
+  private async removeLessonsFlashcardsEvent(
     lessonId: number,
   ): Promise<Flashcard[]> {
-    const lesson = await this.lessonsService.getLessonById(lessonId);
-
-    if (lesson.creator.id !== lessonCreatorId)
-      throw new BadRequestException('Invalid user');
-
     try {
       const flashcards = await this.flashcardRepository.find({
         where: { lesson: { id: lessonId } },
