@@ -140,8 +140,8 @@ export class LessonsService {
 
     // create lesson object
     const lesson = this.lessonsRepository.create({
-      creator: { id: lessonCreatorId },
       ...dto,
+      creator: { id: lessonCreatorId },
     });
 
     try {
