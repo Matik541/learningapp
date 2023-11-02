@@ -1,6 +1,7 @@
 import { Module } from '@nestjs/common';
 import { ConfigModule } from '@nestjs/config';
 import { TypeOrmModule } from '@nestjs/typeorm';
+import { EventEmitterModule } from '@nestjs/event-emitter';
 
 // modules
 import { AuthModule } from './auth/auth.module';
@@ -12,7 +13,12 @@ import { FlashcardsModule } from './flashcards/flashcards.module';
 
 @Module({
   imports: [
+    // TODO: remove module use different env files
     ConfigModule.forRoot({ isGlobal: true }),
+
+    EventEmitterModule.forRoot(),
+
+    // TODO: remove async
     TypeOrmModule.forRootAsync({
       useFactory: async () => {
         if (process.env.APPLICATION_MODE === 'test') {

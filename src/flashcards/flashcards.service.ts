@@ -1,7 +1,9 @@
 import { Injectable, BadRequestException } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
+import { OnEvent } from '@nestjs/event-emitter';
 
+// services
 import { LessonsService } from '../lessons/lessons.service';
 
 // entities
@@ -18,6 +20,26 @@ export class FlashcardsService {
     private readonly flashcardRepository: Repository<Flashcard>,
     private readonly lessonsService: LessonsService,
   ) {}
+
+  @OnEvent('add.flashcards')
+  async addFlashcardsToLessonEvent(
+    lessonId: number,
+    flashcardsData: AddFlashcardDto[],
+  ): Promise<Flashcard[]> {
+    const flashcards: Flashcard[] = flashcardsData.map((card) => {
+      return this.flashcardRepository.create({
+        question: card.question,
+        answer: card.answer,
+        lesson: { id: lessonId },
+      });
+    });
+
+    try {
+      return await this.flashcardRepository.save(flashcards);
+    } catch (err) {
+      throw new BadRequestException(err);
+    }
+  }
 
   async addFlashcardsToLesson(
     lessonCreatorId: number,

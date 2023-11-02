@@ -1,5 +1,6 @@
 import { BadRequestException, Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
+import { EventEmitter2 } from '@nestjs/event-emitter';
 import { Repository, SelectQueryBuilder } from 'typeorm';
 
 // dto
@@ -18,6 +19,7 @@ export class LessonsService {
     @InjectRepository(Lesson) private lessonsRepository: Repository<Lesson>,
     @InjectRepository(LessonCompleted)
     private lessonCompletedRepository: Repository<LessonCompleted>,
+    private eventEmitter: EventEmitter2,
   ) {}
 
   // find lesson in db parameters
@@ -135,21 +137,27 @@ export class LessonsService {
    * @returns The lesson that was created.
    */
   async addLesson(lessonCreatorId: number, dto: AddLessonDto): Promise<Lesson> {
-    // get flashcards
-    // dto.flashcards = await this.addFlashcards(dto.flashcards);
-
     // create lesson object
-    const lesson = this.lessonsRepository.create({
+    let lesson = this.lessonsRepository.create({
       ...dto,
       creator: { id: lessonCreatorId },
     });
 
+    // save lesson in db
     try {
-      // save lesson in db
-      return await this.lessonsRepository.save(lesson);
+      lesson = await this.lessonsRepository.save(lesson);
     } catch (err) {
       throw new BadRequestException(err);
     }
+
+    // add flashcards
+    await this.eventEmitter.emitAsync(
+      'add.flashcards',
+      lesson.id,
+      dto.flashcards,
+    );
+
+    return lesson;
   }
 
   /**
@@ -206,13 +214,17 @@ export class LessonsService {
     if (lesson.creator.id !== creatorId)
       throw new BadRequestException('You are not allowed to update.');
 
+    // TODO: remove flashcards
+
     // delete users score
     await this.lessonCompletedRepository.delete({ lesson: lesson });
 
     // remove lesson from db
-    await this.lessonsRepository.remove(lesson);
-
-    return lesson;
+    try {
+      return await this.lessonsRepository.remove(lesson);
+    } catch (err) {
+      throw new BadRequestException(err);
+    }
   }
 
   /**

@@ -1,8 +1,8 @@
 import { Column, Entity, ManyToOne, PrimaryGeneratedColumn } from 'typeorm';
+import { ApiProperty } from '@nestjs/swagger';
 
 // entities
 import { Lesson } from '../../lessons/entities/lesson.entity';
-import { ApiProperty } from '@nestjs/swagger';
 
 @Entity()
 export class Flashcard {
