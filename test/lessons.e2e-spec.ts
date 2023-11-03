@@ -77,12 +77,16 @@ describe('UsersController (e2e)', () => {
     //   });
   });
 
+  // TODO: add test case with score
+
   it('/lessons/{id} (GET)', async () => {
     return request(app.getHttpServer()).get('/lessons/1').expect(HttpStatus.OK);
     //   .then((res) => {
     //     console.log(res.body);
     //   });
   });
+
+  // TODO: add test case with score
 
   it('/lessons/{id} (PUT)', async () => {
     return request(app.getHttpServer())

@@ -36,7 +36,7 @@ export class LessonsService {
 
   async getAllLessons(
     userId: number | undefined | null = null,
-    queryParams: GetAllLessonsQueryParametersDto | undefined | null = null,
+    queryParams: GetAllLessonsQueryParametersDto | undefined,
   ): Promise<Lesson[]> {
     let lessons = this.lessonsRepository
       .createQueryBuilder('lessons')
@@ -109,13 +109,13 @@ export class LessonsService {
     userId: number | undefined | null = null,
   ): Promise<Lesson> {
     // find lesson by id and return lesson data
-    let lessons = this.lessonsRepository
+    let lesson = this.lessonsRepository
       .createQueryBuilder('lessons')
       .select(this.getLessonSelectParameters);
 
-    lessons = this.getUserScore(lessons, userId);
+    lesson = this.getUserScore(lesson, userId);
 
-    lessons
+    lesson
       .leftJoin('lessons.creator', 'creator')
       .leftJoinAndSelect('lessons.tags', 'tags')
       .leftJoinAndSelect('lessons.flashcards', 'flashcards')
@@ -124,7 +124,7 @@ export class LessonsService {
       .where('lessons.id = :lesson_id', { lesson_id: lessonId });
 
     try {
-      return await lessons.getOneOrFail();
+      return await lesson.getOneOrFail();
     } catch (err) {
       throw new BadRequestException(err);
     }
@@ -224,7 +224,7 @@ export class LessonsService {
 
     // delete user's score
     try {
-      await this.lessonCompletedRepository.remove(lesson.score);
+      await this.lessonCompletedRepository.delete({ lesson: lesson });
     } catch (err) {
       throw new BadRequestException(err);
     }
@@ -273,18 +273,20 @@ export class LessonsService {
    */
   private getUserScore(
     lessons: SelectQueryBuilder<Lesson>,
-    userId: number,
+    userId: number | undefined,
   ): SelectQueryBuilder<Lesson> {
     // check is user logged
     // if logged add lesson result
-    if (userId != null || userId != undefined) {
+    if (userId !== undefined && userId !== null) {
       lessons
         .addSelect('score.score')
         .leftJoin(
           'lessons.score',
           'score',
           'score.lessonId = lessons.id AND score.userId = :user_id',
-          { user_id: userId },
+          {
+            user_id: userId,
+          },
         );
     }
 

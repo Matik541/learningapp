@@ -53,7 +53,7 @@ export class LessonsController {
   })
   getAllLessons(
     @Query() query: GetAllLessonsQueryParametersDto,
-    @LoginedUserDecorator() userId: number = null,
+    @LoginedUserDecorator('sub') userId: number,
   ): Promise<Lesson[]> {
     return this.lessonsService.getAllLessons(userId, query);
   }
@@ -68,7 +68,7 @@ export class LessonsController {
   })
   getLessonById(
     @Param('id') id: string,
-    @LoginedUserDecorator('sub') userId: number = null,
+    @LoginedUserDecorator('sub') userId: number,
   ): Promise<Lesson> {
     return this.lessonsService.getLessonById(+id, userId);
   }
