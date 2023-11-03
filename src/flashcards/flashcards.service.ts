@@ -99,7 +99,7 @@ export class FlashcardsService {
   }
 
   @OnEvent('flashcards.delete_all')
-  private async removeLessonsFlashcardsEvent(
+  private async removeLessonsFlashcards(
     lessonId: number,
   ): Promise<Flashcard[]> {
     try {

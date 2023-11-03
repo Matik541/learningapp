@@ -216,12 +216,15 @@ export class LessonsService {
     if (lesson.creator.id !== creatorId)
       throw new BadRequestException('You are not allowed to update.');
 
+    // remove lesson's comments
+    this.eventEmitter.emitAsync('comments.delete_all', lessonId, creatorId);
+
     // remove lesson's flashcards
     this.eventEmitter.emitAsync('flashcards.delete_all', lessonId);
 
     // delete user's score
     try {
-      await this.lessonCompletedRepository.delete({ lesson: lesson });
+      await this.lessonCompletedRepository.remove(lesson.score);
     } catch (err) {
       throw new BadRequestException(err);
     }

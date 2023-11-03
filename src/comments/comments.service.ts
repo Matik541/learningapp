@@ -1,5 +1,6 @@
 import { BadRequestException, Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
+import { OnEvent } from '@nestjs/event-emitter';
 import { Repository } from 'typeorm';
 
 import { Comment } from './entities/comment.entity';
@@ -21,6 +22,8 @@ export class CommentsService {
     lessonId: number,
     dto: AddCommentDto,
   ): Promise<Comment> {
+    // TODO: check is lesson exist
+
     // create comment object
     const comment = this.commentRepository.create({
       creator: { id: commentCreatorId },
@@ -28,8 +31,8 @@ export class CommentsService {
       ...dto,
     });
 
+    // save comment in db
     try {
-      // save comment in db
       return await this.commentRepository.save(comment);
     } catch (err) {
       throw new BadRequestException(err);
@@ -108,7 +111,8 @@ export class CommentsService {
     }
   }
 
-  async deleteLessonsComments(
+  @OnEvent('comments.delete_all')
+  private async deleteLessonsComments(
     lessonId: number,
     lessonCreatorId: number,
   ): Promise<Comment[]> {
