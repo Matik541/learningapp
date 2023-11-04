@@ -49,6 +49,6 @@ export class LessonComponent {
   }
 
   updateUrl(goto: number): void {
-    this.router.navigate([`/lesson/${this.id}/${this._categories[goto]}`])
+    this.router.navigate(['lesson', this.id, this._categories[goto]])
   }
 }

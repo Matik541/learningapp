@@ -44,7 +44,8 @@ import { ResultComponent } from './components/lesson/quiz/result/result.componen
 import { LoginComponent } from './components/auth/login/login.component'
 import { RegisterComponent } from './components/auth/register/register.component'
 import { AuthComponent } from './components/auth/auth.component'
-import { HomeComponent } from './components/home/home.component'
+import { HomeComponent } from './components/home/home.component';
+import { CreateComponent } from './components/create/create.component'
 
 @NgModule({
   declarations: [
@@ -65,6 +66,7 @@ import { HomeComponent } from './components/home/home.component'
     RegisterComponent,
     AuthComponent,
     HomeComponent,
+    CreateComponent,
   ],
   imports: [
     BrowserModule,

@@ -23,7 +23,10 @@ export class UsersService {
     return this.logged
   }
 
-  constructor(private http: HttpClient, private _snackBar: MatSnackBar) {}
+  constructor(private http: HttpClient, private _snackBar: MatSnackBar) {
+    if (this.refreshToken())
+      this.authRefreshToken()
+  }
 
   private snackBar(
     message: string,
@@ -40,11 +43,12 @@ export class UsersService {
       .join('')
   }
   private loggedIn(tokens: Tokens): User {
+    this.strokeTokens(tokens)
+
     let decode = jwt_decode(tokens.authToken) as {
       username: string
       sub: number
     }
-    this.strokeTokens(tokens)
 
     this.logged = {
       userName: decode?.username,
@@ -52,10 +56,12 @@ export class UsersService {
     }
     return this.logged
   }
+
   private loggedOut(): void {
     this.logged = null
     this.clearTokens()
   }
+
   private error(err: any) {
     console.error(err)
     this.snackBar(
@@ -120,17 +126,21 @@ export class UsersService {
   }
 
   authRefreshToken(): void {
-    this.http.post<Tokens>(`${API_URL}/auth/refreshtoken`, {}).pipe(
+    this.http.post<Tokens>(`${API_URL}/auth/refreshtoken`, null, {
+      headers: { Authorization: `Bearer ${this.refreshToken()}` },
+    }).pipe(
       tap((tokens) => this.loggedIn(tokens)),
       catchError((err) => {
         this.error(err)
         return of()
       }),
-    )
+    ).subscribe((tokens) => this.loggedIn(tokens))
   }
 
   usersMe(): Observable<UserMe> {
-    return this.http.get<UserMe>(`${API_URL}/users/me`)
+    return this.http.get<UserMe>(`${API_URL}/users/me`, {
+      headers: { Authorization: `Bearer ${this.accessToken()}` },
+    })
   }
 
   users(id: number): Observable<UserMe> {
@@ -142,16 +152,12 @@ export class UsersService {
     localStorage.setItem('access_token', tokens.authToken)
     localStorage.setItem('refresh_token', tokens.refreshToken)
   }
+  
   private clearTokens(): void {
     localStorage.removeItem('access_token')
     localStorage.removeItem('refresh_token')
   }
-  private refreshToken(): string {
-    let token = localStorage.getItem('refresh_token')
-    return token ? token : ''
-  }
-  public accessToken(): string {
-    let token = localStorage.getItem('access_token')
-    return token ? token : ''
-  }
+
+  private refreshToken = (): string => localStorage.getItem('refresh_token') ?? ''
+  public accessToken = (): string => localStorage.getItem('access_token') ?? ''
 }

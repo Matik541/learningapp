@@ -1,7 +1,7 @@
 import { Component, Input } from '@angular/core';
 import { PageEvent } from '@angular/material/paginator';
 import { MatSnackBar } from '@angular/material/snack-bar';
-import { Comment } from 'src/app/enums/enums';
+import { CommentUser } from 'src/app/enums/enums';
 import { CommentsService } from 'src/app/services/comments.service';
 
 @Component({
@@ -10,7 +10,7 @@ import { CommentsService } from 'src/app/services/comments.service';
   styleUrls: ['./comments.component.scss'],
 })
 export class CommentsComponent {
-  @Input() comments: Comment[] | undefined;
+  @Input() comments: CommentUser[] | undefined;
 
   lowBound: number = 0;
   highBound: number = 20;

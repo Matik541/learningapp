@@ -29,7 +29,16 @@ export type Flashcard =
 export type Comment = {
   id: number
   comment: string
+}
+
+export type CommentUser = Comment & {
   creator: User
+}
+
+export type CommentLesson = Comment & {
+  lesson: {
+    id: number
+  }
 }
 
 export type User = null | {
@@ -44,7 +53,7 @@ export type Lesson = {
   creator: User
   flashcards: Flashcard[]
   tags: Tag[]
-  comments: Comment[]
+  comments: CommentUser[]
 }
 
 export type Bar = {
@@ -71,7 +80,15 @@ export type UserMe = {
     title: string
     description: string
     iconPath: string
-  }
+  }[]
+  comments: {
+    id: number
+    comment: string
+  }[]
+  lessonsCompleted: {
+    id: number
+    score: number
+  }[]
 }
 
 export enum Methods {

@@ -2,12 +2,12 @@ import { Observable, catchError, of, tap } from 'rxjs'
 import { HttpClient } from '@angular/common/http'
 import { Injectable } from '@angular/core'
 import { MatSnackBar } from '@angular/material/snack-bar'
-import { Comment } from 'src/app/enums/enums'
+import { CommentLesson } from 'src/app/enums/enums'
 import { API_URL } from 'src/environments/environment'
 import { UsersService } from 'src/app/services/users.service'
 
 @Injectable({
-  providedIn: 'root'
+  providedIn: 'root',
 })
 export class CommentsService {
   constructor(
@@ -32,19 +32,17 @@ export class CommentsService {
     )
   }
 
-  // getComments(): Observable<Comment[]> {
-  //   return this.http.get<Comment[]>(`${API_URL}/comments`).pipe(
-  //     tap((data) => of(data)),
-  //     catchError((err) => {
-  //       this.error(err)
-  //       return []
-  //     }),
-  //   )
-  // }
-
-  addComment(comment: string): Observable<Comment> {
+  /**
+   * Call API via http request to add comment to the database
+   * @warning This method requires the user to be logged in
+   * @param {string} comment The comment to add
+   * @returns {Observable<CommentLesson>} The comment added
+   *
+   * @example addComment('This is a comment')
+   */
+  addComment(comment: string): Observable<CommentLesson> {
     return this.http
-      .post<Comment>(
+      .post<CommentLesson>(
         `${API_URL}/comments/add`,
         { comment },
         {
@@ -62,9 +60,21 @@ export class CommentsService {
       )
   }
 
-  updateComment(id: number, comment: string): Observable<Comment> {
+  /**
+   * Call API via http request to update a comment in the database
+   * @warning This method requires the user to be creator of the comment
+   * @param {number} id ID of the comment to update
+   * @param {string} comment The new comment content
+   * @returns {Observable<CommentLesson>} The updated comment
+   *
+   * @example updateComment(1, 'This is a new comment content')
+   */
+  updateComment(
+    id: number,
+    comment: string,
+  ): Observable<CommentLesson> {
     return this.http
-      .put<Comment>(
+      .put<CommentLesson>(
         `${API_URL}/comments/${id}`,
         { comment },
         {
@@ -82,9 +92,17 @@ export class CommentsService {
       )
   }
 
-  deleteComment(id: number): Observable<Comment> {
+  /**
+   * Call API via http request to delete a comment from the database
+   * @warning This method requires the user to be creator of the comment
+   * @param {number} id ID of the comment to delete
+   * @returns {Observable<CommentLesson>} The deleted comment
+   *
+   * @example deleteComment(1)
+   */
+  deleteComment(id: number): Observable<CommentLesson> {
     return this.http
-      .delete<Comment>(`${API_URL}/comments/${id}`, {
+      .delete<CommentLesson>(`${API_URL}/comments/${id}`, {
         headers: { Authorization: `Bearer ${this.usersService.accessToken()}` },
       })
       .pipe(
