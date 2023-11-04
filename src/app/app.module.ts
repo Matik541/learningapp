@@ -28,6 +28,7 @@ import { MatSelectModule } from '@angular/material/select'
 import { MatDialogModule } from '@angular/material/dialog'
 import { MatProgressSpinnerModule } from '@angular/material/progress-spinner'
 import { MatMenuModule } from '@angular/material/menu'
+import {MatStepperModule} from '@angular/material/stepper';
 
 import { NavigationComponent } from './components/navigation/navigation.component'
 import { SearchBarComponent } from './components/navigation/search-bar/search-bar.component'
@@ -99,6 +100,7 @@ import { CreateComponent } from './components/create/create.component'
     MatDialogModule,
     MatProgressSpinnerModule,
     MatMenuModule,
+    MatStepperModule,
   ],
   providers: [],
   bootstrap: [AppComponent],
