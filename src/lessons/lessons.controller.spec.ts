@@ -5,12 +5,15 @@ import { LessonsController } from './lessons.controller';
 
 import { LessonsService } from './lessons.service';
 
+// dtos
 import { AddLessonDto } from './dto/addLesson.dto';
 
+// entities
 import { Lesson } from './entities/lesson.entity';
 import { User } from 'src/users/entities/user.entity';
 import { LessonCompleted } from './entities/lessonCompleted.entity';
 import { Tag } from 'src/tags/entities/tag.entity';
+import { Flashcard } from 'src/flashcards/entities/flashcard.entity';
 
 const lessons: Lesson[] = [];
 
@@ -32,14 +35,26 @@ const mockFlashcardsService = {
         const tag: Tag = { id: dto.tags[0].id, tagName: 'test' };
 
         const lesson: Lesson = {
-          ...dto,
           id: id,
+          title: dto.title,
+          description: dto.description,
+          iconPath: dto.iconPath,
           tags: [tag],
           comments: [],
           creator: mockUser,
           score: score,
           flashcards: [],
         };
+
+        const flashcards: Flashcard[] = dto.flashcards.map((card) => {
+          return {
+            id: 1,
+            question: card.question,
+            answer: card.answer,
+            lesson: lesson,
+          };
+        });
+        lesson.flashcards = flashcards;
 
         lessons.push(lesson);
 
@@ -76,7 +91,12 @@ describe('LessonsController', () => {
       const lessonAddDto: AddLessonDto = {
         title: 'test',
         description: 'desc',
-        flashcards: [],
+        flashcards: [
+          {
+            question: 'test',
+            answer: 'test',
+          },
+        ],
         iconPath: 'path',
         tags: [{ id: 1 }],
       };
@@ -91,6 +111,16 @@ describe('LessonsController', () => {
         score: score,
       };
 
+      const flashcards: Flashcard[] = [
+        {
+          id: 1,
+          question: 'test',
+          answer: 'test',
+          lesson: lesson,
+        },
+      ];
+      lesson.flashcards = flashcards;
+
       expect(await controller.addLesson(1, lessonAddDto)).toEqual(lesson);
     });
 
@@ -103,4 +133,6 @@ describe('LessonsController', () => {
       expect(err.length).toBe(5);
     });
   });
+
+  // describe('update lesson route', () => {});
 });
