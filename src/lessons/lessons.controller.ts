@@ -12,6 +12,7 @@ import {
   Query,
   UsePipes,
   ValidationPipe,
+  ParseIntPipe,
 } from '@nestjs/common';
 import { ApiBearerAuth, ApiResponse, ApiTags } from '@nestjs/swagger';
 
@@ -98,12 +99,12 @@ export class LessonsController {
   })
   updateLesson(
     @LoginedUserDecorator('sub') creatorId: number,
-    @Param('id') lessonId: string,
+    @Param('id', ParseIntPipe) lessonId: number,
     @Body() updateLessonDto: UpdateLessonDto,
   ): Promise<Lesson> {
     return this.lessonsService.updateLesson(
       creatorId,
-      +lessonId,
+      lessonId,
       updateLessonDto,
     );
   }

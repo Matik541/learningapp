@@ -7,6 +7,7 @@ import { LessonsService } from './lessons.service';
 
 // dtos
 import { AddLessonDto } from './dto/addLesson.dto';
+import { UpdateLessonDto } from './dto/updateLesson.dto';
 
 // entities
 import { Lesson } from './entities/lesson.entity';
@@ -62,6 +63,15 @@ const mockFlashcardsService = {
 
         return Promise.resolve(lesson);
       },
+    ),
+  updateLesson: jest
+    .fn()
+    .mockImplementation(
+      async (
+        creatorId: number,
+        lessonId: number,
+        dto: UpdateLessonDto,
+      ): Promise<Lesson> => {},
     ),
 };
 
@@ -134,5 +144,40 @@ describe('LessonsController', () => {
     });
   });
 
-  // describe('update lesson route', () => {});
+  describe('update lesson route', () => {
+    it('should update lesson', async () => {
+      const lessonUpdateDto: UpdateLessonDto = {
+        title: 'test update',
+        description: 'desc update',
+        iconPath: 'path',
+        tags: [{ id: 1 }],
+      };
+
+      const lesson: Lesson = {
+        id: 1,
+        title: 'test update',
+        description: 'desc update',
+        iconPath: 'path',
+        creator: mockUser,
+        comments: [],
+        flashcards: [],
+        tags: [{ id: 1, tagName: 'test' }],
+        score: score,
+      };
+
+      const flashcards: Flashcard[] = [
+        {
+          id: 1,
+          question: 'test',
+          answer: 'test',
+          lesson: lesson,
+        },
+      ];
+      lesson.flashcards = flashcards;
+
+      expect(await controller.updateLesson(1, 1, lessonUpdateDto)).toEqual(
+        lesson,
+      );
+    });
+  });
 });

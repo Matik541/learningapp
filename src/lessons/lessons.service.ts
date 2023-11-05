@@ -178,6 +178,7 @@ export class LessonsService {
     // get lesson by id
     let lesson = await this.getLessonById(lessonId);
 
+    // TODO: update lessons flashcards
     // dto.flashcards = await this.updateLessonFlashcards(dto.flashcards);
 
     // check is lesson author
@@ -185,21 +186,21 @@ export class LessonsService {
       throw new BadRequestException('You are not allowed to update.');
     }
 
-    // TODO: change data update method
-    // change data in lesson object
-    lesson = Object.assign(lesson, dto);
+    // change data in lesson
+    lesson = {
+      ...lesson,
+      title: dto.title,
+      description: dto.description,
+      iconPath: dto.iconPath,
+    };
 
     // save updated lesson
     try {
-      lesson = await this.lessonsRepository.save(lesson);
+      // reload allows to return all lesson data
+      return await this.lessonsRepository.save(lesson, { reload: true });
     } catch (err) {
       throw new BadRequestException(err);
     }
-
-    // clear useless flashcards
-    // await this.removeFlashcardsWithoutLesson();
-
-    return lesson;
   }
 
   /**
