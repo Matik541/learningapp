@@ -28,7 +28,7 @@ import { MatSelectModule } from '@angular/material/select'
 import { MatDialogModule } from '@angular/material/dialog'
 import { MatProgressSpinnerModule } from '@angular/material/progress-spinner'
 import { MatMenuModule } from '@angular/material/menu'
-import {MatStepperModule} from '@angular/material/stepper';
+import { MatStepperModule } from '@angular/material/stepper'
 
 import { NavigationComponent } from './components/navigation/navigation.component'
 import { SearchBarComponent } from './components/navigation/search-bar/search-bar.component'
@@ -45,8 +45,9 @@ import { ResultComponent } from './components/lesson/quiz/result/result.componen
 import { LoginComponent } from './components/auth/login/login.component'
 import { RegisterComponent } from './components/auth/register/register.component'
 import { AuthComponent } from './components/auth/auth.component'
-import { HomeComponent } from './components/home/home.component';
+import { HomeComponent } from './components/home/home.component'
 import { CreateComponent } from './components/create/create.component'
+import { MatChipsModule } from '@angular/material/chips'
 
 @NgModule({
   declarations: [
@@ -101,6 +102,7 @@ import { CreateComponent } from './components/create/create.component'
     MatProgressSpinnerModule,
     MatMenuModule,
     MatStepperModule,
+    MatChipsModule,
   ],
   providers: [],
   bootstrap: [AppComponent],

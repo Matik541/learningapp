@@ -1,0 +1,47 @@
+mat-stepper {
+    max-height: 80vh;
+    height: 100%;
+    padding: 2rem 5%;
+
+    @media screen and (min-width: 600px) {
+        padding: 2rem 15%;
+    }
+
+    @media screen and (min-width: 1000px) {
+        padding: 2rem 25%;
+    }
+
+    form.details {
+        padding: 1rem 0;
+        display: grid;
+        gap: 1rem;
+
+        grid-template-columns: 1fr auto;
+
+        .iconBtn {
+            box-shadow: none !important;
+            border-style: solid;
+            border-color: var(--mdc-outlined-text-field-outline-color);
+            border-width: var(--mdc-outlined-text-field-outline-width);
+
+            &:hover {
+                box-shadow: none !important;
+                border-style: solid;
+                border-color: var(--mdc-outlined-text-field-hover-outline-color);
+                border-width: var(--mdc-outlined-text-field-outline-width);
+            }
+
+            &:focus,
+            &:active {
+                box-shadow: none !important;
+                border-style: solid;
+                border-color: var(--mdc-outlined-text-field-caret-color);
+                border-width: var(--mdc-outlined-text-field-focus-outline-width);
+            }
+        }
+
+        & :not(.row1) {
+            grid-column: 1 / span 2;
+        }
+    }
+}

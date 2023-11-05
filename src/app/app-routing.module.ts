@@ -5,10 +5,12 @@ import { LessonComponent } from './components/lesson/lesson.component'
 import { LoginComponent } from './components/auth/login/login.component'
 import { RegisterComponent } from './components/auth/register/register.component'
 import { HomeComponent } from './components/home/home.component'
+import { CreateComponent } from './components/create/create.component'
 
 const routes: Routes = [
   { path: 'login', component: LoginComponent },
   { path: 'register', component: RegisterComponent },
+  { path: 'create', component: CreateComponent },
   {
     path: 'profile/:id',
     redirectTo: 'lesson/1',
