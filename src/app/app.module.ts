@@ -48,6 +48,7 @@ import { AuthComponent } from './components/auth/auth.component'
 import { HomeComponent } from './components/home/home.component'
 import { CreateComponent } from './components/create/create.component'
 import { MatChipsModule } from '@angular/material/chips'
+import { CookieService } from 'ngx-cookie-service'
 
 @NgModule({
   declarations: [
@@ -104,7 +105,9 @@ import { MatChipsModule } from '@angular/material/chips'
     MatStepperModule,
     MatChipsModule,
   ],
-  providers: [],
+  providers: [
+    CookieService,
+  ],
   bootstrap: [AppComponent],
 })
 export class AppModule {}

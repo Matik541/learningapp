@@ -1,4 +1,4 @@
-import { UsersService } from './../../services/users.service'
+import { UsersService } from '../auth/users.service'
 import { Component } from '@angular/core'
 import { MatDialog } from '@angular/material/dialog'
 import {

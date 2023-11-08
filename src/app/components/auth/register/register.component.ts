@@ -2,7 +2,7 @@ import { ActivatedRoute, Router } from '@angular/router';
 import { CallError, User } from 'src/app/enums/enums'
 import { Component, Input } from '@angular/core'
 import { FormBuilder, FormGroup, Validators } from '@angular/forms'
-import { UsersService } from 'src/app/services/users.service'
+import { UsersService } from 'src/app/components/auth/users.service'
 import { MatDialogRef } from '@angular/material/dialog';
 import { AuthComponent } from '../auth.component';
 

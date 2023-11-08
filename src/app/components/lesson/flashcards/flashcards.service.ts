@@ -1,10 +1,10 @@
-import { Flashcard } from './../enums/enums';
+import { Flashcard } from '../../../enums/enums';
 import { Observable, catchError, of, tap } from 'rxjs';
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { API_URL } from 'src/environments/environment';
-import { UsersService } from './users.service';
+import { UsersService } from '../../auth/users.service';
 
 @Injectable({
   providedIn: 'root',

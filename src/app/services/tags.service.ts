@@ -4,7 +4,7 @@ import { Injectable } from '@angular/core'
 import { MatSnackBar } from '@angular/material/snack-bar'
 import { Tag } from '../enums/enums'
 import { API_URL } from 'src/environments/environment'
-import { UsersService } from './users.service'
+import { UsersService } from '../components/auth/users.service'
 
 @Injectable({
   providedIn: 'root',

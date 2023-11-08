@@ -2,7 +2,7 @@ import { Component, Input } from '@angular/core';
 import { PageEvent } from '@angular/material/paginator';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { CommentUser } from 'src/app/enums/enums';
-import { CommentsService } from 'src/app/services/comments.service';
+import { CommentsService } from 'src/app/components/lesson/comments/comments.service';
 
 @Component({
   selector: 'lesson-comments',
@@ -17,7 +17,10 @@ export class CommentsComponent {
 
   comment: string = '';
 
-  constructor(private commentsService: CommentsService, private snackBar: MatSnackBar) {}
+  constructor(
+    private commentsService: CommentsService,
+    private snackBar: MatSnackBar
+  ) {}
 
   public getPaginatorData(event: PageEvent): PageEvent {
     this.lowBound = event.pageIndex * event.pageSize;
@@ -26,14 +29,7 @@ export class CommentsComponent {
   }
 
   public send() {
-    if (
-      this.comment === '' ||
-      this.comment === null ||
-      this.comment === undefined 
-    ) {
-      
-      return;
-    }
+    if (this.comment ?? false) return;
     this.commentsService.addComment(this.comment);
     this.comment = '';
   }
