@@ -1,4 +1,4 @@
-import { TagsService } from './../../services/tags.service';
+import { TagsService } from 'src/app/services/tags.service';
 import { COMMA, ENTER } from '@angular/cdk/keycodes';
 import { Flashcard, Tag } from 'src/app/enums/enums';
 import { Component, ElementRef, ViewChild } from '@angular/core';
@@ -24,6 +24,9 @@ export class CreateComponent {
     description: ['', Validators.required],
     tagsCtrl: [''],
   });
+
+  flashcards = new FormControl([] as Flashcard[], [Validators.minLength(4), Validators.required]);
+
   flashcardFormGroup = this.formBuilder.group({
     question: ['', Validators.required],
     answer: ['', Validators.required],
@@ -32,8 +35,6 @@ export class CreateComponent {
   filteredTags: Observable<Tag[]> = of([]);
   tags: Tag[] = [];
   allTags: Tag[] = [];
-
-  flashcards: Flashcard[] = [];
 
   @ViewChild('tagInput') tagInput!: ElementRef;
   @ViewChild('stepper', {read:MatStepper}) stepper!: MatStepper;
@@ -118,28 +119,30 @@ export class CreateComponent {
   }
 
   addFlashcard() {
-    console.log(this.flashcardFormGroup.value)
-
     if (this.flashcardFormGroup.invalid) return;
 
-    let flashcard = this.flashcardFormGroup.value as Flashcard;
+    let flashcards = [this.flashcardFormGroup.value as Flashcard];
+    if (this.flashcards.value) 
+      flashcards.push(...this.flashcards.value)
 
-    console.log(flashcard);
-
-    this.flashcards.push(flashcard);
+    this.flashcards.setValue(
+      flashcards
+    )
     this.flashcardFormGroup.reset();
   }
 
   removeFlashcard(flashcard: Flashcard) {
-    let index = this.flashcards.indexOf(flashcard);
+    if (!this.flashcards.value) return;
+
+    let index = this.flashcards.value.indexOf(flashcard);
 
     if (index >= 0) {
-      this.flashcards.splice(index, 1);
+      this.flashcards.value.splice(index, 1);
     }
   }
 
   reset() {
-    this.flashcards = [];
+    this.flashcards.setValue([]);
     this.stepper.reset()
   } 
 

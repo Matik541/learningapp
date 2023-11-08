@@ -70,7 +70,10 @@
     </form>
   </mat-step>
 
-  <mat-step>
+  <mat-step
+    [stepControl]="flashcards"
+    errorMessage="Lesson must have at least four cards"
+  >
     <form [formGroup]="flashcardFormGroup" class="flashcard">
       <ng-template matStepLabel>Fill out your address</ng-template>
       <mat-form-field appearance="outline" class="row full-width">
@@ -81,7 +84,7 @@
         <mat-label>Answer</mat-label>
         <input matInput formControlName="answer" required />
       </mat-form-field>
-      <button mat-fab class="row" (click)="addFlashcard()">
+      <button mat-fab color="primary" class="row" (click)="addFlashcard()">
         <mat-icon fontIcon="add"/>
       </button>
       
@@ -93,7 +96,7 @@
       <mat-divider />
 
       <mat-card
-        *ngFor="let flaschard of flashcards"
+        *ngFor="let flaschard of flashcards.value"
         appearance="outlined"
         class="filled"
         
