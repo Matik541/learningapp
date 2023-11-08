@@ -1,11 +1,14 @@
-<mat-stepper #stepper class="create">
+<mat-stepper #stepper class="create allow-overflow">
   <mat-step
     [stepControl]="detailsFormGroup"
     errorMessage="Details is required."
   >
     <form [formGroup]="detailsFormGroup" class="details">
-      <ng-template matStepLabel>Fill out your name</ng-template>
-      <mat-form-field appearance="outline" class="row1">
+
+      <ng-template matStepLabel>Fill lesson details</ng-template>
+      
+      
+      <mat-form-field appearance="outline" class="row">
         <mat-label>Title</mat-label>
         <input matInput formControlName="title" required />
       </mat-form-field>
@@ -14,12 +17,13 @@
         type="menu"
         mat-fab
         color="background"
-        class="row1 iconBtn mdc-text-field--outlined"
+        class="row iconBtn mdc-text-field--outlined"
         [matMenuTriggerFor]="iconsMenu"
       >
         <mat-icon fontIcon="add"></mat-icon>
       </button>
       <mat-menu #iconsMenu="matMenu" xPosition="before">
+        <!-- TODO: icons list -->
         <button mat-menu-item>
           <mat-icon>dialpad</mat-icon>
         </button>
@@ -41,8 +45,8 @@
             <mat-icon matChipRemove>cancel</mat-icon>
           </mat-chip>
           <input
-            placeholder="New fruit..."
             #tagInput
+            placeholder="New tag..."
             formControlName="tagsCtrl"
             [matAutocomplete]="auto"
             [matChipInputFor]="chipList"
@@ -54,49 +58,68 @@
           #auto="matAutocomplete"
           (optionSelected)="selectedTag($event)"
         >
-          <mat-option
-            *ngFor="let fruit of filteredTags | async"
-            [value]="fruit"
-          >
-            {{ fruit.tagName }}
+          <mat-option *ngFor="let tag of filteredTags | async" [value]="tag">
+            {{ tag.tagName }}
           </mat-option>
         </mat-autocomplete>
       </mat-form-field>
 
       <div>
-        <p>Go to a different step to see the error state</p>
         <button mat-button matStepperNext>Next</button>
       </div>
     </form>
   </mat-step>
-  <mat-step
-    [stepControl]="flashcardFormGroup"
-    errorMessage="Address is required."
-  >
-    <form [formGroup]="flashcardFormGroup">
+
+  <mat-step>
+    <form [formGroup]="flashcardFormGroup" class="flashcard">
       <ng-template matStepLabel>Fill out your address</ng-template>
-      <mat-form-field>
-        <mat-label>Address</mat-label>
-        <input
-          matInput
-          placeholder="Ex. 1 Main St, New York, NY"
-          formControlName="secondCtrl"
-          required
-        />
+      <mat-form-field appearance="outline" class="row full-width">
+        <mat-label>Question</mat-label>
+        <input matInput formControlName="question" required />
       </mat-form-field>
+      <mat-form-field appearance="outline" class="row full-width">
+        <mat-label>Answer</mat-label>
+        <input matInput formControlName="answer" required />
+      </mat-form-field>
+      <button mat-fab class="row" (click)="addFlashcard()">
+        <mat-icon fontIcon="add"/>
+      </button>
+      
       <div>
-        <p>Go to a different step to see the error state</p>
         <button mat-button matStepperPrevious>Back</button>
         <button mat-button matStepperNext>Next</button>
       </div>
+
+      <mat-divider />
+
+      <mat-card
+        *ngFor="let flaschard of flashcards"
+        appearance="outlined"
+        class="filled"
+        
+      >
+        <mat-card-content>
+          <span>{{ flaschard.question }}</span>
+          <mat-divider [vertical]="true" />
+          <span>{{ flaschard.answer }}</span>
+          <button mat-icon-button >
+            <mat-icon fontIcon="delete" (click)="removeFlashcard(flaschard)"></mat-icon>
+          </button>
+        </mat-card-content>
+      </mat-card>
     </form>
   </mat-step>
+
   <mat-step>
     <ng-template matStepLabel>Done</ng-template>
-    <p>You are now done.</p>
-    <div>
-      <button mat-button matStepperPrevious>Back</button>
-      <button mat-button (click)="stepper.reset()">Reset</button>
+   
+    <div class="done">
+      <p>You are now done.</p>
+      <div class="actions">
+        <button mat-button matStepperPrevious>Back</button>
+        <button mat-button (click)="reset()">Reset</button>
+        <button mat-flat-button color="primary" (click)="create()">Create</button>
+      </div>
     </div>
   </mat-step>
 </mat-stepper>

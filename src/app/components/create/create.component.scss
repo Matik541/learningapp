@@ -40,8 +40,47 @@ mat-stepper {
             }
         }
 
-        & :not(.row1) {
+        & :not(.row) {
             grid-column: 1 / span 2;
+        }
+    }
+    form.flashcard{
+        display: grid;
+        grid-template-columns: 1fr 1fr auto;
+        gap: 1rem;
+
+        & :not(.row) {
+            grid-column: 1 / span 3;
+        }
+
+        mat-card-content {
+            display: flex;
+            flex-direction: row;
+            gap: 1rem;
+    
+            span {
+                flex: 1;
+                text-align: center;
+                word-break: break-all;
+            }
+
+            button {
+                margin: -1rem;
+                align-self: center;
+            }
+        }
+    }
+
+    .done {
+        .actions {
+            display: flex;
+            flex-direction: row;
+            gap: 1rem;
+            justify-content: flex-start;
+
+            button:last-child {
+                align-self: flex-end;
+            }
         }
     }
 }
