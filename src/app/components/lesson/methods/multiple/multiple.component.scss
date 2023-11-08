@@ -2,6 +2,7 @@ mat-card {
     mat-card-content {
         padding: 1rem;
         text-align: center;
+        word-break: break-all;
     }
 
     mat-card-actions {
@@ -12,6 +13,7 @@ mat-card {
 
         button {
             flex: 1;
+            word-break: break-all;
         }
     }
 }

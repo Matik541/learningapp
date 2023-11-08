@@ -2,6 +2,7 @@ mat-card {
     mat-card-content {
         padding: 1rem;
         text-align: center;
+        word-break: break-all;
     }
 
     mat-card-actions {

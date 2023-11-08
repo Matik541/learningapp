@@ -8,6 +8,7 @@ mat-card {
         span {
             flex: 1;
             text-align: center;
+            word-break: break-all;
         }
     }
 
@@ -17,6 +18,7 @@ mat-card {
 
         button {
             flex: 1;
+            word-break: break-all;
         }
     }
 }
