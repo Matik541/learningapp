@@ -1,4 +1,4 @@
-import { QuizService } from 'src/app/services/quiz.service'
+import { QuizService } from 'src/app/components/lesson/quiz/quiz.service'
 import { Lesson, Methods, PractiseFlashcard } from 'src/app/enums/enums'
 import { Component, HostListener, Input } from '@angular/core'
 import { MatSnackBar } from '@angular/material/snack-bar'
@@ -6,7 +6,7 @@ import { ProgressBarService } from 'src/app/services/progress-bar.service'
 import { MatDialog } from '@angular/material/dialog'
 import { ResultComponent } from './result/result.component'
 import leven from 'leven'
-import { LessonsService } from 'src/app/services/lessons.service'
+import { LessonsService } from 'src/app/components/lesson/lessons.service'
 
 @Component({
   selector: 'lesson-quiz',

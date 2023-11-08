@@ -1,9 +1,9 @@
-import { QuizService } from 'src/app/services/quiz.service';
-import { UsersService } from './../../services/users.service'
+import { QuizService } from 'src/app/components/lesson/quiz/quiz.service';
+import { UsersService } from '../auth/users.service'
 import { Component } from '@angular/core'
 import { ActivatedRoute, Router } from '@angular/router'
 import { Lesson } from 'src/app/enums/enums'
-import { LessonsService } from 'src/app/services/lessons.service'
+import { LessonsService } from 'src/app/components/lesson/lessons.service'
 
 @Component({
   selector: 'app-lesson',

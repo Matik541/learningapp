@@ -21,8 +21,11 @@ export class CreateComponent {
     description: ['', Validators.required],
     tagsCtrl: [''],
   })
+  flashcardControl = new FormControl([] as Flashcard[], Validators.minLength(4))
+
   flashcardFormGroup = this.formBuilder.group({
-    secondCtrl: ['', Validators.required],
+    questionCtrl: ['', Validators.required],
+    answerCtrl: ['', Validators.required],
   })
 
   filteredTags: Observable<Tag[]> = of([])

@@ -4,7 +4,7 @@
     errorMessage="Details is required."
   >
     <form [formGroup]="detailsFormGroup" class="details">
-      <ng-template matStepLabel>Fill out your name</ng-template>
+      <ng-template matStepLabel>Details</ng-template>
       <mat-form-field appearance="outline" class="row1">
         <mat-label>Title</mat-label>
         <input matInput formControlName="title" required />
@@ -70,26 +70,52 @@
     </form>
   </mat-step>
   <mat-step
-    [stepControl]="flashcardFormGroup"
-    errorMessage="Address is required."
+    [stepControl]="flashcardControl"
+    errorMessage="Flashcards are required."
   >
     <form [formGroup]="flashcardFormGroup">
-      <ng-template matStepLabel>Fill out your address</ng-template>
-      <mat-form-field>
-        <mat-label>Address</mat-label>
+      <ng-template matStepLabel>Flashcards</ng-template>
+
+      <mat-form-field appearance="outline">
+        <mat-label>Question</mat-label>
         <input
           matInput
-          placeholder="Ex. 1 Main St, New York, NY"
-          formControlName="secondCtrl"
+          formControlName="questionCtrl"
           required
         />
       </mat-form-field>
+      <mat-form-field appearance="outline">
+        <mat-label>Answer</mat-label>
+        <input
+          matInput
+          formControlName="answerCtrl"
+          required
+        />
+      </mat-form-field>
+
+      <button mat-fab>
+        <mat-icon>add</mat-icon>
+      </button>
+
       <div>
         <p>Go to a different step to see the error state</p>
         <button mat-button matStepperPrevious>Back</button>
         <button mat-button matStepperNext>Next</button>
       </div>
     </form>
+
+    <mat-card
+    *ngFor="let flaschard of flashcardControl.value"
+    appearance="outlined"
+    class="filled"
+  >
+    <mat-card-content>
+      <span>{{ flaschard.question }}</span>
+      <mat-divider [vertical]="true" />
+      <span>{{ flaschard.answer }}</span>
+    </mat-card-content>
+  </mat-card>
+    
   </mat-step>
   <mat-step>
     <ng-template matStepLabel>Done</ng-template>

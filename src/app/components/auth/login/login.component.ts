@@ -3,7 +3,7 @@ import { FormBuilder, FormGroup, Validators } from '@angular/forms'
 import { MatDialogRef } from '@angular/material/dialog'
 import { ActivatedRoute, Router } from '@angular/router'
 import { User } from 'src/app/enums/enums'
-import { UsersService } from 'src/app/services/users.service'
+import { UsersService } from 'src/app/components/auth/users.service'
 import { AuthComponent } from '../auth.component'
 
 @Component({
