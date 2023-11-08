@@ -1,111 +1,129 @@
+@use 'sass:map';
 @use "@angular/material" as mat;
 
 @include mat.core();
 
 @import url("https://fonts.googleapis.com/css2?family=Exo:ital,wght@0,100;0,400;0,800;1,400;1,800&display=swap");
 
-$contrast: (
-  900: #e6e7e7,
-  800: #cdcfce,
-  700: #9a9e9c,
-  600: #686e6b,
-  500: #363e3a,
-  400: #030d08,
-  300: #030b07,
-  200: #020805,
-  100: #020604,
-  50: #010302
-);
+// $contrast: (
+//   900: #e6e7e7,
+//   800: #cdcfce,
+//   700: #9a9e9c,
+//   600: #686e6b,
+//   500: #363e3a,
+//   400: #030d08,
+//   300: #030b07,
+//   200: #020805,
+//   100: #020604,
+//   50: #010302,
+// );
 
-$contrast-reverse: (
-  900: #010302,
-  800: #020604,
-  700: #020805,
-  600: #030b07,
-  500: #030d08,
-  400: #363e3a,
-  300: #686e6b,
-  200: #9a9e9c,
-  100: #cdcfce,
-  50: #e6e7e7
-);
+// $contrast-reverse: (
+//   900: #010302,
+//   800: #020604,
+//   700: #020805,
+//   600: #030b07,
+//   500: #030d08,
+//   400: #363e3a,
+//   300: #686e6b,
+//   200: #9a9e9c,
+//   100: #cdcfce,
+//   50: #e6e7e7,
+// );
 
-$background: (
-  900: #2d302f,
-  800: #5a615e,
-  700: #88928c,
-  600: #b5c2bb,
-  500: #e2f3ea,
-  400: #e8f6ee,
-  300: #eef8f3,
-  200: #f4fbf7,
-  100: #f9fdfb,
-  50: #fcfefd,
+// $background: (
+//   900: #2d302f,
+//   800: #5a615e,
+//   700: #88928c,
+//   600: #b5c2bb,
+//   500: #e2f3ea,
+//   400: #e8f6ee,
+//   300: #eef8f3,
+//   200: #f4fbf7,
+//   100: #f9fdfb,
+//   50: #fcfefd,
 
-  contrast: $contrast-reverse
-);
+//   contrast: $contrast-reverse,
+// );
 
-$primary: (
-  900: #022713,
-  800: #044d26,
-  700: #057439,
-  600: #079b4c,
-  500: #08c15f,
-  400: #21ce72,
-  300: #39da85,
-  200: #51e798,
-  100: #6af3aa,
-  50: #76f9b4,
+// $primary: (
+//   900: #022713,
+//   800: #044d26,
+//   700: #057439,
+//   600: #079b4c,
+//   500: #08c15f,
+//   400: #21ce72,
+//   300: #39da85,
+//   200: #51e798,
+//   100: #6af3aa,
+//   50: #76f9b4,
 
-  contrast: $contrast
-);
-$secondary: (
-  900: #202f28,
-  800: #3f5e51,
-  700: #5f8c79,
-  600: #7ebba1,
-  500: #9eeac9,
-  400: #b2eed4,
-  300: #c5f3df,
-  200: #d8f7ea,
-  100: #ecfbf4,
-  50: #f6fdfa,
+//   contrast: $contrast,
+// );
+// $secondary: (
+//   900: #202f28,
+//   800: #3f5e51,
+//   700: #5f8c79,
+//   600: #7ebba1,
+//   500: #9eeac9,
+//   400: #b2eed4,
+//   300: #c5f3df,
+//   200: #d8f7ea,
+//   100: #ecfbf4,
+//   50: #f6fdfa,
 
-  contrast: $contrast
-);
-$accent: (
-  900: #2d0418,
-  800: #5a0831,
-  700: #870c49,
-  600: #b41062,
-  500: #e1147a,
-  400: #e74395,
-  300: #ed72af,
-  200: #f3a1ca,
-  100: #f9d0e5,
-  50: #fce8f2,
+//   contrast: $contrast,
+// );
+// $accent: (
+//   900: #2d0418,
+//   800: #5a0831,
+//   700: #870c49,
+//   600: #b41062,
+//   500: #e1147a,
+//   400: #e74395,
+//   300: #ed72af,
+//   200: #f3a1ca,
+//   100: #f9d0e5,
+//   50: #fce8f2,
 
-  contrast: $contrast
-);
+//   contrast: $contrast,
+// );
 
-$QuizUp-primary: mat.define-palette($primary);
-$QuizUp-accent: mat.define-palette($secondary);
-$QuizUp-warn: mat.define-palette($accent);
+// $QuizUp-primary: mat.define-palette($primary);
+// $QuizUp-accent: mat.define-palette($secondary);
+// $QuizUp-warn: mat.define-palette($accent);
 
-$QuizUp-background: mat.define-palette($background);
+// $QuizUp-background: mat.define-palette($background);
 
-$QuizUp-theme: mat.define-light-theme(
-  (
-    color: (
-      primary: $QuizUp-primary,
-      accent: $QuizUp-accent,
-      warn: $QuizUp-warn
-    ),
-    background-color: $QuizUp-background
-  )
-);
+// $QuizUp-theme: mat.define-light-theme(
+//   (
+//     color: (
+//       primary: $QuizUp-primary,
+//       accent: $QuizUp-accent,
+//       warn: $QuizUp-warn,
+//     ),
+//     background-color: $QuizUp-background,
+//   )
+// );
 
-@include mat.all-component-themes($QuizUp-theme);
+// @include mat.all-component-themes($QuizUp-theme);
+
+$my-primary: mat.define-palette(mat.$indigo-palette, 500);
+$my-accent: mat.define-palette(mat.$amber-palette, 400);
+$my-warn: mat.define-palette(mat.$pink-palette);
+$my-background: mat.define-palette(mat.$blue-gray-palette, 500);
+
+$my-theme: mat.define-light-theme((
+ color: (
+   primary: $my-primary,
+   accent: $my-accent,
+   warn: $my-warn,
+ ),
+ typography: mat.define-typography-config(),
+));
+
+@include mat.core-theme($my-theme);
+@include mat.all-component-themes($my-theme);
 
 html,
 body {
@@ -116,14 +134,13 @@ body {
   font-family: Exo, sans-serif;
 }
 
-
 app-navigation {
   display: inline;
 }
 
 nav,
 mat-card.filled {
-  background-color: mat.get-color-from-palette($QuizUp-background, 300);
+  background-color: mat.get-color-from-palette($my-background, 50);
 }
 
 .full-width {
@@ -134,11 +151,14 @@ mat-card.filled {
 .mat-mdc-outlined-button.active .mat-mdc-button-persistent-ripple::before {
   opacity: 0.12 !important;
 }
-.mat-mdc-tab-group.mat-mdc-tab-group-stretch-tabs.even-tabs>.mat-mdc-tab-header .mat-mdc-tab {
+.mat-mdc-tab-group.mat-mdc-tab-group-stretch-tabs.even-tabs
+  > .mat-mdc-tab-header
+  .mat-mdc-tab {
   flex-basis: 0;
 }
 
-.mdc-dialog__surface {
+.mdc-dialog__surface:has(.allow-overflow),
+.allow-overflow .mat-horizontal-content-container {
   overflow: visible !important;
 }
 
