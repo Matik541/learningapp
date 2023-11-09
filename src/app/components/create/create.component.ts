@@ -1,6 +1,6 @@
 import { TagsService } from 'src/app/services/tags.service';
 import { COMMA, ENTER } from '@angular/cdk/keycodes';
-import { Flashcard, Tag } from 'src/app/enums/enums';
+import { Flashcard, NewLesson, Tag } from 'src/app/enums/enums';
 import { Component, ElementRef, ViewChild } from '@angular/core';
 import { FormBuilder, FormControl, Validators } from '@angular/forms';
 import { MatChipInputEvent } from '@angular/material/chips';
@@ -9,6 +9,9 @@ import { MatAutocompleteSelectedEvent } from '@angular/material/autocomplete';
 import { BreakpointObserver } from '@angular/cdk/layout';
 import { StepperOrientation } from '@angular/cdk/stepper';
 import { MatStepper } from '@angular/material/stepper';
+import { LessonsService } from '../lesson/lessons.service';
+import { Router } from '@angular/router';
+import { iconSet } from 'src/environments/environment';
 
 @Component({
   selector: 'app-create',
@@ -25,7 +28,10 @@ export class CreateComponent {
     tagsCtrl: [''],
   });
 
-  flashcards = new FormControl([] as Flashcard[], [Validators.minLength(4), Validators.required]);
+  flashcards = new FormControl([] as Flashcard[], [
+    Validators.minLength(4),
+    Validators.required,
+  ]);
 
   flashcardFormGroup = this.formBuilder.group({
     question: ['', Validators.required],
@@ -36,15 +42,21 @@ export class CreateComponent {
   tags: Tag[] = [];
   allTags: Tag[] = [];
 
+  iconSet = [...iconSet];
+  selectedIcon: string = iconSet[0];
+
   @ViewChild('tagInput') tagInput!: ElementRef;
-  @ViewChild('stepper', {read:MatStepper}) stepper!: MatStepper;
-  
+  @ViewChild('question') question!: ElementRef;
+  @ViewChild('stepper', { read: MatStepper }) stepper!: MatStepper;
+
   stepperOrientation: Observable<StepperOrientation>;
 
   constructor(
     private formBuilder: FormBuilder,
     private tagsService: TagsService,
-    breakpointObserver: BreakpointObserver
+    private breakpointObserver: BreakpointObserver,
+    private lessonsService: LessonsService,
+    private router: Router
   ) {
     this.tagsService.getTags().subscribe((tags) => {
       console.log(tags);
@@ -60,10 +72,15 @@ export class CreateComponent {
       this.rowCount = value.description?.split(/\n/g).length || 1;
     });
 
-    this.stepperOrientation = breakpointObserver
+    this.stepperOrientation = this.breakpointObserver
       .observe('(min-width: 800px)')
-      .pipe(map(({matches}) => (matches ? 'horizontal' : 'vertical')));
-    }
+      .pipe(map(({ matches }) => (matches ? 'horizontal' : 'vertical')));
+  }
+
+  sortIconSet() {
+    this.iconSet = [];
+    this.iconSet = [...iconSet]
+  }
 
   addTag(event: MatChipInputEvent): void {
     const input = event.input;
@@ -122,13 +139,14 @@ export class CreateComponent {
     if (this.flashcardFormGroup.invalid) return;
 
     let flashcards = [this.flashcardFormGroup.value as Flashcard];
-    if (this.flashcards.value) 
-      flashcards.push(...this.flashcards.value)
+    if (this.flashcards.value) flashcards.push(...this.flashcards.value);
 
-    this.flashcards.setValue(
-      flashcards
-    )
+    this.flashcards.setValue(flashcards);
+
     this.flashcardFormGroup.reset();
+    this.flashcardFormGroup.markAsUntouched();
+
+    this.question.nativeElement.focus();
   }
 
   removeFlashcard(flashcard: Flashcard) {
@@ -143,8 +161,28 @@ export class CreateComponent {
 
   reset() {
     this.flashcards.setValue([]);
-    this.stepper.reset()
-  } 
+    this.stepper.reset();
+  }
 
-  create() {}
+  create() {
+    if (this.detailsFormGroup.invalid) return;
+    if (this.flashcards.invalid) return;
+
+    let form = this.detailsFormGroup.value;
+    let flashcards = this.flashcards.value;
+
+    let lesson: NewLesson = {
+      title: form.title ?? '',
+      description: form.description ?? '',
+      tags: this.tags,
+      flashcards: flashcards ?? [],
+      iconPath: this.selectedIcon,
+    };
+
+    this.lessonsService.addLesson(lesson).subscribe((lesson) => {
+      if (lesson.id) return;
+
+      this.router.navigate(['/lesson', lesson.id]);
+    });
+  }
 }
