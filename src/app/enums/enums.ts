@@ -56,6 +56,14 @@ export type Lesson = {
   comments: CommentUser[]
 }
 
+export type NewLesson = {
+  title: string
+  description: string
+  iconPath: string
+  tags: Tag[]
+  flashcards: Flashcard[]
+}
+
 export type Bar = {
   hidden: boolean
   mode: 'indeterminate' | 'query' | 'determinate' | 'buffer'

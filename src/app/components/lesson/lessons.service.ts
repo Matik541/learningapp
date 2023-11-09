@@ -2,7 +2,7 @@ import { Observable, catchError, of, tap } from 'rxjs'
 import { HttpClient } from '@angular/common/http'
 import { Injectable } from '@angular/core'
 import { MatSnackBar } from '@angular/material/snack-bar'
-import { Lesson } from '../../enums/enums'
+import { Lesson, NewLesson } from '../../enums/enums'
 import { API_URL } from 'src/environments/environment'
 import { UsersService } from '../auth/users.service'
 
@@ -90,7 +90,7 @@ export class LessonsService {
       )
   }
 
-  addLesson(lesson: Lesson): Observable<Lesson> {
+  addLesson(lesson: NewLesson): Observable<Lesson> {
     return this.http
       .post<Lesson>(`${API_URL}/lessons`, lesson, {
         headers: { Authorization: `Bearer ${this.usersService.accessToken()}` },
