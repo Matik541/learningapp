@@ -1,4 +1,4 @@
-@use 'sass:map';
+@use "sass:map";
 @use "@angular/material" as mat;
 
 @include mat.core();
@@ -113,14 +113,16 @@ $my-accent: mat.define-palette(mat.$amber-palette, 400);
 $my-warn: mat.define-palette(mat.$pink-palette);
 $my-background: mat.define-palette(mat.$blue-gray-palette, 500);
 
-$my-theme: mat.define-light-theme((
- color: (
-   primary: $my-primary,
-   accent: $my-accent,
-   warn: $my-warn,
- ),
- typography: mat.define-typography-config(),
-));
+$my-theme: mat.define-light-theme(
+  (
+    color: (
+      primary: $my-primary,
+      accent: $my-accent,
+      warn: $my-warn
+    ),
+    typography: mat.define-typography-config()
+  )
+);
 
 @include mat.core-theme($my-theme);
 @include mat.all-component-themes($my-theme);
@@ -151,9 +153,7 @@ mat-card.filled {
 .mat-mdc-outlined-button.active .mat-mdc-button-persistent-ripple::before {
   opacity: 0.12 !important;
 }
-.mat-mdc-tab-group.mat-mdc-tab-group-stretch-tabs.even-tabs
-  > .mat-mdc-tab-header
-  .mat-mdc-tab {
+.mat-mdc-tab-group.mat-mdc-tab-group-stretch-tabs.even-tabs > .mat-mdc-tab-header .mat-mdc-tab {
   flex-basis: 0;
 }
 
@@ -164,4 +164,32 @@ mat-card.filled {
 
 .create .mat-horizontal-content-container {
   padding: 0;
+}
+
+.icon-set {
+  max-width: unset !important;
+
+  & > div {
+    display: grid;
+    grid-template-columns: repeat(10, 1fr);
+    padding: 0.5rem;
+
+    .label,
+    mat-divider {
+      grid-column: 1 / -1;
+      padding: 0.5rem 0;
+    }
+
+    button {
+      min-width: 3rem;
+      padding: 0;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+
+      mat-icon {
+        margin: 0 !important;
+      }
+    }
+  }
 }

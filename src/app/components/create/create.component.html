@@ -4,10 +4,8 @@
     errorMessage="Details is required."
   >
     <form [formGroup]="detailsFormGroup" class="details">
-
       <ng-template matStepLabel>Fill lesson details</ng-template>
-      
-      
+
       <mat-form-field appearance="outline" class="row">
         <mat-label>Title</mat-label>
         <input matInput formControlName="title" required />
@@ -20,12 +18,31 @@
         class="row iconBtn mdc-text-field--outlined"
         [matMenuTriggerFor]="iconsMenu"
       >
-        <mat-icon fontIcon="add"></mat-icon>
+        <mat-icon [fontIcon]="selectedIcon"></mat-icon>
       </button>
-      <mat-menu #iconsMenu="matMenu" xPosition="before">
-        <!-- TODO: icons list -->
-        <button mat-menu-item>
-          <mat-icon>dialpad</mat-icon>
+      <mat-menu #iconsMenu="matMenu" xPosition="before" class="icon-set">
+
+        <div class="label" >
+          <mat-label>Sort by: </mat-label>
+          <mat-button-toggle-group value="popular" name="sortBy" aria-label="Sorted by">
+            <mat-button-toggle value="popular" selected (click)="sortIconSet()">Most popular</mat-button-toggle>
+            <mat-button-toggle value="alphabetical" (click)="iconSet.sort()">Alphabetical </mat-button-toggle>
+          </mat-button-toggle-group>
+        </div>
+        
+        <mat-divider/>
+
+        <button
+          mat-menu-item
+          *ngFor="let icon of iconSet"
+          (click)="selectedIcon = icon"
+          [matTooltip]="icon.replace('_', ' ')"
+        >
+          <mat-icon
+            [color]="icon == selectedIcon ? 'primary' : ''"
+          >
+            {{ icon }}
+          </mat-icon>
         </button>
       </mat-menu>
 
@@ -76,18 +93,20 @@
   >
     <form [formGroup]="flashcardFormGroup" class="flashcard">
       <ng-template matStepLabel>Fill out your address</ng-template>
+
       <mat-form-field appearance="outline" class="row full-width">
         <mat-label>Question</mat-label>
-        <input matInput formControlName="question" required />
+        <input matInput formControlName="question" required #question />
       </mat-form-field>
       <mat-form-field appearance="outline" class="row full-width">
         <mat-label>Answer</mat-label>
         <input matInput formControlName="answer" required />
       </mat-form-field>
+
       <button mat-fab color="primary" class="row" (click)="addFlashcard()">
-        <mat-icon fontIcon="add"/>
+        <mat-icon fontIcon="add" />
       </button>
-      
+
       <div>
         <button mat-button matStepperPrevious>Back</button>
         <button mat-button matStepperNext>Next</button>
@@ -99,30 +118,30 @@
         *ngFor="let flaschard of flashcards.value"
         appearance="outlined"
         class="filled"
-        
       >
         <mat-card-content>
           <span>{{ flaschard.question }}</span>
           <mat-divider [vertical]="true" />
           <span>{{ flaschard.answer }}</span>
-          <button mat-icon-button >
-            <mat-icon fontIcon="delete" (click)="removeFlashcard(flaschard)"></mat-icon>
+          <button mat-icon-button (click)="removeFlashcard(flaschard)">
+            <mat-icon fontIcon="delete"></mat-icon>
           </button>
         </mat-card-content>
       </mat-card>
     </form>
-
   </mat-step>
 
   <mat-step>
     <ng-template matStepLabel>Done</ng-template>
-   
+
     <div class="done">
       <p>You are now done.</p>
       <div class="actions">
         <button mat-button matStepperPrevious>Back</button>
         <button mat-button (click)="reset()">Reset</button>
-        <button mat-flat-button color="primary" (click)="create()">Create</button>
+        <button mat-flat-button color="primary" (click)="create()">
+          Create
+        </button>
       </div>
     </div>
   </mat-step>
