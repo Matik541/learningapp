@@ -92,7 +92,7 @@ export class LessonsService {
 
   addLesson(lesson: NewLesson): Observable<Lesson> {
     return this.http
-      .post<Lesson>(`${API_URL}/lessons`, lesson, {
+      .post<Lesson>(`${API_URL}/lessons/add`, lesson, {
         headers: { Authorization: `Bearer ${this.usersService.accessToken()}` },
       })
       .pipe(
@@ -106,7 +106,7 @@ export class LessonsService {
 
   completeLesson(id: number, percent: number): void {
     this.http
-      .post<{ score: number }>(`${API_URL}/lessons/complete${id}`, percent, {
+      .post<{ score: number }>(`${API_URL}/lessons/complete/${id}`, percent, {
         headers: { Authorization: `Bearer ${this.usersService.accessToken()}` },
       })
       .pipe(

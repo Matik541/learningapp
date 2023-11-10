@@ -46,7 +46,7 @@ import { LoginComponent } from './components/auth/login/login.component'
 import { RegisterComponent } from './components/auth/register/register.component'
 import { AuthComponent } from './components/auth/auth.component'
 import { HomeComponent } from './components/home/home.component'
-import { CreateComponent } from './components/create/create.component'
+import { CreateComponent } from './components/lesson/create/create.component'
 import { MatChipsModule } from '@angular/material/chips'
 import { CookieService } from 'ngx-cookie-service'
 

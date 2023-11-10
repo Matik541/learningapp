@@ -47,7 +47,7 @@
           mat-menu-item
           *ngFor="let icon of iconSet"
           (click)="selectedIcon = icon"
-          [matTooltip]="icon.replace('_', ' ')"
+          [matTooltip]="icon.replaceAll('_', ' ')"
         >
           <mat-icon [color]="icon == selectedIcon ? 'primary' : ''">
             {{ icon }}

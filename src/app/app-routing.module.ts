@@ -5,7 +5,7 @@ import { LessonComponent } from './components/lesson/lesson.component'
 import { LoginComponent } from './components/auth/login/login.component'
 import { RegisterComponent } from './components/auth/register/register.component'
 import { HomeComponent } from './components/home/home.component'
-import { CreateComponent } from './components/create/create.component'
+import { CreateComponent } from './components/lesson/create/create.component'
 
 const routes: Routes = [
   { path: 'login', component: LoginComponent },

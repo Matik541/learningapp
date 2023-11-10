@@ -9,9 +9,10 @@ import { MatAutocompleteSelectedEvent } from '@angular/material/autocomplete';
 import { BreakpointObserver } from '@angular/cdk/layout';
 import { StepperOrientation } from '@angular/cdk/stepper';
 import { MatStepper } from '@angular/material/stepper';
-import { LessonsService } from '../lesson/lessons.service';
+import { LessonsService } from '../lessons.service';
 import { Router } from '@angular/router';
 import { iconSet } from 'src/environments/environment';
+import { MatSnackBar } from '@angular/material/snack-bar';
 
 @Component({
   selector: 'app-create',
@@ -56,7 +57,8 @@ export class CreateComponent {
     private tagsService: TagsService,
     private breakpointObserver: BreakpointObserver,
     private lessonsService: LessonsService,
-    private router: Router
+    private router: Router,
+    private _snackBar: MatSnackBar,
   ) {
     this.tagsService.getTags().subscribe((tags) => {
       console.log(tags);
@@ -165,8 +167,10 @@ export class CreateComponent {
   }
 
   create() {
-    if (this.detailsFormGroup.invalid) return;
-    if (this.flashcards.invalid) return;
+    if (this.detailsFormGroup.invalid || this.flashcards.invalid) {
+      this.snackBar('Please fill all the fields', 'Close');
+      return;
+    }
 
     let form = this.detailsFormGroup.value;
     let flashcards = this.flashcards.value;
@@ -180,9 +184,17 @@ export class CreateComponent {
     };
 
     this.lessonsService.addLesson(lesson).subscribe((lesson) => {
-      if (lesson.id) return;
+      if (!lesson.id) return;
 
       this.router.navigate(['/lesson', lesson.id]);
     });
+  }
+  
+  private snackBar(
+    message: string,
+    action: string,
+    config: {} = { duration: 2000 },
+  ) {
+    return this._snackBar.open(message, action, config)
   }
 }
