@@ -6,6 +6,8 @@ import { API_URL } from 'src/environments/environment';
 import { Observable, catchError, map, of, tap } from 'rxjs';
 import jwt_decode from 'jwt-decode';
 import { CookieService } from 'ngx-cookie-service';
+import { Router, ActivatedRoute } from '@angular/router';
+import { MatDialogRef } from '@angular/material/dialog';
 
 // {
 //   "authToken": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOjEsInVzZXJuYW1lIjoic3RyaW5nIiwiaWF0IjoxNjk3MTIzMjY4LCJleHAiOjE2OTc3MjgwNjh9.EZqrXzCfAMKbbQywJqT9T7RvTMcpJKT_Niu9AJNM8wU",
@@ -19,17 +21,19 @@ type Tokens = { authToken: string; refreshToken: string };
 })
 export class UsersService {
   private logged: User = null;
+  dialogRef: MatDialogRef<any> | undefined;
 
   get user(): User {
     return this.logged;
   }
 
   constructor(
-    private http: HttpClient, 
+    private http: HttpClient,
     private _snackBar: MatSnackBar,
-    private cookieService: CookieService,  
+    private cookieService: CookieService,
+    private router: Router,
+    private activatedRoute: ActivatedRoute
   ) {
-    
     if (this.refreshToken()) this.authRefreshToken();
   }
 
@@ -73,6 +77,15 @@ export class UsersService {
       'Error: something went wrong, check console for more info',
       'Close'
     );
+  }
+
+  close() {
+    if (!this.dialogRef)  {
+      this.router.navigate(['/home']);
+      return;
+    }
+    this.dialogRef.close();
+    this.dialogRef = undefined;
   }
 
   authRegister(
@@ -158,8 +171,16 @@ export class UsersService {
   private strokeTokens(tokens: any): void {
     let date = new Date();
 
-    this.cookieService.set('access_token', tokens.authToken, new Date(date.getTime() + 1000 * 60 * 5 ));
-    this.cookieService.set('refresh_token', tokens.refreshToken, new Date(date.getTime() + 1000 * 60 * 60 * 24));
+    this.cookieService.set(
+      'access_token',
+      tokens.authToken,
+      new Date(date.getTime() + 1000 * 60 * 5)
+    );
+    this.cookieService.set(
+      'refresh_token',
+      tokens.refreshToken,
+      new Date(date.getTime() + 1000 * 60 * 60 * 24)
+    );
   }
 
   private clearTokens(): void {

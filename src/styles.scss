@@ -142,13 +142,26 @@ app-navigation {
 
 nav,
 mat-card.filled {
-  background-color: mat.get-color-from-palette($my-background, 50);
+  background-color: mat.get-color-from-palette($my-primary, 50);
 }
 
 .full-width {
   width: 100%;
   flex: 1;
 }
+.page-container {
+  max-height: 80vh;
+  padding: 2rem 5%;
+
+  @media screen and (min-width: 600px) {
+    padding: 2rem 10%;
+  }
+
+  @media screen and (min-width: 1000px) {
+    padding: 2rem 20%;
+  }
+}
+
 .mat-mdc-buttonl.active .mat-mdc-button-persistent-ripple::before,
 .mat-mdc-outlined-button.active .mat-mdc-button-persistent-ripple::before {
   opacity: 0.12 !important;

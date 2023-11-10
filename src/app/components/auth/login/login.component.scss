@@ -1,6 +1,6 @@
 form.tab {
     min-width: 25vw;
-    padding: 0;
+    padding: 0 !important;
 }
 
 form {
@@ -10,16 +10,6 @@ form {
     flex-direction: column;
     align-items: stretch;
     gap: 1rem;
-
-    padding: 2rem 5%;
-
-    @media screen and (min-width: 600px) {
-        padding: 2rem 15%;
-    }
-
-    @media screen and (min-width: 1000px) {
-        padding: 2rem 25%;
-    }
 
     .button {
         flex-grow: 1;

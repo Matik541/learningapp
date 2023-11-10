@@ -1,32 +1,65 @@
 <div>
   <mat-tab-group selectedIndex="{{category}}" (selectedIndexChange)="updateUrl($event)" preserveContent="true" dynamicHeight="true" class="even-tabs">
+    
+    <mat-tab>
+      <mat-divider/>
+      <ng-template mat-tab-label>
+        <mat-icon class="tab-icon material-icons-outlined">description</mat-icon>
+        Details
+      </ng-template>
+      <section class="page-container">
+        <h3 mat-subheader>Folders</h3>
+   
+        <div class="description">
+          <h1>{{lesson.title}}</h1>
+          <p>{{lesson.description}}</p>
+        </div>
+        <div class="details">
+          <div class="author">
+            <mat-icon class="material-icons-outlined">person</mat-icon>
+            <div class="name">
+              <h3>{{lesson.creator?.userName}}</h3>
+            </div>
+          </div>
+        </div>
+      </section>
+    </mat-tab>
+    
     <mat-tab [disabled]="quizService.start">
+      <mat-divider/>
       <ng-template mat-tab-label>
         <mat-icon class="tab-icon material-icons-outlined">style</mat-icon>
         Flashcards
       </ng-template>
       <lesson-flashcards [flashcards]="lesson.flashcards"/>
     </mat-tab>
+    
     <mat-tab [disabled]="quizService.start">
+      <mat-divider/>
       <ng-template mat-tab-label>
         <mat-icon class="tab-icon material-icons-outlined">school</mat-icon>
         Practise
       </ng-template>
       <lesson-practise [lesson]="lesson"/>
     </mat-tab>
+    
     <mat-tab>
+      <mat-divider />
       <ng-template mat-tab-label>
         <mat-icon class="tab-icon material-icons-outlined">quiz</mat-icon>
         Quiz
       </ng-template>
       <lesson-quiz [lesson]="lesson"/>
     </mat-tab>
+    
     <mat-tab [disabled]="quizService.start">
+      <mat-divider/>
       <ng-template mat-tab-label>
         <mat-icon class="tab-icon material-icons-outlined">comment</mat-icon>
         Comments
       </ng-template>
       <lesson-comments [comments]="lesson.comments"/>
     </mat-tab>
+
   </mat-tab-group>
 </div>

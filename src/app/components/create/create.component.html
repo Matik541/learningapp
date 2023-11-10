@@ -1,4 +1,8 @@
-<mat-stepper #stepper class="create allow-overflow">
+<mat-stepper
+  #stepper
+  class="create allow-overflow page-container"
+  [orientation]="(stepperOrientation | async)!"
+>
   <mat-step
     [stepControl]="detailsFormGroup"
     errorMessage="Details is required."
@@ -21,16 +25,23 @@
         <mat-icon [fontIcon]="selectedIcon"></mat-icon>
       </button>
       <mat-menu #iconsMenu="matMenu" xPosition="before" class="icon-set">
-
-        <div class="label" >
+        <div class="label">
           <mat-label>Sort by: </mat-label>
-          <mat-button-toggle-group value="popular" name="sortBy" aria-label="Sorted by">
-            <mat-button-toggle value="popular" selected (click)="sortIconSet()">Most popular</mat-button-toggle>
-            <mat-button-toggle value="alphabetical" (click)="iconSet.sort()">Alphabetical </mat-button-toggle>
+          <mat-button-toggle-group
+            value="popular"
+            name="sortBy"
+            aria-label="Sorted by"
+          >
+            <mat-button-toggle value="popular" selected (click)="sortIconSet()"
+              >Most popular</mat-button-toggle
+            >
+            <mat-button-toggle value="alphabetical" (click)="iconSet.sort()"
+              >Alphabetical
+            </mat-button-toggle>
           </mat-button-toggle-group>
         </div>
-        
-        <mat-divider/>
+
+        <mat-divider />
 
         <button
           mat-menu-item
@@ -38,9 +49,7 @@
           (click)="selectedIcon = icon"
           [matTooltip]="icon.replace('_', ' ')"
         >
-          <mat-icon
-            [color]="icon == selectedIcon ? 'primary' : ''"
-          >
+          <mat-icon [color]="icon == selectedIcon ? 'primary' : ''">
             {{ icon }}
           </mat-icon>
         </button>

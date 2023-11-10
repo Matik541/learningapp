@@ -73,7 +73,7 @@ export class CreateComponent {
     });
 
     this.stepperOrientation = this.breakpointObserver
-      .observe('(min-width: 800px)')
+      .observe('(min-width: 1000px)')
       .pipe(map(({ matches }) => (matches ? 'horizontal' : 'vertical')));
   }
 
