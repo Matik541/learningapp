@@ -91,6 +91,7 @@ export class LessonsService {
   }
 
   addLesson(lesson: NewLesson): Observable<Lesson> {
+    console.log(lesson)
     return this.http
       .post<Lesson>(`${API_URL}/lessons/add`, lesson, {
         headers: { Authorization: `Bearer ${this.usersService.accessToken()}` },

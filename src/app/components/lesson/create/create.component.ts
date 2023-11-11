@@ -192,7 +192,7 @@ export class CreateComponent {
   
   private snackBar(
     message: string,
-    action: string,
+    action: string = 'OK',
     config: {} = { duration: 2000 },
   ) {
     return this._snackBar.open(message, action, config)

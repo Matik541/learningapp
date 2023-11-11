@@ -6,6 +6,7 @@ import {
   ProgressBarService,
 } from 'src/app/services/progress-bar.service'
 import { AuthComponent } from '../auth/auth.component'
+import { Router } from '@angular/router'
 @Component({
   selector: 'app-navigation',
   templateUrl: './navigation.component.html',
@@ -18,13 +19,14 @@ export class NavigationComponent {
     public progressBarService: ProgressBarService,
     public usersServices: UsersService,
     public dialog: MatDialog,
+    private router: Router,
   ) {
     this.progressBar = this.progressBarService.createBar('navigation', 100)
     this.progressBar.current = 0
   }
 
   create() {
-    console.log('create')
+    this.router.navigate(['/create'])
   }
 
   login() {

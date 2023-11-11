@@ -8,18 +8,22 @@
         Details
       </ng-template>
       <section class="page-container">
-        <h3 mat-subheader>Folders</h3>
-   
-        <div class="description">
-          <h1>{{lesson.title}}</h1>
-          <p>{{lesson.description}}</p>
-        </div>
-        <div class="details">
-          <div class="author">
-            <mat-icon class="material-icons-outlined">person</mat-icon>
-            <div class="name">
-              <h3>{{lesson.creator?.userName}}</h3>
-            </div>
+        <!-- put lesson icon, then title, add descripion below and creator, add flashcards count (use mat-chip) and last user score using (mat-spinner) -->
+        <div class="lesson-details">
+          <mat-icon class="lesson-icon material-icons-outlined">{{lesson.iconPath}}</mat-icon>
+          <h1 class="lesson-title">{{lesson.title}}</h1>
+          <p class="lesson-description">{{lesson.description}}</p>
+          <div class="lesson-creator">
+            <mat-icon class="creator-icon material-icons-outlined">person</mat-icon>
+            <span class="creator-name">{{lesson.creator}}</span>
+          </div>
+          <div class="lesson-flashcards">
+            <mat-icon class="flashcards-icon material-icons-outlined">style</mat-icon>
+            <span class="flashcards-count" *ngIf="lesson.flashcards">{{lesson.flashcards.length}}</span>
+          </div>
+          <div class="lesson-score">
+            <mat-icon class="score-icon material-icons-outlined">assessment</mat-icon>
+            <span class="score-value" *ngIf="lesson.score">{{lesson.score[0]}}</span>
           </div>
         </div>
       </section>
@@ -58,7 +62,7 @@
         <mat-icon class="tab-icon material-icons-outlined">comment</mat-icon>
         Comments
       </ng-template>
-      <lesson-comments [comments]="lesson.comments"/>
+      <lesson-comments [comments]="lesson.comments" [lessonId]="lesson.id"/>
     </mat-tab>
 
   </mat-tab-group>

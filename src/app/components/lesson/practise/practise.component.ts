@@ -64,19 +64,25 @@ export class PractiseComponent {
   private answers: number[] = []
   private newAnswer: string | null = null
 
+  private loaded: boolean = false
+
   constructor(
     private snackBar: MatSnackBar,
     private progressBarService: ProgressBarService,
   ) {
     
 
-    setTimeout(() => {
+
+    let intedval = setInterval(() => {
       this.generateRound()
+      if (this.loaded) 
+        clearInterval(intedval)
     }, 100)
   }
 
   async generateRound() {
     if (!this.lesson.flashcards) return
+    this.loaded = true
 
     if (this.round.size != this.lesson.flashcards.length)
       this.round.size = this.lesson.flashcards.length

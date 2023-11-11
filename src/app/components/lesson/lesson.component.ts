@@ -1,5 +1,4 @@
 import { QuizService } from 'src/app/components/lesson/quiz/quiz.service';
-import { UsersService } from '../auth/users.service';
 import { Component } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { Lesson } from 'src/app/enums/enums';
@@ -26,7 +25,6 @@ export class LessonComponent {
     public quizService: QuizService,
     private activeRoute: ActivatedRoute,
     private router: Router,
-    private usersService: UsersService,
     private lessonsService: LessonsService
   ) {
     if (

@@ -54,6 +54,10 @@ export type Lesson = {
   flashcards: Flashcard[]
   tags: Tag[]
   comments: CommentUser[]
+  score: {
+    id: number
+    score: number
+  }[]
 }
 
 export type NewLesson = {
