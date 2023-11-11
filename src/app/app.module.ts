@@ -48,7 +48,8 @@ import { AuthComponent } from './components/auth/auth.component'
 import { HomeComponent } from './components/home/home.component'
 import { CreateComponent } from './components/lesson/create/create.component'
 import { MatChipsModule } from '@angular/material/chips'
-import { CookieService } from 'ngx-cookie-service'
+import { CookieService } from 'ngx-cookie-service';
+import { DialogComponent } from './components/dialog/dialog.component'
 
 @NgModule({
   declarations: [
@@ -70,6 +71,7 @@ import { CookieService } from 'ngx-cookie-service'
     AuthComponent,
     HomeComponent,
     CreateComponent,
+    DialogComponent,
   ],
   imports: [
     BrowserModule,

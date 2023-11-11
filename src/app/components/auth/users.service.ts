@@ -20,10 +20,10 @@ type Tokens = { authToken: string; refreshToken: string };
   providedIn: 'root',
 })
 export class UsersService {
-  private logged: User = null;
+  private logged: User | undefined;
   dialogRef: MatDialogRef<any> | undefined;
 
-  get user(): User {
+  get user(): User | undefined {
     return this.logged;
   }
 
@@ -44,13 +44,14 @@ export class UsersService {
   ) {
     this._snackBar.open(message, action, config);
   }
-  private hashPassword(password: string): string {
+  private hash(password: string): string {
     let i = 0;
     return password
       .split('')
-      .sort(() => (i++ % 2) - 1)
+      .sort(() => (i++ % 2) - 0.5)
       .join('');
   }
+
   private loggedIn(tokens: Tokens): User {
     this.strokeTokens(tokens);
 
@@ -93,12 +94,11 @@ export class UsersService {
     email: string,
     password: string
   ): Observable<User | CallError> {
-    console.log(this.hashPassword(password));
     return this.http
       .post(`${API_URL}/auth/register`, {
         userName,
         email,
-        hashedPassword: this.hashPassword(password),
+        hashedPassword: this.hash(password),
       })
       .pipe(
         tap((tokens) => {
@@ -116,7 +116,7 @@ export class UsersService {
     return this.http
       .post(`${API_URL}/auth/login`, {
         email,
-        hashedPassword: this.hashPassword(password),
+        hashedPassword: this.hash(password),
       })
       .pipe(
         tap((tokens) => {

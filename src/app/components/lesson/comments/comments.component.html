@@ -1,24 +1,62 @@
 <div class="tab-content page-container">
-  <div class="add-comment">
+  <form class="add-comment" [formControl]="commentCtrl">
     <mat-form-field appearance="outline" class="full-width">
       <mat-label>Comment</mat-label>
-      <input [(ngModel)]="comment" matInput placeholder="Leave a comment" />
+      <input
+        name="comment"
+        matInput
+        [placeholder]="usersService.user ? 'Add a comment' : 'Login to add a comment'"
+      />
     </mat-form-field>
-    <button mat-fab color="primary" (click)="send()">
+
+    <button
+      type="submit"
+      mat-fab
+      color="primary"
+      (click)="send()"
+      [disabled]="!usersService.user"
+    >
       <mat-icon class="material-icons-outlined">send</mat-icon>
     </button>
-  </div>
-  <mat-divider/>
+  </form>
+  <mat-divider />
 
   <mat-list>
     <mat-list-item
       *ngFor="let comment of comments | slice : lowBound : highBound"
     >
       <span matListItemTitle>{{ comment.comment }}</span>
-      <span matListItemLine>{{ comment.creator?.userName ?? "Deleted user" }}</span>
+      <button
+        matListItemMeta
+        style="display: flex"
+        mat-icon-button
+        [matMenuTriggerFor]="menu"
+        *ngIf="comment.creator?.id === usersService.user?.id"
+      >
+        <mat-icon> more_vert </mat-icon>
+      </button>
+
+      <mat-menu #menu="matMenu">
+        <button mat-menu-item (click)="remove(comment.id)">
+          <mat-icon>delete</mat-icon>
+          <span>Delete</span>
+        </button>
+        <button mat-menu-item (click)="edit(comment)">
+          <mat-icon>edit</mat-icon>
+          <span>Edit</span>
+        </button>
+      </mat-menu>
+
+      <span matListItemLine>{{
+        comment.creator?.userName ?? "Deleted user"
+      }}</span>
+    </mat-list-item>
+    <mat-list-item style="text-align: center" *ngIf="!comments?.length">
+      <span matListItemTitle>No comments yet</span>
+      <span matListItemLine>Be the first to comment</span>
     </mat-list-item>
   </mat-list>
-  <mat-divider/>
+  <mat-divider />
   <mat-paginator
     [length]="comments?.length"
     pageSize="25"

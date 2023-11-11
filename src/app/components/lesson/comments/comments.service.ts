@@ -40,10 +40,10 @@ export class CommentsService {
    *
    * @example addComment('This is a comment')
    */
-  addComment(comment: string): Observable<CommentLesson> {
+  addComment(comment: string, lessonId: number): Observable<CommentLesson> {
     return this.http
       .post<CommentLesson>(
-        `${API_URL}/comments/add`,
+        `${API_URL}/comments/add/${lessonId}`,
         { comment },
         {
           headers: {
