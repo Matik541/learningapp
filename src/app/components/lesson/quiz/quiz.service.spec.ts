@@ -1,6 +1,7 @@
 import { TestBed } from '@angular/core/testing';
 
 import { QuizService } from './quiz.service';
+import { Methods } from 'src/app/enums/enums';
 
 describe('QuizService', () => {
   let service: QuizService;

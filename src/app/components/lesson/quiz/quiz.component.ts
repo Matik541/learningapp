@@ -1,12 +1,13 @@
-import { QuizService } from 'src/app/components/lesson/quiz/quiz.service'
-import { Lesson, Methods, PractiseFlashcard } from 'src/app/enums/enums'
-import { Component, HostListener, Input } from '@angular/core'
-import { MatSnackBar } from '@angular/material/snack-bar'
-import { ProgressBarService } from 'src/app/services/progress-bar.service'
-import { MatDialog } from '@angular/material/dialog'
-import { ResultComponent } from './result/result.component'
-import leven from 'leven'
-import { LessonsService } from 'src/app/components/lesson/lessons.service'
+import { QuizService } from 'src/app/components/lesson/quiz/quiz.service';
+import { Lesson, Methods, PractiseFlashcard } from 'src/app/enums/enums';
+import { Component, HostListener, Input } from '@angular/core';
+import { MatSnackBar } from '@angular/material/snack-bar';
+import { ProgressBarService } from 'src/app/services/progress-bar.service';
+import { MatDialog } from '@angular/material/dialog';
+import { ResultComponent } from './result/result.component';
+import leven from 'leven';
+import { LessonsService } from 'src/app/components/lesson/lessons.service';
+import { BACKSLASH, COMMA, DASH, SLASH } from '@angular/cdk/keycodes';
 
 @Component({
   selector: 'lesson-quiz',
@@ -14,29 +15,32 @@ import { LessonsService } from 'src/app/components/lesson/lessons.service'
   styleUrls: ['./quiz.component.scss'],
 })
 export class QuizComponent {
-  @Input() lesson: Lesson | undefined = {} as Lesson
+  @Input() lesson: Lesson | undefined = {} as Lesson;
 
   avableMethods: Methods[] = [
     Methods.BOOLEAN,
     Methods.MULTIPLE,
     Methods.WRITE,
     /* Methods.MATCH */
-  ]
+  ];
   methods: Methods[] = [
     Methods.BOOLEAN,
     Methods.MULTIPLE,
     Methods.MATCH,
     Methods.WRITE,
-  ]
+  ];
 
-  sizes: number[] = [3, 5, 8, 10]
+  sizes: number[] = [3, 5, 8, 10];
 
   quiz: {
-    size: number
-    methods: [Methods, PractiseFlashcard[]][]
-    answers: (string | null)[]
+    size: number;
+    methods: [Methods, PractiseFlashcard[]][];
+    answers: (string | null)[];
   } = {
-    size: this.sizes[1],
+    size: Math.min(
+      Math.max(this.lesson?.flashcards?.length ?? 0, this.sizes[0]),
+      this.sizes[1]
+    ),
     methods: [
       [Methods.BOOLEAN, []],
       [Methods.MULTIPLE, []],
@@ -44,30 +48,29 @@ export class QuizComponent {
       [Methods.WRITE, []],
     ],
     answers: [],
-  }
+  };
 
-  private variant: ('question' | 'answer')[] = ['question', 'answer']
-  private scores: number[] = []
+  private variant: ('question' | 'answer')[] = ['question', 'answer'];
+  private scores: number[] = [];
 
   constructor(
     public dialog: MatDialog,
     public quizService: QuizService,
     private snackBar: MatSnackBar,
     private progressBarService: ProgressBarService,
-    private lessonsService: LessonsService,
-  ) {
-  }
+    private lessonsService: LessonsService
+  ) {}
 
   generateQuiz() {
-    this.quizService.startQuiz()
+    this.quizService.startQuiz();
 
-    let navBar = this.progressBarService.getBar('navigation')
-    if (navBar) navBar.max = this.quiz.size * this.avableMethods.length
+    let navBar = this.progressBarService.getBar('navigation');
+    if (navBar) navBar.max = this.quiz.size * this.avableMethods.length;
 
     setTimeout(() => {
-      let el = document.querySelector('.tab-content') as HTMLElement
-      if (el) el.scrollTop = 0
-    }, 50)
+      let el = document.querySelector('.tab-content') as HTMLElement;
+      if (el) el.scrollTop = 0;
+    }, 50);
 
     this.quiz = {
       size: this.quiz.size,
@@ -78,29 +81,29 @@ export class QuizComponent {
         [Methods.WRITE, []],
       ],
       answers: [],
-    }
+    };
 
-    if (!this.lesson?.flashcards) return
+    if (!this.lesson?.flashcards) return;
 
-    let avableFlashcards = [...this.lesson.flashcards]
+    let avableFlashcards = [...this.lesson.flashcards];
 
     for (let i = 0; i <= this.methods.length; i++) {
       avableFlashcards = [...this.lesson.flashcards].sort(
-        () => Math.random() - 0.5,
-      )
+        () => Math.random() - 0.5
+      );
 
       for (let j = 0; j < this.quiz.size; j++) {
-        let flashcard: PractiseFlashcard = {} as PractiseFlashcard
+        let flashcard: PractiseFlashcard = {} as PractiseFlashcard;
 
         switch (this.methods[i]) {
           case Methods.BOOLEAN:
-            avableFlashcards.sort(() => Math.random() - 0.5)
-            this.variant.sort(() => Math.random() - 0.5)
+            avableFlashcards.sort(() => Math.random() - 0.5);
+            this.variant.sort(() => Math.random() - 0.5);
 
             let answers = avableFlashcards.filter(
               (flashcard) =>
-                flashcard.answer !== avableFlashcards[0][this.variant[0]],
-            )
+                flashcard.answer !== avableFlashcards[0][this.variant[0]]
+            );
             flashcard = {
               method: Methods.BOOLEAN,
               variant: this.variant,
@@ -111,12 +114,12 @@ export class QuizComponent {
                   : answers[Math.floor(Math.random() * answers.length)][
                       this.variant[1]
                     ],
-            }
-            this.quiz.methods[0][1].push(flashcard)
-            break
+            };
+            this.quiz.methods[0][1].push(flashcard);
+            break;
 
           case Methods.MULTIPLE:
-            this.variant.sort(() => Math.random() - 0.5)
+            this.variant.sort(() => Math.random() - 0.5);
 
             flashcard = {
               method: Methods.MULTIPLE,
@@ -126,31 +129,31 @@ export class QuizComponent {
                 .filter(
                   (flashcard) =>
                     flashcard[this.variant[1]] !==
-                    avableFlashcards[0][this.variant[1]],
+                    avableFlashcards[0][this.variant[1]]
                 )
                 .sort(() => Math.random() - 0.5)
                 .map((flashcard) => flashcard[this.variant[1]])
                 .splice(0, 3),
-              answers: [...avableFlashcards]
+              answers: [...this.lesson.flashcards]
                 .filter(
                   (flashcard) =>
                     flashcard[this.variant[1]] ===
-                    avableFlashcards[0][this.variant[1]],
+                    avableFlashcards[0][this.variant[1]]
                 )
                 .map((flashcard) => flashcard[this.variant[1]]),
-            }
-            this.quiz.methods[1][1].push(flashcard)
-            break
+            };
+            this.quiz.methods[1][1].push(flashcard);
+            break;
 
           case Methods.MATCH:
             // console.error('Match method not implemented yet')
             // avableFlashcards.sort(() => Math.random() - 0.5)
             // this.variant.sort(() => Math.random() - 0.5)
-            break
+            break;
 
           case Methods.WRITE:
-            avableFlashcards.sort(() => Math.random() - 0.5)
-            this.variant.sort(() => Math.random() - 0.5)
+            avableFlashcards.sort(() => Math.random() - 0.5);
+            this.variant.sort(() => Math.random() - 0.5);
 
             flashcard = {
               method: Methods.WRITE,
@@ -160,59 +163,57 @@ export class QuizComponent {
                 .filter(
                   (flashcard) =>
                     flashcard[this.variant[1]] ===
-                    avableFlashcards[0][this.variant[1]],
+                    avableFlashcards[0][this.variant[1]]
                 )
                 .map((flashcard) => flashcard[this.variant[1]]),
-            }
-            this.quiz.methods[3][1].push(flashcard)
+            };
+            this.quiz.methods[3][1].push(flashcard);
         }
-        avableFlashcards.shift()
+        avableFlashcards.shift();
       }
     }
   }
 
   changeAnswer(method: number, index: number, answer: string | null) {
-    console.log(method, index, answer)
-    this.quiz.answers[method * this.quiz.size + index] = answer
+    console.log(method, index, answer);
+    console.log(this.quiz.answers);
+    this.quiz.answers[method * this.quiz.size + index] = answer;
 
-    let navBar = this.progressBarService.getBar('navigation')
-    // set nabBar to amount of not empty elements in the answers array
+    let navBar = this.progressBarService.getBar('navigation');
     if (navBar)
-      navBar.current = this.quiz.answers.filter((answer) => answer).length
+      navBar.current = this.quiz.answers.filter(
+        (answer) => answer !== undefined
+      ).length;
   }
 
   submitQuiz() {
-    this.quizService.finishQuiz()
+    this.quizService.finishQuiz();
 
     let quiz: {
-      answer: string | null
-      flashcard: PractiseFlashcard
-    }[] = []
+      answer: string | null;
+      flashcard: PractiseFlashcard;
+    }[] = [];
 
     for (let i = 0; i < this.quiz.methods.length; i++) {
       for (let j = 0; j < this.quiz.methods[i][1].length; j++) {
         quiz.push({
           answer: this.quiz.answers[i * this.quiz.size + j],
           flashcard: this.quiz.methods[i][1][j],
-        })
+        });
       }
     }
 
-    this.scores = []
-
-    console.log(quiz)
+    this.scores = [];
 
     quiz.forEach((quiz) => {
-      if (!this.lesson) return
+      if (!this.lesson) return;
 
-      let score = 0
-      let avableFlashcards = [...this.lesson.flashcards]
-
-      console.log(quiz.flashcard, quiz.answer)
+      let score = 0;
+      let avableFlashcards = [...this.lesson.flashcards];
 
       switch (quiz.flashcard.method) {
         case Methods.BOOLEAN:
-          console.log(quiz.flashcard, quiz.answer)
+          console.log(quiz.flashcard, quiz.answer);
 
           let flashcardExists = avableFlashcards.some((flashcard) => {
             if (
@@ -223,80 +224,82 @@ export class QuizComponent {
                 flashcard[quiz.flashcard.variant[0]] ===
                   quiz.flashcard.question)
             ) {
-              return true
+              return true;
             }
-            return false
-          })
+            return false;
+          });
 
           if (
             (flashcardExists && quiz.answer === quiz.flashcard.answer) ||
             quiz.answer === quiz.flashcard.question ||
             (!flashcardExists && quiz.answer === null)
           )
-            score = 1
-          break
+            score = 1;
+          break;
         case Methods.MULTIPLE:
           if (quiz.answer)
-            if (quiz.flashcard.answers?.includes(quiz.answer)) score = 1
-          break
+            if (quiz.flashcard.answers?.includes(quiz.answer)) score = 1;
+
+          break;
         case Methods.MATCH:
-          break
+          break;
         case Methods.WRITE:
           if (quiz.flashcard.answers?.includes(quiz.answer ?? '')) {
-            score = 1
-            break
+            score = 1;
+            break;
           }
 
           if (!quiz.answer) {
-            score = 0
-            break
+            score = 0;
+            break;
           }
 
-          let input = quiz.answer as string
-          let similarityScores:
-            | number[]
-            | undefined = quiz.flashcard.answers?.map((value) => {
-            return (
-              1 -
-              leven(this.normalizeString(input), this.normalizeString(value)) /
-                Math.max(input.length, value.length)
-            )
-          })
+          let input = quiz.answer as string;
+          let similarityScores: number[] | undefined =
+            quiz.flashcard.answers?.map((value) => {
+              return (
+                1 -
+                leven(
+                  this.normalizeString(input),
+                  this.normalizeString(value)
+                ) /
+                  Math.max(input.length, value.length)
+              );
+            });
 
-          score = Math.max(...(similarityScores ?? [0]))
+          score = Math.max(...(similarityScores ?? [0]));
       }
 
-      // console.log(score, this.answers);
-
-      this.scores.push(score)
-
-      // this.display = false;
-      // this.round.current++;
-      // setTimeout(() => {
-      //   this.display = true;
-      // }, 50);
-    })
-
-    // calculate the score from 
+      this.scores.push(score);
+    });
 
     if (this.lesson)
-      this.lessonsService.completeLesson(this.lesson.id, Math.round(this.scores.reduce((a, b) => a + b, 0) / this.scores.length * 10000) / 100)
+      this.lessonsService.completeLesson(
+        this.lesson.id,
+        Math.round(
+          (this.scores.reduce((a, b) => a + b, 0) / this.scores.length) * 10000
+        ) / 100
+      );
 
-    let resultDialog = this.dialog.open(ResultComponent, {
+    let navBar = this.progressBarService.getBar('navigation');
+    if (navBar)
+      navBar.current = this.quiz.answers.filter(
+        (answer) => answer !== undefined
+      ).length;
+
+    this.dialog.open(ResultComponent, {
       data: {
         scores: this.scores,
         size: this.quiz.size,
-        methods: this.quiz.methods.filter(method => method[1].length > 0),
+        methods: this.quiz.methods.filter((method) => method[1].length > 0),
       },
-    })
-
-
+    });
   }
 
   private normalizeString(input: string): string {
     return input
       .normalize('NFD')
       .replace(/[\u0300-\u036f]/g, '')
-      .toLowerCase()
+      .toLowerCase();
   }
 }

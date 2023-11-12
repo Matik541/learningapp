@@ -50,6 +50,7 @@ import { CreateComponent } from './components/lesson/create/create.component'
 import { MatChipsModule } from '@angular/material/chips'
 import { CookieService } from 'ngx-cookie-service';
 import { DialogComponent } from './components/dialog/dialog.component'
+import { RouterTestingModule } from '@angular/router/testing'
 
 @NgModule({
   declarations: [
@@ -74,6 +75,7 @@ import { DialogComponent } from './components/dialog/dialog.component'
     DialogComponent,
   ],
   imports: [
+    RouterTestingModule,
     BrowserModule,
     AppRoutingModule,
     BrowserAnimationsModule,
