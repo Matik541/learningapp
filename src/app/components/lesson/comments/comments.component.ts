@@ -20,6 +20,8 @@ export class CommentsComponent {
   lowBound: number = 0;
   highBound: number = 20;
 
+  editing: number = -1;
+
   commentCtrl = new FormControl('', [
     Validators.required,
     (): ValidationErrors | null => {
@@ -49,9 +51,31 @@ export class CommentsComponent {
       !this.usersService.user ||
       !this.commentCtrl.value
     ) {
-      this.snackBar.open('Comment cannot be added', 'Close', {
-        duration: 2000,
+      this.snackBar.open(
+        `Comment cannot be ${this.editing == -1 ? 'added' : 'edited'}`,
+        'Close',
+        {
+          duration: 2000,
+        }
+      );
+      return;
+    }
+    
+    console.log(this.editing);
+    if (this.editing != -1) {
+      this.commentsService
+        .updateComment(this.editing, this.commentCtrl.value)
+        .subscribe();
+      this.comments = this.comments?.map((comment) => {
+        if (comment.id == this.editing) {
+          comment.comment = this.commentCtrl.value ?? '';
+        }
+        return comment;
       });
+
+      this.editing = -1;
+      this.commentCtrl.setValue('');
+
       return;
     }
 
@@ -63,7 +87,7 @@ export class CommentsComponent {
         newComment.id = comment.id;
       });
 
-    this.comments?.push({
+    this.comments?.unshift({
       id: newComment.id,
       comment: this.commentCtrl.value,
       creator: this.usersService.user,
@@ -80,12 +104,10 @@ export class CommentsComponent {
         confirm: {
           text: 'Delete',
           color: 'warn',
-          type: 'raised',
         },
         cancel: {
           text: 'Cancel',
           color: 'primary',
-          type: 'flat',
         },
       },
     });
@@ -98,7 +120,16 @@ export class CommentsComponent {
     });
   }
 
-  public edit(Comment: CommentUser) {}
+  public edit(comment: CommentUser) {
+    console.log(comment);
+    this.editing = comment.id;
+    this.commentCtrl.setValue(comment.comment);
+    this.commentCtrl.markAsDirty();
 
-  private update(comment: CommentUser) {}
+  }
+
+  public cancel() {
+    this.editing = -1;
+    this.commentCtrl.setValue(null);  
+  }
 }

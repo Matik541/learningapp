@@ -1,13 +1,30 @@
 <div class="tab-content page-container">
-  <form class="add-comment" [formControl]="commentCtrl">
+  <form class="add-comment">
     <mat-form-field appearance="outline" class="full-width">
       <mat-label>Comment</mat-label>
       <input
         name="comment"
         matInput
-        [placeholder]="usersService.user ? 'Add a comment' : 'Login to add a comment'"
+        [formControl]="commentCtrl"
+        [placeholder]="
+          usersService.user
+            ? editing == -1
+              ? 'Add a comment'
+              : 'Edit your comment'
+            : 'Login to add a comment'
+        "
       />
     </mat-form-field>
+
+    <button
+      *ngIf="editing != -1"
+      type="submit"
+      mat-fab
+      color="warn"
+      (click)="cancel()"
+    >
+      <mat-icon class="material-icons-outlined"> close </mat-icon>
+    </button>
 
     <button
       type="submit"
@@ -16,10 +33,22 @@
       (click)="send()"
       [disabled]="!usersService.user"
     >
-      <mat-icon class="material-icons-outlined">send</mat-icon>
+      <mat-icon class="material-icons-outlined">
+        {{ editing == -1 ? "send" : "edit" }}
+      </mat-icon>
     </button>
   </form>
+
   <mat-divider />
+
+  <mat-paginator
+    [length]="comments?.length"
+    pageSize="25"
+    (page)="getPaginatorData($event)"
+    [pageSizeOptions]="[10, 25, 50]"
+    showFirstLastButtons="true"
+  >
+  </mat-paginator>
 
   <mat-list>
     <mat-list-item
@@ -56,13 +85,4 @@
       <span matListItemLine>Be the first to comment</span>
     </mat-list-item>
   </mat-list>
-  <mat-divider />
-  <mat-paginator
-    [length]="comments?.length"
-    pageSize="25"
-    (page)="getPaginatorData($event)"
-    [pageSizeOptions]="[10, 25, 50]"
-    showFirstLastButtons="true"
-  >
-  </mat-paginator>
 </div>
