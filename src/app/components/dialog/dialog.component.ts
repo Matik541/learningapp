@@ -17,12 +17,10 @@ export class DialogComponent {
       confirm?: {
         text: string;
         color?: string;
-        type?: 'raised' | 'stroked' | 'flat';
       };
       cancel?: {
         text: string;
         color?: string;
-        type?: 'raised' | 'stroked' | 'flat';
       };
     }
   ) {}

@@ -10,11 +10,6 @@
   <div mat-dialog-actions>
     <button
 			mat-button
-      [ngClass]="{
-        'mat-raised-button': data.confirm.type === 'raised',
-        'mat-stroked-button': data.confirm.type === 'stroked',
-				'mat-flat-button': data.confirm.type === 'flat',
-      }"
       *ngIf="data.confirm"
       [color]="data.confirm.color"
       [mat-dialog-close]="true"
@@ -23,11 +18,6 @@
     </button>
     <button
       mat-button
-      [ngClass]="{
-        'mat-raised-button': data.cancel.type === 'raised',
-        'mat-stroked-button': data.cancel.type === 'stroked',
-				'mat-flat-button': data.cancel.type === 'flat',
-      }"
       *ngIf="data.cancel"
       [color]="data.cancel.color"
       [mat-dialog-close]="false"
