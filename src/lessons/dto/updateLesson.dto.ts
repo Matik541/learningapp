@@ -1,8 +1,6 @@
 import { ApiProperty } from '@nestjs/swagger';
-import { IsArray, IsOptional, IsString } from 'class-validator';
-
-// dto
-import { AddTagToLesson } from '../../tags/dto/addTagToLesson.dto';
+import { IsNumber, IsOptional, IsString } from 'class-validator';
+import { Type } from 'class-transformer';
 
 export class UpdateLessonDto {
   @ApiProperty({
@@ -37,11 +35,12 @@ export class UpdateLessonDto {
 
   @ApiProperty({
     description: 'Lesson tags',
-    type: [AddTagToLesson],
+    type: [Number],
     nullable: false,
     required: false,
   })
-  @IsArray()
+  @Type(() => Number)
+  @IsNumber({}, { each: true })
   @IsOptional()
-  tags?: AddTagToLesson[];
+  tags?: number[];
 }

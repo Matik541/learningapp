@@ -1,8 +1,8 @@
 import { ApiProperty } from '@nestjs/swagger';
-import { IsArray, IsNotEmpty, IsString } from 'class-validator';
+import { IsArray, IsNotEmpty, IsNumber, IsString } from 'class-validator';
+import { Type } from 'class-transformer';
 
 // dto
-import { AddTagToLesson } from '../../tags/dto/addTagToLesson.dto';
 import { AddFlashcardDto } from '../../flashcards/dto/addFlashcard.dto';
 
 export class AddLessonDto {
@@ -37,13 +37,14 @@ export class AddLessonDto {
   iconPath: string;
 
   @ApiProperty({
-    description: 'Lesson tags',
-    type: [AddTagToLesson],
+    description: "Id's of lesson tags",
+    type: [Number],
     nullable: false,
     required: true,
   })
-  @IsArray()
-  tags: AddTagToLesson[];
+  @Type(() => Number)
+  @IsNumber({}, { each: true })
+  tags: number[];
 
   @ApiProperty({
     description: 'Lesson flashcards',
