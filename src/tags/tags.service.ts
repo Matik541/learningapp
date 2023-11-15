@@ -1,6 +1,7 @@
 import { Injectable, BadRequestException } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
-import { Repository } from 'typeorm';
+import { OnEvent } from '@nestjs/event-emitter';
+import { In, Repository } from 'typeorm';
 
 // entities
 import { Tag } from './entities/tag.entity';
@@ -21,6 +22,17 @@ export class TagsService {
     // find and return all tags
     try {
       return await this.tagRepository.find();
+    } catch (err) {
+      throw new BadRequestException(err);
+    }
+  }
+
+  @OnEvent('tags.get_tags_by_ids')
+  private async getTagsByIds(tagIds: number[]): Promise<Tag[]> {
+    try {
+      return await this.tagRepository.find({
+        where: { id: In(tagIds) },
+      });
     } catch (err) {
       throw new BadRequestException(err);
     }
