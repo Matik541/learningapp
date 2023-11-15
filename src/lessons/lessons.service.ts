@@ -137,10 +137,21 @@ export class LessonsService {
    * @returns The lesson that was created.
    */
   async addLesson(lessonCreatorId: number, dto: AddLessonDto): Promise<Lesson> {
+    // Todo: add wrapper for event
+    let tags = [];
+    if (Array.isArray(dto.tags) && dto.tags.length > 0) {
+      tags = await this.eventEmitter.emitAsync(
+        'tags.get_tags_by_ids',
+        dto.tags,
+      );
+      tags = tags.at(0);
+    }
+
     // create lesson object
     let lesson = this.lessonsRepository.create({
       ...dto,
       creator: { id: lessonCreatorId },
+      tags: tags,
     });
 
     // save lesson in db
@@ -176,28 +187,38 @@ export class LessonsService {
     dto: UpdateLessonDto,
   ): Promise<Lesson> {
     // get lesson by id
-    let lesson = await this.getLessonById(lessonId);
-
-    // TODO: update lessons flashcards
-    // dto.flashcards = await this.updateLessonFlashcards(dto.flashcards);
+    const lesson = await this.getLessonById(lessonId);
 
     // check is lesson author
     if (lesson.creator.id !== creatorId) {
       throw new BadRequestException('You are not allowed to update.');
     }
 
+    // TODO: update lessons flashcards
+    // dto.flashcards = await this.updateLessonFlashcards(dto.flashcards);
+
     // change data in lesson
-    lesson = {
-      ...lesson,
-      title: dto.title,
-      description: dto.description,
-      iconPath: dto.iconPath,
-    };
+    // if dto property not undefined
+    for (const [key, value] of Object.entries(dto)) {
+      if (value !== null && value !== undefined) {
+        lesson[key] = value;
+      }
+    }
+
+    // if dto.tags not empty
+    // find tags by id
+    // and update them
+    if (Array.isArray(dto.tags) && dto.tags.length > 0) {
+      lesson.tags = await this.eventEmitter.emitAsync(
+        'tags.get_tags_by_ids',
+        dto.tags,
+      );
+    }
 
     // save updated lesson
     try {
       // reload allows to return all lesson data
-      return await this.lessonsRepository.save(lesson, { reload: true });
+      return await this.lessonsRepository.save(lesson);
     } catch (err) {
       throw new BadRequestException(err);
     }
@@ -211,7 +232,7 @@ export class LessonsService {
    */
   async deleteLesson(creatorId: number, lessonId: number): Promise<Lesson> {
     // get lesson by id
-    const lesson = await this.getLessonById(lessonId);
+    const lesson = await this.getLessonById(lessonId, creatorId);
 
     // check is lesson author
     if (lesson.creator.id !== creatorId)
@@ -280,6 +301,7 @@ export class LessonsService {
     // if logged add lesson result
     if (userId !== undefined && userId !== null) {
       lessons
+        .addSelect('score.id')
         .addSelect('score.score')
         .leftJoin(
           'lessons.score',
