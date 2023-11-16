@@ -41,6 +41,7 @@ export class CommentsService {
    * @example addComment('This is a comment')
    */
   addComment(comment: string, lessonId: number): Observable<CommentLesson> {
+    this.usersService.authRefreshToken();
     return this.http
       .post<CommentLesson>(
         `${API_URL}/comments/add/${lessonId}`,
@@ -73,6 +74,7 @@ export class CommentsService {
     id: number,
     comment: string,
   ): Observable<CommentLesson> {
+    this.usersService.authRefreshToken();
     return this.http
       .put<CommentLesson>(
         `${API_URL}/comments/${id}`,
@@ -101,6 +103,7 @@ export class CommentsService {
    * @example deleteComment(1)
    */
   deleteComment(id: number): Observable<CommentLesson> {
+    this.usersService.authRefreshToken();
     return this.http
       .delete<CommentLesson>(`${API_URL}/comments/${id}`, {
         headers: { Authorization: `Bearer ${this.usersService.accessToken()}` },

@@ -27,14 +27,14 @@
             >
             <span class="creator-name">{{ lesson.creator?.userName }}</span>
           </div>
-          <div class="lesson-flashcards">
-            <mat-icon class="flashcards-icon material-icons-outlined"
+          <mat-chip class="lesson-flashcards">
+            <mat-icon matChipTrailingIcon class="material-icons-outlined"
               >style</mat-icon
             >
             <span class="flashcards-count" *ngIf="lesson.flashcards">{{
               lesson.flashcards.length
             }}</span>
-          </div>
+          </mat-chip>
           <div class="lesson-score">
             <mat-icon class="score-icon material-icons-outlined"
               >assessment</mat-icon

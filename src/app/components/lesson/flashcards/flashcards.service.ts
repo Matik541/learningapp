@@ -36,6 +36,7 @@ export class FlashcardsService {
     lessonID: number,
     flashcards: Flashcard[]
   ): Observable<Flashcard> {
+    this.usersService.authRefreshToken();
     return this.http
       .post<Flashcard>(
         `${API_URL}/flashcards/${lessonID}`,
@@ -60,6 +61,7 @@ export class FlashcardsService {
     flashcardId: number,
     flashcard: Flashcard
   ): Observable<Flashcard> {
+    this.usersService.authRefreshToken();
     return this.http
       .put<Flashcard>(`${API_URL}/flashcards/${lessonID}/${flashcardId}`, flashcard, {
         headers: { Authorization: `Bearer ${this.usersService.accessToken()}` },
@@ -77,6 +79,7 @@ export class FlashcardsService {
     lessonId: number,
     flashcardId: number
   ): Observable<Flashcard> {
+    this.usersService.authRefreshToken();
     return this.http
       .delete<Flashcard>(`${API_URL}/flashcards/${lessonId}/${flashcardId}`, {
         headers: { Authorization: `Bearer ${this.usersService.accessToken()}` },

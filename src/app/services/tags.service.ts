@@ -43,6 +43,7 @@ export class TagsService {
   }
 
   addTag(tagName: string): Observable<Tag> {
+    this.usersService.authRefreshToken();
     return this.http
       .post<Tag>(
         `${API_URL}/tags/add`,
@@ -63,6 +64,7 @@ export class TagsService {
   }
 
   updateTag(id: number, tagName: string): Observable<Tag> {
+    this.usersService.authRefreshToken();
     return this.http
       .put<Tag>(
         `${API_URL}/tags/${id}`,
@@ -83,6 +85,7 @@ export class TagsService {
   }
 
   deleteTag(id: number): Observable<Tag> {
+    this.usersService.authRefreshToken();
     return this.http
       .delete<Tag>(`${API_URL}/tags/${id}`, {
         headers: {

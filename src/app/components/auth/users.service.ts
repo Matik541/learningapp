@@ -159,6 +159,7 @@ export class UsersService {
   }
 
   usersMe(): Observable<UserMe> {
+    this.authRefreshToken();
     return this.http.get<UserMe>(`${API_URL}/users/me`, {
       headers: { Authorization: `Bearer ${this.accessToken()}` },
     });

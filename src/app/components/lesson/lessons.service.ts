@@ -1,10 +1,10 @@
-import { Observable, catchError, of, tap } from 'rxjs'
-import { HttpClient } from '@angular/common/http'
-import { Injectable } from '@angular/core'
-import { MatSnackBar } from '@angular/material/snack-bar'
-import { Lesson, NewLesson } from '../../enums/enums'
-import { API_URL } from 'src/environments/environment'
-import { UsersService } from '../auth/users.service'
+import { Observable, catchError, of, tap } from 'rxjs';
+import { HttpClient } from '@angular/common/http';
+import { Injectable } from '@angular/core';
+import { MatSnackBar } from '@angular/material/snack-bar';
+import { Lesson, NewLesson } from '../../enums/enums';
+import { API_URL } from 'src/environments/environment';
+import { UsersService } from '../auth/users.service';
 
 @Injectable({
   providedIn: 'root',
@@ -13,35 +13,36 @@ export class LessonsService {
   constructor(
     private http: HttpClient,
     private _snackBar: MatSnackBar,
-    private usersService: UsersService,
+    private usersService: UsersService
   ) {}
 
   private snackBar(
     message: string,
     action: string,
-    config: {} = { duration: 2000 },
+    config: {} = { duration: 2000 }
   ) {
-    return this._snackBar.open(message, action, config)
+    return this._snackBar.open(message, action, config);
   }
   private error(err: any) {
-    console.error(err)
+    console.error(err);
     this.snackBar(
       'Error: something went wrong, check console for more info',
-      'Close',
-    )
+      'Close'
+    );
   }
 
   getLessons(): Observable<Lesson[]> {
     return this.http.get<Lesson[]>(`${API_URL}/lessons`).pipe(
       tap((data) => of(data)),
       catchError((err) => {
-        this.error(err)
-        return []
-      }),
-    )
+        this.error(err);
+        return [];
+      })
+    );
   }
 
   getLesson(id: number): Observable<Lesson> {
+    this.usersService.authRefreshToken();
     return this.http
       .get<Lesson>(
         `${API_URL}/lessons/${id}`,
@@ -51,18 +52,19 @@ export class LessonsService {
                 Authorization: `Bearer ${this.usersService.accessToken()}`,
               },
             }
-          : {},
+          : {}
       )
       .pipe(
         tap((data) => of(data)),
         catchError((err) => {
-          this.error(err)
-          return of()
-        }),
-      )
+          this.error(err);
+          return of();
+        })
+      );
   }
 
   updateLesson(id: number, lesson: Lesson): Observable<Lesson> {
+    this.usersService.authRefreshToken();
     return this.http
       .put<Lesson>(`${API_URL}/lessons/${id}`, lesson, {
         headers: { Authorization: `Bearer ${this.usersService.accessToken()}` },
@@ -70,13 +72,14 @@ export class LessonsService {
       .pipe(
         tap((data) => of(data)),
         catchError((err) => {
-          this.error(err)
-          return of()
-        }),
-      )
+          this.error(err);
+          return of();
+        })
+      );
   }
 
   deleteLesson(id: number): Observable<Lesson> {
+    this.usersService.authRefreshToken();
     return this.http
       .delete<Lesson>(`${API_URL}/lessons/${id}`, {
         headers: { Authorization: `Bearer ${this.usersService.accessToken()}` },
@@ -84,14 +87,15 @@ export class LessonsService {
       .pipe(
         tap((data) => of(data)),
         catchError((err) => {
-          this.error(err)
-          return of()
-        }),
-      )
+          this.error(err);
+          return of();
+        })
+      );
   }
 
   addLesson(lesson: NewLesson): Observable<Lesson> {
-    console.log(lesson)
+    this.usersService.authRefreshToken();
+    console.log(lesson);
     return this.http
       .post<Lesson>(`${API_URL}/lessons/add`, lesson, {
         headers: { Authorization: `Bearer ${this.usersService.accessToken()}` },
@@ -99,25 +103,26 @@ export class LessonsService {
       .pipe(
         tap((data) => of(data)),
         catchError((err) => {
-          this.error(err)
-          return of()
-        }),
-      )
+          this.error(err);
+          return of();
+        })
+      );
   }
 
   completeLesson(id: number, percent: number): void {
+    this.usersService.authRefreshToken();
     this.http
       .post<{ score: number }>(`${API_URL}/lessons/complete/${id}`, percent, {
         headers: { Authorization: `Bearer ${this.usersService.accessToken()}` },
       })
       .pipe(
         tap((data) => {
-          this.snackBar(`Your score is saved, ${data.score}`, 'Close')
+          this.snackBar(`Your score is saved, ${data.score}`, 'Close');
         }),
         catchError((err) => {
-          this.error(err)
-          return of()
-        }),
-      )
+          this.error(err);
+          return of();
+        })
+      );
   }
 }
