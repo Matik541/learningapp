@@ -1,4 +1,4 @@
-import { Module } from '@nestjs/common';
+import { Logger, Module } from '@nestjs/common';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { JwtModule } from '@nestjs/jwt';
 
@@ -30,7 +30,7 @@ import { JWTUtil } from '../auth/utils/jwt.util';
     JwtModule.register({}),
   ],
   controllers: [LessonsController],
-  providers: [LessonsService, JWTUtil],
+  providers: [LessonsService, JWTUtil, Logger],
   exports: [LessonsService],
 })
 export class LessonsModule {}
