@@ -67,6 +67,16 @@ export class LessonsController {
     type: Lesson,
     description: 'Return lesson data by id. <br> If user logged return scores.',
   })
+  @ApiResponse({
+    status: HttpStatus.NOT_FOUND,
+    schema: {
+      example: {
+        statusCode: HttpStatus.NOT_FOUND,
+        message: `Could not find lesson with id: 0.`,
+        error: 'Not Found',
+      },
+    },
+  })
   getLessonById(
     @Param('id') id: string,
     @LoginedUserDecorator('sub') userId: number,
@@ -97,6 +107,35 @@ export class LessonsController {
     type: Lesson,
     description: 'Update and return lesson data by id.',
   })
+  @ApiResponse({
+    status: HttpStatus.UNAUTHORIZED,
+    schema: {
+      example: { statusCode: HttpStatus.UNAUTHORIZED, message: 'Unauthorized' },
+    },
+    description: 'User not authorized.',
+  })
+  @ApiResponse({
+    status: HttpStatus.FORBIDDEN,
+    schema: {
+      example: {
+        error: 'Forbidden',
+        message: 'Access denied.',
+        statusCode: HttpStatus.FORBIDDEN,
+      },
+    },
+    description: 'User are not author of the lesson.',
+  })
+  @ApiResponse({
+    status: HttpStatus.NOT_FOUND,
+    schema: {
+      example: {
+        statusCode: HttpStatus.NOT_FOUND,
+        message: `Could not find lesson with id: 0.`,
+        error: 'Not Found',
+      },
+    },
+    description: 'Could not find lesson.',
+  })
   updateLesson(
     @LoginedUserDecorator('sub') creatorId: number,
     @Param('id', ParseIntPipe) lessonId: number,
@@ -117,6 +156,28 @@ export class LessonsController {
     type: Lesson,
     description: 'Delete and return lesson data by id.',
   })
+  @ApiResponse({
+    status: HttpStatus.FORBIDDEN,
+    schema: {
+      example: {
+        error: 'Forbidden',
+        message: 'Access denied.',
+        statusCode: HttpStatus.FORBIDDEN,
+      },
+    },
+    description: 'User are not author of the lesson.',
+  })
+  @ApiResponse({
+    status: HttpStatus.NOT_FOUND,
+    schema: {
+      example: {
+        statusCode: HttpStatus.NOT_FOUND,
+        message: `Could not find lesson with id: 0.`,
+        error: 'Not Found',
+      },
+    },
+    description: 'Could not find lesson.',
+  })
   deleteLesson(
     @LoginedUserDecorator('sub') creatorId: number,
     @Param('id') lessonId: string,
@@ -132,11 +193,22 @@ export class LessonsController {
     type: LessonCompleted,
     description: 'Save user score.',
   })
+  @ApiResponse({
+    status: HttpStatus.NOT_FOUND,
+    schema: {
+      example: {
+        statusCode: HttpStatus.NOT_FOUND,
+        message: `Could not find lesson with id: 0.`,
+        error: 'Not Found',
+      },
+    },
+    description: 'Could not find lesson.',
+  })
   lessonCompleted(
     @LoginedUserDecorator('sub') userId: number,
-    @Param('id') lessonId: string,
+    @Param('id', ParseIntPipe) lessonId: number,
     @Body() dto: LessonCompletedDto,
   ): Promise<LessonCompleted> {
-    return this.lessonsService.lessonCompleted(userId, +lessonId, dto);
+    return this.lessonsService.lessonCompleted(userId, lessonId, dto);
   }
 }
