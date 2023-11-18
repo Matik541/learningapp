@@ -1,4 +1,10 @@
-import { BadRequestException, Injectable } from '@nestjs/common';
+import {
+  BadRequestException,
+  NotFoundException,
+  ForbiddenException,
+  Injectable,
+  Logger,
+} from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { EventEmitter2 } from '@nestjs/event-emitter';
 import { Repository, SelectQueryBuilder } from 'typeorm';
@@ -20,6 +26,7 @@ export class LessonsService {
     @InjectRepository(LessonCompleted)
     private lessonCompletedRepository: Repository<LessonCompleted>,
     private eventEmitter: EventEmitter2,
+    private readonly logger: Logger,
   ) {}
 
   // find lesson in db parameters
@@ -126,7 +133,11 @@ export class LessonsService {
     try {
       return await lesson.getOneOrFail();
     } catch (err) {
-      throw new BadRequestException(err);
+      this.logger.error(err);
+
+      throw new NotFoundException(
+        `Could not find lesson with id: ${lessonId}.`,
+      );
     }
   }
 
@@ -190,9 +201,8 @@ export class LessonsService {
     const lesson = await this.getLessonById(lessonId);
 
     // check is lesson author
-    if (lesson.creator.id !== creatorId) {
-      throw new BadRequestException('You are not allowed to update.');
-    }
+    if (lesson.creator.id !== creatorId)
+      throw new ForbiddenException('Access denied.');
 
     // TODO: update lessons flashcards
     // dto.flashcards = await this.updateLessonFlashcards(dto.flashcards);
@@ -236,7 +246,7 @@ export class LessonsService {
 
     // check is lesson author
     if (lesson.creator.id !== creatorId)
-      throw new BadRequestException('You are not allowed to update.');
+      throw new ForbiddenException('Access denied.');
 
     // remove lesson's comments
     this.eventEmitter.emitAsync('comments.delete_all', lessonId, creatorId);
@@ -271,6 +281,10 @@ export class LessonsService {
     lessonId: number,
     dto: LessonCompletedDto,
   ): Promise<LessonCompleted> {
+    // Todo: secure route
+    // - find lesson
+    // - find user
+
     // create lesson completed object
     const lessonCompleted = this.lessonCompletedRepository.create({
       user: { id: userId },
@@ -282,7 +296,9 @@ export class LessonsService {
       // save user score
       return await this.lessonCompletedRepository.save(lessonCompleted);
     } catch (err) {
-      throw new BadRequestException(err);
+      this.logger.error(err);
+
+      throw new BadRequestException('Could not save your lesson progress.');
     }
   }
 
