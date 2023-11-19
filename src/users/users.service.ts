@@ -1,6 +1,7 @@
-import { BadRequestException, Injectable } from '@nestjs/common';
+import { NotFoundException, Injectable, Logger } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { FindOptionsRelations, FindOptionsSelect, Repository } from 'typeorm';
+import { OnEvent } from '@nestjs/event-emitter';
 
 // entities
 import { User } from './entities/user.entity';
@@ -22,6 +23,7 @@ export class UsersService {
 
   constructor(
     @InjectRepository(User) private userRepository: Repository<User>,
+    private readonly logger: Logger,
   ) {}
 
   async getMe(userId: number): Promise<User> {
@@ -32,10 +34,13 @@ export class UsersService {
         relations: { ...this.userRelationships, lessonsCompleted: true },
       });
     } catch (err) {
-      throw new BadRequestException(err);
+      this.logger.error(err);
+
+      throw new NotFoundException(`Could not find user with id ${userId}.`);
     }
   }
 
+  @OnEvent('users.get_by_id')
   async getUserById(userId: number): Promise<User> {
     try {
       return await this.userRepository.findOneOrFail({
@@ -44,7 +49,9 @@ export class UsersService {
         relations: this.userRelationships,
       });
     } catch (err) {
-      throw new BadRequestException(err);
+      this.logger.error(err);
+
+      throw new NotFoundException(`Could not find user with id ${userId}.`);
     }
   }
 }
