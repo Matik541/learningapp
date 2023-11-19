@@ -18,6 +18,8 @@ import { GetAllLessonsQueryParametersDto } from './dto/getAllLessonsQueryParamet
 // entity
 import { Lesson } from './entities/lesson.entity';
 import { LessonCompleted } from './entities/lessonCompleted.entity';
+import { User } from 'src/users/entities/user.entity';
+import { Tag } from 'src/tags/entities/tag.entity';
 
 @Injectable()
 export class LessonsService {
@@ -149,13 +151,11 @@ export class LessonsService {
    */
   async addLesson(lessonCreatorId: number, dto: AddLessonDto): Promise<Lesson> {
     // Todo: add wrapper for event
-    let tags = [];
+    let tags: Tag[] = [];
     if (Array.isArray(dto.tags) && dto.tags.length > 0) {
-      tags = await this.eventEmitter.emitAsync(
-        'tags.get_tags_by_ids',
-        dto.tags,
-      );
-      tags = tags.at(0);
+      tags = (
+        await this.eventEmitter.emitAsync('tags.get_tags_by_ids', dto.tags)
+      )[0];
     }
 
     // create lesson object
@@ -281,14 +281,18 @@ export class LessonsService {
     lessonId: number,
     dto: LessonCompletedDto,
   ): Promise<LessonCompleted> {
-    // Todo: secure route
-    // - find lesson
-    // - find user
+    // check if lesson exists
+    const lesson: Lesson = await this.getLessonById(lessonId);
+
+    // check if user exists
+    const user: User = (
+      await this.eventEmitter.emitAsync('users.get_by_id', userId)
+    )[0];
 
     // create lesson completed object
     const lessonCompleted = this.lessonCompletedRepository.create({
-      user: { id: userId },
-      lesson: { id: lessonId },
+      user: { id: user.id },
+      lesson: { id: lesson.id },
       score: dto.percent,
     });
 
