@@ -10,9 +10,6 @@ import { LessonsService } from './lessons.service';
 
 // entity
 import { Lesson } from './entities/lesson.entity';
-import { Flashcard } from '../flashcards/entities/flashcard.entity';
-import { User } from '../users/entities/user.entity';
-import { Comment } from '../comments/entities/comment.entity';
 import { LessonCompleted } from './entities/lessonCompleted.entity';
 
 // utils
@@ -20,13 +17,7 @@ import { JWTUtil } from '../auth/utils/jwt.util';
 
 @Module({
   imports: [
-    TypeOrmModule.forFeature([
-      Lesson,
-      Flashcard,
-      User,
-      Comment,
-      LessonCompleted,
-    ]),
+    TypeOrmModule.forFeature([Lesson, LessonCompleted]),
     JwtModule.register({}),
   ],
   controllers: [LessonsController],
