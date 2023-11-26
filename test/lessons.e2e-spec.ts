@@ -63,6 +63,56 @@ describe('Lessons (e2e)', () => {
 
   describe('/lessons/add (POST)', () => {
     it('should add lesson with proper data', async () => {
+      await request(app.getHttpServer())
+        .post('/lessons/add')
+        .send({
+          title: 'test lesson',
+          description: 'string',
+          iconPath: 'string',
+          tags: [1],
+          flashcards: [
+            {
+              question: 'first lesson flashcard',
+              answer: 'string',
+            },
+            {
+              question: 'second lesson flashcard',
+              answer: 'string',
+            },
+            {
+              question: 'third lesson flashcard',
+              answer: 'string',
+            },
+          ],
+        })
+        .set('Authorization', `Bearer ${tokens.authToken}`)
+        .expect(HttpStatus.CREATED);
+
+      await request(app.getHttpServer())
+        .post('/lessons/add')
+        .send({
+          title: 'test lesson',
+          description: 'string',
+          iconPath: 'string',
+          tags: [2],
+          flashcards: [
+            {
+              question: 'first lesson flashcard',
+              answer: 'string',
+            },
+            {
+              question: 'second lesson flashcard',
+              answer: 'string',
+            },
+            {
+              question: 'third lesson flashcard',
+              answer: 'string',
+            },
+          ],
+        })
+        .set('Authorization', `Bearer ${tokens.authToken}`)
+        .expect(HttpStatus.CREATED);
+
       return await request(app.getHttpServer())
         .post('/lessons/add')
         .send({
@@ -89,7 +139,7 @@ describe('Lessons (e2e)', () => {
         .expect(HttpStatus.CREATED)
         .then((res) => {
           expect(res.body).toEqual({
-            id: 1,
+            id: 3,
             title: 'test lesson',
             description: 'string',
             iconPath: 'string',
@@ -147,7 +197,30 @@ describe('Lessons (e2e)', () => {
         });
     });
 
-    // it('should fail validation', () => {});
+    it('should fail validation', async () => {
+      return await request(app.getHttpServer())
+        .post('/lessons/add')
+        .send({
+          title: '',
+          description: '',
+          iconPath: '',
+          tags: [],
+          flashcards: [],
+        })
+        .set('Authorization', `Bearer ${tokens.authToken}`)
+        .expect(HttpStatus.BAD_REQUEST)
+        .then((res) => {
+          expect(res.body).toEqual({
+            statusCode: HttpStatus.BAD_REQUEST,
+            message: [
+              'title should not be empty',
+              'description should not be empty',
+              'iconPath should not be empty',
+            ],
+            error: 'Bad Request',
+          });
+        });
+    });
   });
 
   describe('/lessons/completed/{id} (POST)', () => {
@@ -203,7 +276,26 @@ describe('Lessons (e2e)', () => {
         });
     });
 
-    // it('should fail validation', () => {})
+    it('should fail validation', async () => {
+      return await request(app.getHttpServer())
+        .post('/lessons/completed/1')
+        .send({
+          percent: 'test',
+        })
+        .set('Authorization', `Bearer ${tokens.authToken}`)
+        .expect(HttpStatus.BAD_REQUEST)
+        .then((res) => {
+          expect(res.body).toEqual({
+            statusCode: HttpStatus.BAD_REQUEST,
+            message: [
+              'percent must not be greater than 100',
+              'percent must not be less than 0',
+              'percent must be a number conforming to the specified constraints',
+            ],
+            error: 'Bad Request',
+          });
+        });
+    });
   });
 
   describe('/lessons (GET)', () => {
@@ -227,10 +319,6 @@ describe('Lessons (e2e)', () => {
                   id: 1,
                   tagName: 'first test tag',
                 },
-                {
-                  id: 2,
-                  tagName: 'second test tag',
-                },
               ],
               flashcards: [
                 {
@@ -245,6 +333,78 @@ describe('Lessons (e2e)', () => {
                 },
                 {
                   id: 3,
+                  question: 'third lesson flashcard',
+                  answer: 'string',
+                },
+              ],
+              comments: [],
+            },
+            {
+              id: 2,
+              title: 'test lesson',
+              description: 'string',
+              iconPath: 'string',
+              creator: {
+                id: 1,
+                userName: 'test',
+              },
+              tags: [
+                {
+                  id: 2,
+                  tagName: 'second test tag',
+                },
+              ],
+              flashcards: [
+                {
+                  id: 4,
+                  question: 'first lesson flashcard',
+                  answer: 'string',
+                },
+                {
+                  id: 5,
+                  question: 'second lesson flashcard',
+                  answer: 'string',
+                },
+                {
+                  id: 6,
+                  question: 'third lesson flashcard',
+                  answer: 'string',
+                },
+              ],
+              comments: [],
+            },
+            {
+              id: 3,
+              title: 'test lesson',
+              description: 'string',
+              iconPath: 'string',
+              creator: {
+                id: 1,
+                userName: 'test',
+              },
+              tags: [
+                {
+                  id: 1,
+                  tagName: 'first test tag',
+                },
+                {
+                  id: 2,
+                  tagName: 'second test tag',
+                },
+              ],
+              flashcards: [
+                {
+                  id: 7,
+                  question: 'first lesson flashcard',
+                  answer: 'string',
+                },
+                {
+                  id: 8,
+                  question: 'second lesson flashcard',
+                  answer: 'string',
+                },
+                {
+                  id: 9,
                   question: 'third lesson flashcard',
                   answer: 'string',
                 },
@@ -267,24 +427,20 @@ describe('Lessons (e2e)', () => {
               title: 'test lesson',
               description: 'string',
               iconPath: 'string',
+              creator: {
+                id: 1,
+                userName: 'test',
+              },
               score: [
                 {
                   id: 1,
                   score: 10,
                 },
               ],
-              creator: {
-                id: 1,
-                userName: 'test',
-              },
               tags: [
                 {
                   id: 1,
                   tagName: 'first test tag',
-                },
-                {
-                  id: 2,
-                  tagName: 'second test tag',
                 },
               ],
               flashcards: [
@@ -306,23 +462,198 @@ describe('Lessons (e2e)', () => {
               ],
               comments: [],
             },
+            {
+              id: 2,
+              title: 'test lesson',
+              description: 'string',
+              iconPath: 'string',
+              creator: {
+                id: 1,
+                userName: 'test',
+              },
+              score: [],
+              tags: [
+                {
+                  id: 2,
+                  tagName: 'second test tag',
+                },
+              ],
+              flashcards: [
+                {
+                  id: 4,
+                  question: 'first lesson flashcard',
+                  answer: 'string',
+                },
+                {
+                  id: 5,
+                  question: 'second lesson flashcard',
+                  answer: 'string',
+                },
+                {
+                  id: 6,
+                  question: 'third lesson flashcard',
+                  answer: 'string',
+                },
+              ],
+              comments: [],
+            },
+            {
+              id: 3,
+              title: 'test lesson',
+              description: 'string',
+              iconPath: 'string',
+              score: [],
+              creator: {
+                id: 1,
+                userName: 'test',
+              },
+              tags: [
+                {
+                  id: 1,
+                  tagName: 'first test tag',
+                },
+                {
+                  id: 2,
+                  tagName: 'second test tag',
+                },
+              ],
+              flashcards: [
+                {
+                  id: 7,
+                  question: 'first lesson flashcard',
+                  answer: 'string',
+                },
+                {
+                  id: 8,
+                  question: 'second lesson flashcard',
+                  answer: 'string',
+                },
+                {
+                  id: 9,
+                  question: 'third lesson flashcard',
+                  answer: 'string',
+                },
+              ],
+              comments: [],
+            },
           ]);
         });
     });
 
-    // it('should return filtered lessons with scores', () => {})
+    it('should return filtered lessons with scores', async () => {
+      return request(app.getHttpServer())
+        .get('/lessons?tagIds=1')
+        .set('Authorization', `Bearer ${tokens.authToken}`)
+        .expect(HttpStatus.OK)
+        .then((res) => {
+          expect(res.body).toEqual([
+            {
+              id: 1,
+              title: 'test lesson',
+              description: 'string',
+              iconPath: 'string',
+              creator: {
+                id: 1,
+                userName: 'test',
+              },
+              score: [
+                {
+                  id: 1,
+                  score: 10,
+                },
+              ],
+              tags: [
+                {
+                  id: 1,
+                  tagName: 'first test tag',
+                },
+              ],
+              flashcards: [
+                {
+                  id: 1,
+                  question: 'first lesson flashcard',
+                  answer: 'string',
+                },
+                {
+                  id: 2,
+                  question: 'second lesson flashcard',
+                  answer: 'string',
+                },
+                {
+                  id: 3,
+                  question: 'third lesson flashcard',
+                  answer: 'string',
+                },
+              ],
+              comments: [],
+            },
+            {
+              id: 3,
+              title: 'test lesson',
+              description: 'string',
+              iconPath: 'string',
+              score: [],
+              creator: {
+                id: 1,
+                userName: 'test',
+              },
+              tags: [
+                {
+                  id: 1,
+                  tagName: 'first test tag',
+                },
+                {
+                  id: 2,
+                  tagName: 'second test tag',
+                },
+              ],
+              flashcards: [
+                {
+                  id: 7,
+                  question: 'first lesson flashcard',
+                  answer: 'string',
+                },
+                {
+                  id: 8,
+                  question: 'second lesson flashcard',
+                  answer: 'string',
+                },
+                {
+                  id: 9,
+                  question: 'third lesson flashcard',
+                  answer: 'string',
+                },
+              ],
+              comments: [],
+            },
+          ]);
+        });
+    });
 
-    // it('should fail filters validation', () => {});
+    it('should fail filters validation', async () => {
+      return request(app.getHttpServer())
+        .get('/lessons?tagIds=test')
+        .expect(HttpStatus.BAD_REQUEST)
+        .then((res) => {
+          expect(res.body).toEqual({
+            statusCode: HttpStatus.BAD_REQUEST,
+            message: [
+              'each value in tagIds must be a number conforming to the specified constraints',
+            ],
+            error: 'Bad Request',
+          });
+        });
+    });
   });
 
   describe('/lessons/{id} (GET)', () => {
     it('should return lesson by id without score', async () => {
       return request(app.getHttpServer())
-        .get('/lessons/1')
+        .get('/lessons/3')
         .expect(HttpStatus.OK)
         .then((res) => {
           expect(res.body).toEqual({
-            id: 1,
+            id: 3,
             title: 'test lesson',
             description: 'string',
             iconPath: 'string',
@@ -342,17 +673,17 @@ describe('Lessons (e2e)', () => {
             ],
             flashcards: [
               {
-                id: 1,
+                id: 7,
                 question: 'first lesson flashcard',
                 answer: 'string',
               },
               {
-                id: 2,
+                id: 8,
                 question: 'second lesson flashcard',
                 answer: 'string',
               },
               {
-                id: 3,
+                id: 9,
                 question: 'third lesson flashcard',
                 answer: 'string',
               },
@@ -364,25 +695,22 @@ describe('Lessons (e2e)', () => {
 
     it('should return lesson by id with score', async () => {
       return request(app.getHttpServer())
-        .get('/lessons/1')
+        .get('/lessons/3')
         .set('Authorization', `Bearer ${tokens.authToken}`)
         .expect(HttpStatus.OK)
         .then((res) => {
+          console.log(res.body);
+
           expect(res.body).toEqual({
-            id: 1,
+            id: 3,
             title: 'test lesson',
             description: 'string',
             iconPath: 'string',
-            score: [
-              {
-                id: 1,
-                score: 10,
-              },
-            ],
             creator: {
               id: 1,
               userName: 'test',
             },
+            score: [],
             tags: [
               {
                 id: 1,
@@ -395,17 +723,17 @@ describe('Lessons (e2e)', () => {
             ],
             flashcards: [
               {
-                id: 1,
+                id: 7,
                 question: 'first lesson flashcard',
                 answer: 'string',
               },
               {
-                id: 2,
+                id: 8,
                 question: 'second lesson flashcard',
                 answer: 'string',
               },
               {
-                id: 3,
+                id: 9,
                 question: 'third lesson flashcard',
                 answer: 'string',
               },
@@ -435,7 +763,7 @@ describe('Lessons (e2e)', () => {
   describe('/lessons/{id} (PUT)', () => {
     it('should update lesson data', async () => {
       return request(app.getHttpServer())
-        .put('/lessons/1')
+        .put('/lessons/3')
         .send({
           description: 'string',
           iconPath: 'string',
@@ -444,7 +772,7 @@ describe('Lessons (e2e)', () => {
         .expect(HttpStatus.OK)
         .then((res) => {
           expect(res.body).toEqual({
-            id: 1,
+            id: 3,
             title: 'test lesson',
             description: 'string',
             iconPath: 'string',
@@ -464,17 +792,17 @@ describe('Lessons (e2e)', () => {
             ],
             flashcards: [
               {
-                id: 1,
+                id: 7,
                 question: 'first lesson flashcard',
                 answer: 'string',
               },
               {
-                id: 2,
+                id: 8,
                 question: 'second lesson flashcard',
                 answer: 'string',
               },
               {
-                id: 3,
+                id: 9,
                 question: 'third lesson flashcard',
                 answer: 'string',
               },
@@ -538,7 +866,28 @@ describe('Lessons (e2e)', () => {
         });
     });
 
-    // it('should fail validation', () => {})
+    it('should fail validation', async () => {
+      return request(app.getHttpServer())
+        .put('/lessons/1')
+        .send({
+          title: 'string',
+          description: 'string',
+          iconPath: 1,
+          tags: 'test',
+        })
+        .set('Authorization', `Bearer ${tokens.authToken}`)
+        .expect(HttpStatus.BAD_REQUEST)
+        .then((res) => {
+          expect(res.body).toEqual({
+            statusCode: HttpStatus.BAD_REQUEST,
+            message: [
+              'iconPath must be a string',
+              'each value in tags must be a number conforming to the specified constraints',
+            ],
+            error: 'Bad Request',
+          });
+        });
+    });
   });
 
   describe('/lessons/{id} (DELETE)', () => {
@@ -570,7 +919,7 @@ describe('Lessons (e2e)', () => {
 
     it('should delete lesson and return data', async () => {
       return request(app.getHttpServer())
-        .delete('/lessons/1')
+        .delete('/lessons/3')
         .set('Authorization', `Bearer ${tokens.authToken}`)
         .expect(HttpStatus.OK)
         .then((res) => {
@@ -578,12 +927,7 @@ describe('Lessons (e2e)', () => {
             title: 'test lesson',
             description: 'string',
             iconPath: 'string',
-            score: [
-              {
-                id: 1,
-                score: 10,
-              },
-            ],
+            score: [],
             creator: {
               id: 1,
               userName: 'test',
@@ -600,17 +944,17 @@ describe('Lessons (e2e)', () => {
             ],
             flashcards: [
               {
-                id: 1,
+                id: 7,
                 question: 'first lesson flashcard',
                 answer: 'string',
               },
               {
-                id: 2,
+                id: 8,
                 question: 'second lesson flashcard',
                 answer: 'string',
               },
               {
-                id: 3,
+                id: 9,
                 question: 'third lesson flashcard',
                 answer: 'string',
               },
@@ -621,7 +965,7 @@ describe('Lessons (e2e)', () => {
     });
 
     it("should fail because lesson don't exist", async () => {
-      const lessonId = '1';
+      const lessonId = '3';
 
       return request(app.getHttpServer())
         .delete('/lessons/' + lessonId)
