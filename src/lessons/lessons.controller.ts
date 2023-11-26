@@ -52,6 +52,19 @@ export class LessonsController {
     description:
       'Return all lessons data. <br> Filter them by searchQuery and tags. <br> If user logged return scores.',
   })
+  @ApiResponse({
+    status: HttpStatus.BAD_REQUEST,
+    schema: {
+      example: {
+        statusCode: HttpStatus.BAD_REQUEST,
+        message: [
+          'each value in tagIds must be a number conforming to the specified constraints',
+        ],
+        error: 'Bad Request',
+      },
+    },
+    description: 'Validation error.',
+  })
   getAllLessons(
     @Query() query: GetAllLessonsQueryParametersDto,
     @LoginedUserDecorator('sub') userId: number,
@@ -91,6 +104,21 @@ export class LessonsController {
     status: HttpStatus.CREATED,
     type: Lesson,
     description: 'Add lesson and return data.',
+  })
+  @ApiResponse({
+    status: HttpStatus.BAD_REQUEST,
+    schema: {
+      example: {
+        statusCode: HttpStatus.BAD_REQUEST,
+        message: [
+          'title should not be empty',
+          'description should not be empty',
+          'iconPath should not be empty',
+        ],
+        error: 'Bad Request',
+      },
+    },
+    description: 'Validation error.',
   })
   addLesson(
     @LoginedUserDecorator('sub') lessonCreatorId: number,
@@ -135,6 +163,20 @@ export class LessonsController {
       },
     },
     description: 'Could not find lesson.',
+  })
+  @ApiResponse({
+    status: HttpStatus.BAD_REQUEST,
+    schema: {
+      example: {
+        statusCode: HttpStatus.BAD_REQUEST,
+        message: [
+          'iconPath must be a string',
+          'each value in tags must be a number conforming to the specified constraints',
+        ],
+        error: 'Bad Request',
+      },
+    },
+    description: 'Validation error.',
   })
   updateLesson(
     @LoginedUserDecorator('sub') creatorId: number,
@@ -203,6 +245,21 @@ export class LessonsController {
       },
     },
     description: 'Could not find lesson.',
+  })
+  @ApiResponse({
+    status: HttpStatus.BAD_REQUEST,
+    schema: {
+      example: {
+        statusCode: HttpStatus.BAD_REQUEST,
+        message: [
+          'percent must not be greater than 100',
+          'percent must not be less than 0',
+          'percent must be a number conforming to the specified constraints',
+        ],
+        error: 'Bad Request',
+      },
+    },
+    description: 'Validation error.',
   })
   lessonCompleted(
     @LoginedUserDecorator('sub') userId: number,
