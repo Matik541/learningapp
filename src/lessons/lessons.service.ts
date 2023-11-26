@@ -208,7 +208,7 @@ export class LessonsService {
     // dto.flashcards = await this.updateLessonFlashcards(dto.flashcards);
 
     // change data in lesson
-    // if dto property not undefined
+    // if dto property is not null or undefined
     for (const [key, value] of Object.entries(dto)) {
       if (value !== null && value !== undefined) {
         lesson[key] = value;
@@ -227,7 +227,6 @@ export class LessonsService {
 
     // save updated lesson
     try {
-      // reload allows to return all lesson data
       return await this.lessonsRepository.save(lesson);
     } catch (err) {
       throw new BadRequestException(err);
