@@ -9,7 +9,7 @@ async function bootstrap() {
   const config = new DocumentBuilder()
     .setTitle('Learning Apps Api')
     .setDescription('Learning Apps API Documentation')
-    .setVersion('1.0')
+    .setVersion('1.1')
     .addBearerAuth()
     .build();
 
