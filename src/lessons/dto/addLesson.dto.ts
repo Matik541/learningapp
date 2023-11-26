@@ -44,6 +44,7 @@ export class AddLessonDto {
   })
   @Type(() => Number)
   @IsNumber({}, { each: true })
+  @IsArray()
   tags: number[];
 
   @ApiProperty({
