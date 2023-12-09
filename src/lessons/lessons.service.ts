@@ -6,7 +6,7 @@ import {
   Logger,
 } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
-import { EventEmitter2 } from '@nestjs/event-emitter';
+import { EventEmitter2, OnEvent } from '@nestjs/event-emitter';
 import { Repository, SelectQueryBuilder } from 'typeorm';
 
 // dto
@@ -113,6 +113,7 @@ export class LessonsService {
    * @param {number} lessonId - number - the id of the lesson we want to get.
    * @returns Lesson object.
    */
+  @OnEvent('lessons.get_lesson_by_id')
   async getLessonById(
     lessonId: number,
     userId: number | undefined | null = null,
