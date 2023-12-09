@@ -27,7 +27,6 @@ describe('UsersController (e2e)', () => {
         hashedPassword: 'test',
       })
       .then((res) => {
-        // console.log(res.body);
         tokens = res.body;
       });
 
@@ -39,9 +38,6 @@ describe('UsersController (e2e)', () => {
       })
       .set('Authorization', `Bearer ${tokens.authToken}`)
       .expect(HttpStatus.CREATED);
-    //   .then((res) => {
-    //     console.log(res.body);
-    //   });
 
     // create new lesson
     await request(app.getHttpServer())
@@ -50,11 +46,7 @@ describe('UsersController (e2e)', () => {
         title: 'test lesson',
         description: 'string',
         iconPath: 'string',
-        tags: [
-          {
-            id: 1,
-          },
-        ],
+        tags: [1],
         flashcards: [
           {
             question: 'string',
@@ -64,22 +56,93 @@ describe('UsersController (e2e)', () => {
       })
       .set('Authorization', `Bearer ${tokens.authToken}`)
       .expect(HttpStatus.CREATED);
-    //   .then((res) => {
-    //     console.log(res.body);
-    //   });
   });
 
-  it('/comments/add/{lessonId} (POST)', async () => {
-    return request(app.getHttpServer())
-      .post('/comments/add/1')
-      .send({
-        comment: 'test comment',
-      })
-      .set('Authorization', `Bearer ${tokens.authToken}`)
-      .expect(HttpStatus.CREATED);
-    //   .then((res) => {
-    //     console.log(res.body);
-    //   });
+  describe('/comments/add/{lessonId} (POST)', () => {
+    it('should add comment', async () => {
+      return request(app.getHttpServer())
+        .post('/comments/add/1')
+        .send({
+          comment: 'test comment',
+        })
+        .set('Authorization', `Bearer ${tokens.authToken}`)
+        .expect(HttpStatus.CREATED)
+        .then((res) => {
+          expect(res.body).toEqual({
+            id: 1,
+            lesson: { id: 1 },
+            creator: { id: 1 },
+            comment: 'test comment',
+          });
+        });
+    });
+
+    it('should fail because not authorized', async () => {
+      return request(app.getHttpServer())
+        .post('/comments/add/1')
+        .send({
+          comment: 'test comment',
+        })
+        .expect(HttpStatus.UNAUTHORIZED)
+        .then((res) => {
+          expect(res.body).toEqual({
+            statusCode: 401,
+            message: 'Unauthorized',
+          });
+        });
+    });
+
+    it("should fail because user don't exists", async () => {
+      return request(app.getHttpServer())
+        .post('/comments/add/1')
+        .send({
+          comment: 'test comment',
+        })
+        .set('Authorization', `Bearer random_text`)
+        .expect(HttpStatus.UNAUTHORIZED)
+        .then((res) => {
+          expect(res.body).toEqual({
+            message: 'Unauthorized',
+            statusCode: 401,
+          });
+        });
+    });
+
+    it("should fail because lesson don't exists", async () => {
+      const lessonId = 99;
+
+      return request(app.getHttpServer())
+        .post('/comments/add/' + lessonId)
+        .send({
+          comment: 'test comment',
+        })
+        .set('Authorization', `Bearer ${tokens.authToken}`)
+        .expect(HttpStatus.NOT_FOUND)
+        .then((res) => {
+          expect(res.body).toEqual({
+            statusCode: HttpStatus.NOT_FOUND,
+            message: `Could not find lesson with id: ${lessonId}.`,
+            error: 'Not Found',
+          });
+        });
+    });
+
+    it('should fail validation', async () => {
+      return request(app.getHttpServer())
+        .post('/comments/add/1')
+        .send({
+          comment: '',
+        })
+        .set('Authorization', `Bearer ${tokens.authToken}`)
+        .expect(HttpStatus.BAD_REQUEST)
+        .then((res) => {
+          expect(res.body).toEqual({
+            statusCode: 400,
+            message: ['comment should not be empty'],
+            error: 'Bad Request',
+          });
+        });
+    });
   });
 
   it('/comments/{id} (PUT)', async () => {
