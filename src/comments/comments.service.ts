@@ -10,6 +10,7 @@ import { Repository } from 'typeorm';
 
 import { Comment } from './entities/comment.entity';
 import { Lesson } from 'src/lessons/entities/lesson.entity';
+import { User } from 'src/users/entities/user.entity';
 
 import { AddCommentDto } from './dto/addComment.dto';
 import { UpdateCommentDto } from './dto/updateComment.dto';
@@ -30,6 +31,10 @@ export class CommentsService {
     lessonId: number,
     dto: AddCommentDto,
   ): Promise<Comment> {
+    const user: User = (
+      await this.eventEmitter.emitAsync('users.get_by_id', commentCreatorId)
+    )[0];
+
     const lesson: Lesson = (
       await this.eventEmitter.emitAsync('lessons.get_lesson_by_id', lessonId)
     )[0];
@@ -42,7 +47,7 @@ export class CommentsService {
 
     // create comment object
     const comment = this.commentRepository.create({
-      creator: { id: commentCreatorId },
+      creator: { id: user.id },
       lesson: { id: lesson.id },
       ...dto,
     });
