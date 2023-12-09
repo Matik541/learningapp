@@ -1,9 +1,15 @@
-import { BadRequestException, Injectable } from '@nestjs/common';
+import {
+  BadRequestException,
+  Injectable,
+  Logger,
+  NotFoundException,
+} from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
-import { OnEvent } from '@nestjs/event-emitter';
+import { EventEmitter2, OnEvent } from '@nestjs/event-emitter';
 import { Repository } from 'typeorm';
 
 import { Comment } from './entities/comment.entity';
+import { Lesson } from 'src/lessons/entities/lesson.entity';
 
 import { AddCommentDto } from './dto/addComment.dto';
 import { UpdateCommentDto } from './dto/updateComment.dto';
@@ -13,6 +19,8 @@ export class CommentsService {
   constructor(
     @InjectRepository(Comment)
     private readonly commentRepository: Repository<Comment>,
+    private eventEmitter: EventEmitter2,
+    private readonly logger: Logger,
   ) {}
 
   // TODO: add methods documentation
@@ -22,12 +30,20 @@ export class CommentsService {
     lessonId: number,
     dto: AddCommentDto,
   ): Promise<Comment> {
-    // TODO: check is lesson exist
+    const lesson: Lesson = (
+      await this.eventEmitter.emitAsync('lessons.get_lesson_by_id', lessonId)
+    )[0];
+
+    if (lesson === undefined) {
+      throw new NotFoundException(
+        `Could not find lesson with id: ${lessonId}.`,
+      );
+    }
 
     // create comment object
     const comment = this.commentRepository.create({
       creator: { id: commentCreatorId },
-      lesson: { id: lessonId },
+      lesson: { id: lesson.id },
       ...dto,
     });
 
