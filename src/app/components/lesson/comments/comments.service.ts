@@ -1,7 +1,7 @@
 import { Observable, catchError, of, tap } from 'rxjs'
 import { HttpClient } from '@angular/common/http'
 import { Injectable } from '@angular/core'
-import { MatSnackBar } from '@angular/material/snack-bar'
+import { MatSnackBar, MatSnackBarConfig, MatSnackBarRef, TextOnlySnackBar } from '@angular/material/snack-bar'
 import { CommentLesson } from 'src/app/enums/enums'
 import { API_URL } from 'src/environments/environment'
 import { UsersService } from 'src/app/components/auth/users.service'
@@ -16,15 +16,31 @@ export class CommentsService {
     private usersService: UsersService,
   ) {}
 
+  /**
+   * Open a snackbar with the given message, action and optional config
+   * @param {string} message The message to display
+   * @param {string} action The action to display
+   * @param {object} config Optional config for the snackbar
+   * @returns {MatSnackBarRef<TextOnlySnackBar>} The snackbar reference
+   * 
+   * @example snackBar('This is a message', 'Close', { duration: 2000 })
+   */
   private snackBar(
     message: string,
     action: string,
     config: {} = { duration: 2000 },
-  ) {
+  ): MatSnackBarRef<TextOnlySnackBar> {
     return this._snackBar.open(message, action, config)
   }
 
-  private error(err: any) {
+  /**
+   * Log the error to the console and open a snackbar with the message to check console
+   * @param err The error to log
+   * @returns {void}
+   * 
+   * @example error(err)
+   */
+  private error(err: any): void {
     console.error(err)
     this.snackBar(
       'Error: something went wrong, check console for more info',

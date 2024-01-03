@@ -157,7 +157,7 @@ mat-card.filled {
     padding: 2rem 10%;
   }
 
-  @media screen and (min-width: 1000px) {
+  @media screen and (min-width: 1200px) {
     padding: 2rem 20%;
   }
 }
@@ -205,4 +205,15 @@ mat-card.filled {
       }
     }
   }
+}
+
+.limit-length {
+  max-width: 20ch;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+mat-card-header.clip > div {
+  flex: 1;
+  overflow: hidden;
 }

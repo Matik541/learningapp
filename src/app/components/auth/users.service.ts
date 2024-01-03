@@ -34,7 +34,7 @@ export class UsersService {
     private router: Router,
     private activatedRoute: ActivatedRoute
   ) {
-    if (this.refreshToken()) this.authRefreshToken();
+    this.authRefreshToken();
   }
 
   private snackBar(
@@ -144,6 +144,7 @@ export class UsersService {
   }
 
   authRefreshToken(): void {
+    if (!this.refreshToken()) return;
     this.http
       .post<Tokens>(`${API_URL}/auth/refreshtoken`, null, {
         headers: { Authorization: `Bearer ${this.refreshToken()}` },
@@ -175,7 +176,10 @@ export class UsersService {
     this.cookieService.set(
       'access_token',
       tokens.authToken,
-      new Date(date.getTime() + 1000 * 60 * 5)
+      new Date(date.getTime() + 1000 * 60 * 5),
+      '/',
+      undefined,
+      true
     );
     this.cookieService.set(
       'refresh_token',
@@ -189,9 +193,9 @@ export class UsersService {
     this.cookieService.delete('refresh_token');
   }
 
-  private refreshToken = (): string | false =>
+  private refreshToken = (): (string | false) =>
     this.cookieService.get('refresh_token') ?? false;
 
-  public accessToken = (): string | false =>
+  public accessToken = (): (string | false) =>
     this.cookieService.get('access_token') ?? false;
 }

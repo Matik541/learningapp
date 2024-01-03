@@ -13,6 +13,7 @@
       <mat-form-field appearance="outline" class="row">
         <mat-label>Title</mat-label>
         <input matInput formControlName="title" required />
+        <mat-hint align="end">{{ detailsFormGroup.get("title")?.value?.length || 0 }}/50</mat-hint>
       </mat-form-field>
 
       <button
@@ -58,8 +59,9 @@
       <mat-form-field class="full-width" appearance="outline">
         <mat-label>Description</mat-label>
         <textarea
-          [rows]="rowCount"
           matInput
+          cdkTextareaAutosize
+          cdkAutosizeMinRows="3"
           formControlName="description"
         ></textarea>
       </mat-form-field>

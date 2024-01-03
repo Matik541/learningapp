@@ -1,0 +1,34 @@
+mat-card {
+    overflow: hidden;
+    display: subgrid;
+    height: 100%;
+
+    mat-card-header {
+
+        mat-card-title {
+            overflow: hidden;
+            text-overflow: ellipsis;
+        }
+
+        mat-card-subtitle {
+            display: flex;
+            flex-direction: column;
+            align-items: flex-start;
+            gap: 0.5rem;
+
+            .creator {
+                display: flex;
+                align-items: center;
+                gap: 0.5rem;
+            }
+        }
+    }
+
+    mat-card-content {
+        margin-bottom: 1rem;
+        line-height: 1em;
+        max-height: 3em;
+        overflow: hidden;
+        word-break: break-all;
+    }
+}

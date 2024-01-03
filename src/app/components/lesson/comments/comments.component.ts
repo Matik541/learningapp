@@ -61,7 +61,6 @@ export class CommentsComponent {
       return;
     }
     
-    console.log(this.editing);
     if (this.editing != -1) {
       this.commentsService
         .updateComment(this.editing, this.commentCtrl.value)

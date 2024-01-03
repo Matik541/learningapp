@@ -50,7 +50,8 @@ import { CreateComponent } from './components/lesson/create/create.component'
 import { MatChipsModule } from '@angular/material/chips'
 import { CookieService } from 'ngx-cookie-service';
 import { DialogComponent } from './components/dialog/dialog.component'
-import { RouterTestingModule } from '@angular/router/testing'
+import { RouterTestingModule } from '@angular/router/testing';
+import { LessonCardComponent } from './components/home/lesson-card/lesson-card.component'
 
 @NgModule({
   declarations: [
@@ -73,6 +74,7 @@ import { RouterTestingModule } from '@angular/router/testing'
     HomeComponent,
     CreateComponent,
     DialogComponent,
+    LessonCardComponent,
   ],
   imports: [
     RouterTestingModule,

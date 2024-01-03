@@ -20,7 +20,6 @@ import { MatSnackBar } from '@angular/material/snack-bar';
   styleUrls: ['./create.component.scss'],
 })
 export class CreateComponent {
-  rowCount = 1;
   separatorKeysCodes: number[] = [ENTER, COMMA];
 
   detailsFormGroup = this.formBuilder.group({
@@ -68,10 +67,6 @@ export class CreateComponent {
 
     this.detailsFormGroup.valueChanges.subscribe((form) => {
       this.filteredTags = of(this._filter(form.tagsCtrl));
-    });
-
-    this.detailsFormGroup.valueChanges.subscribe((value) => {
-      this.rowCount = value.description?.split(/\n/g).length || 1;
     });
 
     this.stepperOrientation = this.breakpointObserver
